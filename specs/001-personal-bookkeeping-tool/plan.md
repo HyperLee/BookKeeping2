@@ -20,7 +20,7 @@
 **目標平台**: 桌面瀏覽器 Chrome、Edge、Firefox、Safari 與行動裝置瀏覽器  
 **專案型態**: Web，單一 ASP.NET Core Razor Pages 專案 + `BookKeeping2.Tests` 測試專案  
 **效能目標**: FCP < 1.5 秒、LCP < 2.5 秒；10,000 筆交易篩選 < 2 秒；10,000 筆紀錄查詢 < 3 秒；100 筆月報產生 < 2 秒；1,000 筆 CSV 匯出 < 5 秒；100 筆 CSV 匯入 < 10 秒  
-**限制**: CSV 匯入 < 5 MB / 10,000 有效資料列；金額 API 一律使用 `decimal`；V1 單一幣別 TWD；實際交易日期不得晚於 Asia/Taipei 今日；狀態變更表單使用 Anti-Forgery Token；使用者面向文字為繁體中文；生產環境 HTTPS/HSTS；未授權第三方傳輸為 0  
+**限制**: CSV 匯入檔案不超過 5 MB / 10,000 有效資料列；金額 API 一律使用 `decimal`；V1 單一幣別 TWD；實際交易日期不得晚於 Asia/Taipei 今日；狀態變更表單使用 Anti-Forgery Token；使用者面向文字為繁體中文；生產環境 HTTPS/HSTS；未授權第三方傳輸為 0
 **規模與範圍**: 單人使用、約 8 個主要頁面、年累積 600-2,400 筆紀錄、極端情境 10,000+ 筆交易；V1 不包含站內帳號、角色、多帳本、多幣別或帳戶間轉帳
 
 ## Constitution Check
