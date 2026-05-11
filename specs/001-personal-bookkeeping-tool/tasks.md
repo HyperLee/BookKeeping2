@@ -43,24 +43,24 @@
 
 **CRITICAL**: 此階段完成前不得開始任何使用者故事實作。
 
-- [ ] T008 建立交易與稽核列舉於 `BookKeeping2/Models/Common/TransactionType.cs`、`BookKeeping2/Models/Accounts/AccountType.cs`、`BookKeeping2/Models/Audit/AuditEventType.cs`
-- [ ] T009 建立金額 minor units 轉換工具於 `BookKeeping2/Services/Common/MoneyMinorUnitConverter.cs`
-- [ ] T010 建立 Asia/Taipei 日期服務介面與實作於 `BookKeeping2/Services/Time/ITaipeiDateService.cs`、`BookKeeping2/Services/Time/TaipeiDateService.cs`
-- [ ] T011 [P] 建立交易實體於 `BookKeeping2/Models/Transactions/Transaction.cs`
-- [ ] T012 [P] 建立分類實體於 `BookKeeping2/Models/Categories/Category.cs`
-- [ ] T013 [P] 建立帳戶實體於 `BookKeeping2/Models/Accounts/Account.cs`
-- [ ] T014 [P] 建立預算實體於 `BookKeeping2/Models/Budgets/Budget.cs`
-- [ ] T015 [P] 建立 CSV 匯入批次與錯誤實體於 `BookKeeping2/Models/CsvImports/CsvImportBatch.cs`、`BookKeeping2/Models/CsvImports/CsvImportError.cs`
-- [ ] T016 [P] 建立稽核事件與應用設定實體於 `BookKeeping2/Models/Audit/AuditEvent.cs`、`BookKeeping2/Models/Settings/AppSetting.cs`
-- [ ] T017 建立 EF Core DbContext 與 DbSet 於 `BookKeeping2/Data/AppDbContext.cs`
-- [ ] T018 建立 EF Core entity configuration 於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CategoryConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportBatchConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportErrorConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AuditEventConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AppSettingConfiguration.cs`
-- [ ] T019 建立預設分類與站台設定 seed 於 `BookKeeping2/Data/SeedData/DefaultSeedData.cs`、`BookKeeping2/Data/SeedData/DatabaseInitializer.cs`
-- [ ] T020 建立 EF Core migration design-time factory、`InitialCreate` migration 與初始 migration snapshot 於 `BookKeeping2/Data/AppDbContextFactory.cs`、`BookKeeping2/Data/Migrations/*_InitialCreate.cs`、`BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`
-- [ ] T021 更新 SQLite connection string 與資料庫路徑設定於 `BookKeeping2/appsettings.json`、`BookKeeping2/appsettings.Development.json`
-- [ ] T022 建立共用驗證訊息與輸入安全 helper 於 `BookKeeping2/Validation/FinancialValidationMessages.cs`、`BookKeeping2/Validation/TextInputSanitizer.cs`
-- [ ] T023 建立稽核服務介面與遮罩策略於 `BookKeeping2/Services/Audit/IAuditService.cs`、`BookKeeping2/Services/Audit/AuditService.cs`、`BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
-- [ ] T024 建立安全標頭註冊 extension 於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`
-- [ ] T025 更新 DI、DbContext、初始化、安全標頭與服務註冊於 `BookKeeping2/Program.cs`
+- [X] T008 建立交易與稽核列舉於 `BookKeeping2/Models/Common/TransactionType.cs`、`BookKeeping2/Models/Accounts/AccountType.cs`、`BookKeeping2/Models/Audit/AuditEventType.cs`
+- [X] T009 建立金額 minor units 轉換工具於 `BookKeeping2/Services/Common/MoneyMinorUnitConverter.cs`
+- [X] T010 建立 Asia/Taipei 日期服務介面與實作於 `BookKeeping2/Services/Time/ITaipeiDateService.cs`、`BookKeeping2/Services/Time/TaipeiDateService.cs`
+- [X] T011 [P] 建立交易實體於 `BookKeeping2/Models/Transactions/Transaction.cs`
+- [X] T012 [P] 建立分類實體於 `BookKeeping2/Models/Categories/Category.cs`
+- [X] T013 [P] 建立帳戶實體於 `BookKeeping2/Models/Accounts/Account.cs`
+- [X] T014 [P] 建立預算實體於 `BookKeeping2/Models/Budgets/Budget.cs`
+- [X] T015 [P] 建立 CSV 匯入批次與錯誤實體於 `BookKeeping2/Models/CsvImports/CsvImportBatch.cs`、`BookKeeping2/Models/CsvImports/CsvImportError.cs`
+- [X] T016 [P] 建立稽核事件與應用設定實體於 `BookKeeping2/Models/Audit/AuditEvent.cs`、`BookKeeping2/Models/Settings/AppSetting.cs`
+- [X] T017 建立 EF Core DbContext 與 DbSet 於 `BookKeeping2/Data/AppDbContext.cs`
+- [X] T018 建立 EF Core entity configuration 於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CategoryConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportBatchConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportErrorConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AuditEventConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AppSettingConfiguration.cs`
+- [X] T019 建立預設分類與站台設定 seed 於 `BookKeeping2/Data/SeedData/DefaultSeedData.cs`、`BookKeeping2/Data/SeedData/DatabaseInitializer.cs`
+- [X] T020 建立 EF Core migration design-time factory、`InitialCreate` migration 與初始 migration snapshot 於 `BookKeeping2/Data/AppDbContextFactory.cs`、`BookKeeping2/Data/Migrations/*_InitialCreate.cs`、`BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`
+- [X] T021 更新 SQLite connection string 與資料庫路徑設定於 `BookKeeping2/appsettings.json`、`BookKeeping2/appsettings.Development.json`
+- [X] T022 建立共用驗證訊息與輸入安全 helper 於 `BookKeeping2/Validation/FinancialValidationMessages.cs`、`BookKeeping2/Validation/TextInputSanitizer.cs`
+- [X] T023 建立稽核服務介面與遮罩策略於 `BookKeeping2/Services/Audit/IAuditService.cs`、`BookKeeping2/Services/Audit/AuditService.cs`、`BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
+- [X] T024 建立安全標頭註冊 extension 於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`
+- [X] T025 更新 DI、DbContext、初始化、安全標頭與服務註冊於 `BookKeeping2/Program.cs`
 
 **Checkpoint**: Foundation ready。使用者故事可依優先級開始實作。
 

@@ -1,24 +1,50 @@
+using BookKeeping2.Data;
+using BookKeeping2.Data.SeedData;
+using BookKeeping2.Services.Audit;
+using BookKeeping2.Services.Security;
+using BookKeeping2.Services.Time;
+using BookKeeping2.Validation;
+using Microsoft.EntityFrameworkCore;
+
 namespace BookKeeping2;
 
+/// <summary>
+/// Application entry point.
+/// </summary>
 public class Program
 {
+    /// <summary>
+    /// Starts the Open BookKeeping web application.
+    /// </summary>
+    /// <param name="args">Command line arguments.</param>
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        // Add services to the container.
+        string connectionString = builder.Configuration.GetConnectionString("BookKeepingDatabase")
+            ?? "Data Source=App_Data/bookkeeping.db";
+
+        builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+        builder.Services.AddScoped<ITaipeiDateService, TaipeiDateService>();
+        builder.Services.AddScoped<IAuditService, AuditService>();
+        builder.Services.AddSingleton<AuditLogMaskingPolicy>();
+        builder.Services.AddSingleton<TextInputSanitizer>();
         builder.Services.AddRazorPages();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
+        using (IServiceScope scope = app.Services.CreateScope())
+        {
+            DatabaseInitializer.InitializeAsync(scope.ServiceProvider).GetAwaiter().GetResult();
+        }
+
         if (!app.Environment.IsDevelopment())
         {
             app.UseExceptionHandler("/Error");
-            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
 
+        app.UseBookKeepingSecurityHeaders();
         app.UseHttpsRedirection();
 
         app.UseRouting();

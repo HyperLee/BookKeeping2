@@ -1,9 +1,11 @@
+using BookKeeping2.Services.Time;
+
 namespace BookKeeping2.Tests.TestSupport;
 
 /// <summary>
 /// Provides a fixed Asia/Taipei date for deterministic tests.
 /// </summary>
-public sealed class FakeTaipeiDateService
+public sealed class FakeTaipeiDateService : ITaipeiDateService
 {
     /// <summary>
     /// Initializes a fake date service with the supplied local date.
