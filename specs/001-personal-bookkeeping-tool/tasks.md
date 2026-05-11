@@ -132,23 +132,23 @@
 
 ### Tests for User Story 3（必須先寫且先失敗）
 
-- [ ] T052 [P] [US3] 撰寫分類 normalized name 唯一性、預設分類與封存規則單元測試於 `BookKeeping2.Tests/Unit/Categories/CategoryServiceTests.cs`
-- [ ] T053 [P] [US3] 撰寫帳戶 normalized name 唯一性與餘額計算單元測試於 `BookKeeping2.Tests/Unit/Accounts/AccountServiceTests.cs`
-- [ ] T054 [P] [US3] 撰寫分類與帳戶管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/CategoryAndAccountPagesTests.cs`
-- [ ] T055 [US3] 執行分類與帳戶相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T052 [P] [US3] 撰寫分類 normalized name 唯一性、預設分類與封存規則單元測試於 `BookKeeping2.Tests/Unit/Categories/CategoryServiceTests.cs`
+- [X] T053 [P] [US3] 撰寫帳戶 normalized name 唯一性與餘額計算單元測試於 `BookKeeping2.Tests/Unit/Accounts/AccountServiceTests.cs`
+- [X] T054 [P] [US3] 撰寫分類與帳戶管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/CategoryAndAccountPagesTests.cs`
+- [X] T055 [US3] 執行分類與帳戶相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 3
 
-- [ ] T056 [P] [US3] 建立分類管理 ViewModel 於 `BookKeeping2/ViewModels/Categories/CategoryViewModels.cs`
-- [ ] T057 [P] [US3] 建立帳戶管理 ViewModel 於 `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`
-- [ ] T058 [US3] 建立分類服務介面與結果型別於 `BookKeeping2/Services/Categories/ICategoryService.cs`、`BookKeeping2/Services/Categories/CategoryResult.cs`
-- [ ] T059 [US3] 實作分類新增、編輯、刪除限制與封存邏輯於 `BookKeeping2/Services/Categories/CategoryService.cs`
-- [ ] T060 [US3] 建立帳戶服務介面與餘額摘要型別於 `BookKeeping2/Services/Accounts/IAccountService.cs`、`BookKeeping2/Services/Accounts/AccountBalanceSummary.cs`
-- [ ] T061 [US3] 實作帳戶新增、編輯、封存與目前餘額計算於 `BookKeeping2/Services/Accounts/AccountService.cs`
-- [ ] T062 [US3] 實作分類管理 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Categories/Index.cshtml`、`BookKeeping2/Pages/Categories/Index.cshtml.cs`
-- [ ] T063 [US3] 實作帳戶管理 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Accounts/Index.cshtml`、`BookKeeping2/Pages/Accounts/Index.cshtml.cs`
-- [ ] T064 [US3] 將分類與帳戶選項整合到交易表單載入流程於 `BookKeeping2/Services/Transactions/TransactionFormOptionsService.cs`
-- [ ] T065 [US3] 執行並修正分類與帳戶相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T056 [P] [US3] 建立分類管理 ViewModel 於 `BookKeeping2/ViewModels/Categories/CategoryViewModels.cs`
+- [X] T057 [P] [US3] 建立帳戶管理 ViewModel 於 `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`
+- [X] T058 [US3] 建立分類服務介面與結果型別於 `BookKeeping2/Services/Categories/ICategoryService.cs`、`BookKeeping2/Services/Categories/CategoryResult.cs`
+- [X] T059 [US3] 實作分類新增、編輯、刪除限制與封存邏輯於 `BookKeeping2/Services/Categories/CategoryService.cs`
+- [X] T060 [US3] 建立帳戶服務介面與餘額摘要型別於 `BookKeeping2/Services/Accounts/IAccountService.cs`、`BookKeeping2/Services/Accounts/AccountBalanceSummary.cs`
+- [X] T061 [US3] 實作帳戶新增、編輯、封存與目前餘額計算於 `BookKeeping2/Services/Accounts/AccountService.cs`
+- [X] T062 [US3] 實作分類管理 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Categories/Index.cshtml`、`BookKeeping2/Pages/Categories/Index.cshtml.cs`
+- [X] T063 [US3] 實作帳戶管理 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Accounts/Index.cshtml`、`BookKeeping2/Pages/Accounts/Index.cshtml.cs`
+- [X] T064 [US3] 將分類與帳戶選項整合到交易表單載入流程於 `BookKeeping2/Services/Transactions/TransactionFormOptionsService.cs`
+- [X] T065 [US3] 執行並修正分類與帳戶相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 3 必須可獨立展示分類、帳戶與餘額摘要。
 

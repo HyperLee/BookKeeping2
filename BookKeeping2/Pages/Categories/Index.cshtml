@@ -1,0 +1,69 @@
+@page
+@using BookKeeping2.Models.Common
+@model BookKeeping2.Pages.Categories.IndexModel
+@{
+    ViewData["Title"] = "分類管理";
+}
+
+<h1 class="h3 mb-3">分類管理</h1>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @statusMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+    </div>
+}
+
+<form method="post" class="row g-3 mb-4">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-4">
+        <label asp-for="Input.Name" class="form-label"></label>
+        <input asp-for="Input.Name" class="form-control" />
+        <span asp-validation-for="Input.Name" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Input.Type" class="form-label"></label>
+        <select asp-for="Input.Type" class="form-select">
+            <option value="@TransactionType.Expense">支出</option>
+            <option value="@TransactionType.Income">收入</option>
+        </select>
+    </div>
+    <div class="col-md-3">
+        <label asp-for="Input.IconKey" class="form-label"></label>
+        <input asp-for="Input.IconKey" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Input.DisplayOrder" class="form-label"></label>
+        <input asp-for="Input.DisplayOrder" class="form-control" />
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">新增分類</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th scope="col">名稱</th>
+                <th scope="col">類型</th>
+                <th scope="col">狀態</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                    <td>@category.TypeText</td>
+                    <td>@(category.IsArchived ? "已封存" : category.IsDefault ? "預設" : "自訂")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

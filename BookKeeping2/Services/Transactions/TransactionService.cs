@@ -8,7 +8,6 @@ using BookKeeping2.Services.Common;
 using BookKeeping2.Services.Time;
 using BookKeeping2.Validation;
 using BookKeeping2.ViewModels.Transactions;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
@@ -24,6 +23,7 @@ public sealed class TransactionService : ITransactionService
     private readonly IAuditService auditService;
     private readonly AuditLogMaskingPolicy maskingPolicy;
     private readonly TextInputSanitizer sanitizer;
+    private readonly TransactionFormOptionsService formOptionsService;
 
     /// <summary>
     /// Initializes a new transaction service.
@@ -33,18 +33,21 @@ public sealed class TransactionService : ITransactionService
     /// <param name="auditService">The audit service.</param>
     /// <param name="maskingPolicy">The audit masking policy.</param>
     /// <param name="sanitizer">The text sanitizer.</param>
+    /// <param name="formOptionsService">The form options service.</param>
     public TransactionService(
         AppDbContext dbContext,
         ITaipeiDateService dateService,
         IAuditService auditService,
         AuditLogMaskingPolicy maskingPolicy,
-        TextInputSanitizer? sanitizer = null)
+        TextInputSanitizer? sanitizer = null,
+        TransactionFormOptionsService? formOptionsService = null)
     {
         this.dbContext = dbContext;
         this.dateService = dateService;
         this.auditService = auditService;
         this.maskingPolicy = maskingPolicy;
         this.sanitizer = sanitizer ?? new TextInputSanitizer();
+        this.formOptionsService = formOptionsService ?? new TransactionFormOptionsService(dbContext);
     }
 
     /// <inheritdoc />
@@ -99,32 +102,7 @@ public sealed class TransactionService : ITransactionService
     /// <inheritdoc />
     public async Task<TransactionFormOptionsViewModel> GetFormOptionsAsync(TransactionType? type = null, CancellationToken cancellationToken = default)
     {
-        IQueryable<Category> categories = dbContext.Categories.AsNoTracking().Where(category => !category.IsArchived);
-        if (type is not null)
-        {
-            categories = categories.Where(category => category.Type == type);
-        }
-
-        List<SelectListItem> categoryOptions = await categories
-            .OrderBy(category => category.Type)
-            .ThenBy(category => category.DisplayOrder)
-            .ThenBy(category => category.Name)
-            .Select(category => new SelectListItem(category.Name, category.Id.ToString()))
-            .ToListAsync(cancellationToken);
-
-        List<SelectListItem> accountOptions = await dbContext.Accounts
-            .AsNoTracking()
-            .Where(account => !account.IsArchived)
-            .OrderBy(account => account.DisplayOrder)
-            .ThenBy(account => account.Name)
-            .Select(account => new SelectListItem(account.Name, account.Id.ToString()))
-            .ToListAsync(cancellationToken);
-
-        return new TransactionFormOptionsViewModel
-        {
-            Categories = categoryOptions,
-            Accounts = accountOptions
-        };
+        return await formOptionsService.GetOptionsAsync(type, cancellationToken);
     }
 
     /// <inheritdoc />
