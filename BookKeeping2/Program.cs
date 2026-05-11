@@ -2,6 +2,7 @@ using BookKeeping2.Data;
 using BookKeeping2.Services.Accounts;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Categories;
+using BookKeeping2.Services.Reports;
 using BookKeeping2.Services.Security;
 using BookKeeping2.Services.Time;
 using BookKeeping2.Services.Transactions;
@@ -35,6 +36,7 @@ public class Program
         builder.Services.AddScoped<IAuditService, AuditService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<IReportService, ReportService>();
         builder.Services.AddScoped<TransactionFormOptionsService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<AuditLogMaskingPolicy>();

@@ -162,20 +162,20 @@
 
 ### Tests for User Story 4（必須先寫且先失敗）
 
-- [ ] T066 [P] [US4] 撰寫月報總額、分類佔比、跨年月份歸屬與 100 筆月報 2 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
-- [ ] T067 [P] [US4] 撰寫報表頁面與空白狀態整合測試於 `BookKeeping2.Tests/Integration/Pages/ReportsPageTests.cs`
-- [ ] T068 [US4] 執行報表相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T066 [P] [US4] 撰寫月報總額、分類佔比、跨年月份歸屬與 100 筆月報 2 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
+- [X] T067 [P] [US4] 撰寫報表頁面與空白狀態整合測試於 `BookKeeping2.Tests/Integration/Pages/ReportsPageTests.cs`
+- [X] T068 [US4] 執行報表相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 4
 
-- [ ] T069 [P] [US4] 建立報表 ViewModel 於 `BookKeeping2/ViewModels/Reports/MonthlyReportViewModel.cs`
-- [ ] T070 [US4] 建立報表服務介面與圖表資料型別於 `BookKeeping2/Services/Reports/IReportService.cs`、`BookKeeping2/Services/Reports/ReportChartPoint.cs`
-- [ ] T071 [US4] 實作伺服器端月報彙總、分類佔比與趨勢計算於 `BookKeeping2/Services/Reports/ReportService.cs`
-- [ ] T072 [US4] 實作報表 PageModel 與月份輸入驗證於 `BookKeeping2/Pages/Reports/Index.cshtml.cs`
-- [ ] T073 [US4] 實作報表 Razor Page 與空白狀態於 `BookKeeping2/Pages/Reports/Index.cshtml`
-- [ ] T074 [P] [US4] 加入 Chart.js 4.x vendored asset 於 `BookKeeping2/wwwroot/lib/chart.js/chart.umd.min.js`
-- [ ] T075 [US4] 加入報表圖表初始化腳本於 `BookKeeping2/wwwroot/js/reports.js`
-- [ ] T076 [US4] 執行並修正報表相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T069 [P] [US4] 建立報表 ViewModel 於 `BookKeeping2/ViewModels/Reports/MonthlyReportViewModel.cs`
+- [X] T070 [US4] 建立報表服務介面與圖表資料型別於 `BookKeeping2/Services/Reports/IReportService.cs`、`BookKeeping2/Services/Reports/ReportChartPoint.cs`
+- [X] T071 [US4] 實作伺服器端月報彙總、分類佔比與趨勢計算於 `BookKeeping2/Services/Reports/ReportService.cs`
+- [X] T072 [US4] 實作報表 PageModel 與月份輸入驗證於 `BookKeeping2/Pages/Reports/Index.cshtml.cs`
+- [X] T073 [US4] 實作報表 Razor Page 與空白狀態於 `BookKeeping2/Pages/Reports/Index.cshtml`
+- [X] T074 [P] [US4] 加入 Chart.js 4.x vendored asset 於 `BookKeeping2/wwwroot/lib/chart.js/chart.umd.min.js`
+- [X] T075 [US4] 加入報表圖表初始化腳本於 `BookKeeping2/wwwroot/js/reports.js`
+- [X] T076 [US4] 執行並修正報表相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 4 必須可獨立驗證所有報表數值來自同一批交易資料。
 
