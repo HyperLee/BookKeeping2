@@ -27,7 +27,7 @@
 
 **目的**: 建立功能所需的專案、測試與工具基礎。
 
-- [ ] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考，並啟用 XML 文件輸出與公開 API 文件註解警告檢查
+- [ ] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考，啟用 XML 文件輸出與公開 API 文件註解警告檢查，並在 `.editorconfig` 確認私有欄位命名規則與憲章差異的實作決策
 - [ ] T002 建立 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`，加入 xUnit、Moq、Microsoft.AspNetCore.Mvc.Testing、Microsoft.EntityFrameworkCore.Sqlite、coverlet.collector 套件參考
 - [ ] T003 [P] 建立 SQLite 測試資料庫 fixture 於 `BookKeeping2.Tests/TestSupport/SqliteTestDatabase.cs`
 - [ ] T004 [P] 建立 Razor Pages 整合測試 factory 於 `BookKeeping2.Tests/TestSupport/BookKeepingWebApplicationFactory.cs`
@@ -300,7 +300,7 @@
 - [ ] T125 [P] 統一 toast、alert 與可關閉錯誤訊息互動於 `BookKeeping2/wwwroot/js/site.js`
 - [ ] T126 檢查主要導覽入口（首頁、明細、新增、報表、設定或更多功能）與所有使用者面向 UI 文字、驗證訊息為繁體中文於 `BookKeeping2/Pages/Shared/_Layout.cshtml`
 - [ ] T127 檢查敏感財務資料遮罩、CSV 稽核與預算警告稽核於 `BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
-- [ ] T128 檢查 CSP、HTTPS/HSTS、antiforgery、no-store 下載回應、套件弱點掃描與安全 header 風險紀錄於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`
+- [ ] T128 檢查 CSP、HTTPS/HSTS、antiforgery、no-store 下載回應與安全 header 風險於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`，並將套件弱點掃描結果記錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
 - [ ] T129 執行全套測試、收集 coverage，確認關鍵業務邏輯測試覆蓋率達 80% 以上並修正失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 - [ ] T130 執行 web 專案建置、XML 文件註解檢查並修正警告或錯誤於 `BookKeeping2/BookKeeping2.csproj`
 - [ ] T131 依 quickstart 完成 320px 手機、常見桌面寬度與 30 秒內首次新增交易手動驗證紀錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
