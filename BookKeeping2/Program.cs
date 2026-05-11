@@ -40,6 +40,7 @@ public class Program
         builder.Services.AddScoped<IBudgetService, BudgetService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<ICsvExportService, CsvExportService>();
+        builder.Services.AddScoped<ICsvImportService, CsvImportService>();
         builder.Services.AddScoped<IReportService, ReportService>();
         builder.Services.AddScoped<TransactionFormOptionsService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();

@@ -243,21 +243,21 @@
 
 ### Tests for User Story 7（必須先寫且先失敗）
 
-- [ ] T099 [P] [US7] 撰寫 CSV 標題列、欄位數、空檔案、檔案大小限制與 100 筆標準 CSV 10 秒內解析單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
-- [ ] T100 [P] [US7] 撰寫 CSV 逐列驗證、自動建立分類、部分失敗與 100 筆匯入 10 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
-- [ ] T101 [P] [US7] 撰寫 CSV 匯入頁面、錯誤摘要與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`
-- [ ] T102 [US7] 執行 CSV 匯入相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T099 [P] [US7] 撰寫 CSV 標題列、欄位數、空檔案、檔案大小限制與 100 筆標準 CSV 10 秒內解析單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
+- [X] T100 [P] [US7] 撰寫 CSV 逐列驗證、自動建立分類、部分失敗與 100 筆匯入 10 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
+- [X] T101 [P] [US7] 撰寫 CSV 匯入頁面、錯誤摘要與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`
+- [X] T102 [US7] 執行 CSV 匯入相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 7
 
-- [ ] T103 [P] [US7] 建立 CSV 匯入命令與結果型別於 `BookKeeping2/Services/Csv/CsvImportCommand.cs`、`BookKeeping2/Services/Csv/CsvImportResult.cs`
-- [ ] T104 [US7] 建立 CSV 匯入服務介面於 `BookKeeping2/Services/Csv/ICsvImportService.cs`
-- [ ] T105 [US7] 實作 CSV row parser、標題驗證與錯誤原因產生於 `BookKeeping2/Services/Csv/CsvImportParser.cs`
-- [ ] T106 [US7] 實作 CSV 匯入 transaction、逐列驗證、分類自動建立與批次摘要於 `BookKeeping2/Services/Csv/CsvImportService.cs`
-- [ ] T107 [US7] 實作匯入結果格式化與遮罩預覽於 `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
-- [ ] T108 [US7] 實作 CSV 匯入 PageModel 與上傳限制於 `BookKeeping2/Pages/Csv/Import.cshtml.cs`
-- [ ] T109 [US7] 實作 CSV 匯入 Razor Page 與錯誤摘要 UI 於 `BookKeeping2/Pages/Csv/Import.cshtml`
-- [ ] T110 [US7] 執行並修正 CSV 匯入相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T103 [P] [US7] 建立 CSV 匯入命令與結果型別於 `BookKeeping2/Services/Csv/CsvImportCommand.cs`、`BookKeeping2/Services/Csv/CsvImportResult.cs`
+- [X] T104 [US7] 建立 CSV 匯入服務介面於 `BookKeeping2/Services/Csv/ICsvImportService.cs`
+- [X] T105 [US7] 實作 CSV row parser、標題驗證與錯誤原因產生於 `BookKeeping2/Services/Csv/CsvImportParser.cs`
+- [X] T106 [US7] 實作 CSV 匯入 transaction、逐列驗證、分類自動建立與批次摘要於 `BookKeeping2/Services/Csv/CsvImportService.cs`
+- [X] T107 [US7] 實作匯入結果格式化與遮罩預覽於 `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
+- [X] T108 [US7] 實作 CSV 匯入 PageModel 與上傳限制於 `BookKeeping2/Pages/Csv/Import.cshtml.cs`
+- [X] T109 [US7] 實作 CSV 匯入 Razor Page 與錯誤摘要 UI 於 `BookKeeping2/Pages/Csv/Import.cshtml`
+- [X] T110 [US7] 執行並修正 CSV 匯入相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 7 必須可獨立處理有效列、錯誤列與自動分類摘要。
 
