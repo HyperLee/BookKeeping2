@@ -18,10 +18,12 @@ bulk deletion, stop and ask the user to perform that cleanup manually.
 For additional context about technologies to be used, project structure, shell commands,
 and other important information, read the current plan before changing code.
 
-Current state: this repository has Spec Kit installed, but no `specs/` feature directory
-or active `specs/*/plan.md` was present during the 2026-05-11 audit. When a feature plan
-exists, read its `spec.md`, `plan.md`, `tasks.md`, `research.md`, `data-model.md`, and
-`quickstart.md` as applicable before implementation.
+Current plan: `specs/001-personal-bookkeeping-tool/plan.md`.
+
+Before implementation, read the active feature artifacts in
+`specs/001-personal-bookkeeping-tool/` as applicable:
+`spec.md`, `plan.md`, `research.md`, `data-model.md`, `quickstart.md`, and
+`contracts/`. If `tasks.md` exists, follow it as the execution source of truth.
 <!-- SPECKIT END -->
 
 ## Project Snapshot
