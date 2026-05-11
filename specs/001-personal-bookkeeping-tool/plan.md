@@ -15,8 +15,8 @@
 
 **語言與版本**: C# 14 / .NET 10 / ASP.NET Core 10.0  
 **主要相依**: Razor Pages、Bootstrap 5、jQuery 3.x、jQuery Validation、Chart.js 4.x、Entity Framework Core 10.0 SQLite provider、Serilog、HtmlSanitizer、CsvHelper  
-**儲存**: SQLite，透過 EF Core `DbContext`、Migrations、唯一索引、外鍵與交易控制；資料檔路徑由設定管理，避免提交實際資料庫  
-**測試**: xUnit + Moq 單元測試、`WebApplicationFactory` 整合測試；必要時補充 Playwright 或等效 UI 驗證  
+**儲存**: SQLite，透過 EF Core `DbContext`、`InitialCreate` Migration、唯一索引、外鍵與交易控制；資料檔路徑由設定管理，避免提交實際資料庫
+**測試**: xUnit + Moq 單元測試、`WebApplicationFactory` 整合測試、coverlet coverage 收集；必要時補充 Playwright、axe-core 或等效 UI/可及性驗證
 **目標平台**: 桌面瀏覽器 Chrome、Edge、Firefox、Safari 與行動裝置瀏覽器  
 **專案型態**: Web，單一 ASP.NET Core Razor Pages 專案 + `BookKeeping2.Tests` 測試專案  
 **效能目標**: FCP < 1.5 秒、LCP < 2.5 秒；10,000 筆交易篩選 < 2 秒；10,000 筆紀錄查詢 < 3 秒；100 筆月報產生 < 2 秒；1,000 筆 CSV 匯出 < 5 秒；100 筆 CSV 匯入 < 10 秒  
@@ -29,18 +29,18 @@
 
 | 原則 | 狀態 | 設計承諾 |
 |------|------|----------|
-| 程式碼品質 | 通過 | 使用 C# 14、Nullable Reference Types、檔案範圍命名空間、`.editorconfig`、清楚分層與必要 XML 文件註解；公開服務與複雜金融計算 API 需含範例。 |
-| 測試優先 | 通過 | 建立 `BookKeeping2.Tests` 後先撰寫失敗測試；交易、分類、帳戶、餘額、報表、預算、CSV、日期與安全驗證均有單元/整合測試策略。 |
+| 程式碼品質 | 通過 | 使用 C# 14、Nullable Reference Types、檔案範圍命名空間、`.editorconfig`、清楚分層與必要 XML 文件註解；公開服務與複雜金融計算 API 需含範例；建置階段檢查 XML 文件註解與警告。 |
+| 測試優先 | 通過 | 建立 `BookKeeping2.Tests` 後先撰寫失敗測試，取得使用者或維護者對測試意圖確認後才實作；交易、分類、帳戶、餘額、報表、預算、CSV、日期與安全驗證均有單元/整合測試策略；關鍵業務邏輯 coverage 門檻為 80%。 |
 | 資料完整性 | 通過 | 領域與服務金額使用 `decimal`；SQLite 儲存用 minor units；交易、匯入與跨資料表異動包在 EF Core transaction；交易刪除採軟刪除與稽核摘要。 |
-| 安全優先 | 通過 | 伺服器端驗證為權威；Razor 預設編碼；POST 表單使用 antiforgery；CSV/備註經 HtmlSanitizer 或拒絕策略；生產 HTTPS/HSTS；規劃 CSP header。 |
-| 使用者體驗 | 通過 | Bootstrap 5、既有 `site.css`、繁體中文欄位層級錯誤、toast/alert 回饋、鍵盤操作與 320px 手機寬度無重疊。 |
+| 安全優先 | 通過 | 伺服器端驗證為權威；Razor 預設編碼；POST 表單使用 antiforgery；CSV/備註經 HtmlSanitizer 或拒絕策略；生產 HTTPS/HSTS；規劃 CSP header；套件弱點掃描與未授權第三方傳輸檢查列入交付閘門。 |
+| 使用者體驗 | 通過 | Bootstrap 5、既有 `site.css`、繁體中文欄位層級錯誤、toast/alert 回饋、鍵盤操作、語意標記、對比度與 320px 手機寬度無重疊；以 WCAG 2.1 AA 核心要求驗證。 |
 | 效能與延展性 | 通過 | 交易列表分頁、索引、async EF 查詢、預先彙總查詢、Chart.js 輕量資料、匯入串流處理與靜態資源管線。 |
 | 可觀察性與稽核 | 通過 | Serilog/`ILogger` 結構化事件；新增/編輯/刪除、匯入/匯出、預算警告與寫入失敗記錄遮罩摘要，不記錄完整備註或敏感明細。 |
 | 文件語言 | 通過 | `spec.md`、`plan.md`、`research.md`、`data-model.md`、`quickstart.md`、`contracts/*` 使用繁體中文 zh-TW。 |
 
 ### Post-Design Constitution Check
 
-Phase 1 設計後重新檢查結果仍為通過。唯一需在 tasks 階段明確安排的是建立測試專案、補齊 CSP/安全 header、以及處理 constitution 私有欄位 camelCase 與 `.editorconfig` `_camelCase` 的既有不一致；實作不得在未決定前進行大規模私有欄位命名翻修。
+Phase 1 設計後重新檢查結果仍為通過。tasks 階段必須明確安排建立測試專案、測試意圖確認 checkpoint、coverage 80% 門檻、XML 文件註解檢查、套件弱點掃描、未授權第三方傳輸檢查、WCAG 2.1 AA 核心可及性驗證、CSP/安全 header，以及處理 constitution 私有欄位 camelCase 與 `.editorconfig` `_camelCase` 的既有不一致；實作不得在未決定前進行大規模私有欄位命名翻修。
 
 ## 專案結構
 
@@ -131,7 +131,7 @@ BookKeeping2.Tests/
 - [contracts/csv-format.md](./contracts/csv-format.md)
 - [quickstart.md](./quickstart.md)
 
-設計涵蓋交易、分類、帳戶、預算、CSV 匯入批次/錯誤、稽核事件與應用設定；契約涵蓋主要 Razor Pages 路由、表單欄位、驗證回饋、CSV 欄位格式、匯出安全處理與匯入錯誤摘要。
+設計涵蓋交易、分類、帳戶、預算、CSV 匯入批次/錯誤、稽核事件與應用設定；EF Core configuration 必須涵蓋所有持久化實體；契約涵蓋主要 Razor Pages 路由、表單欄位、驗證回饋、CSV 欄位格式、匯出安全處理與匯入錯誤摘要。
 
 ## 複雜度追蹤
 

@@ -27,8 +27,8 @@
 
 **目的**: 建立功能所需的專案、測試與工具基礎。
 
-- [ ] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考
-- [ ] T002 建立 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`，加入 xUnit、Moq、Microsoft.AspNetCore.Mvc.Testing、Microsoft.EntityFrameworkCore.Sqlite 套件參考
+- [ ] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考，並啟用 XML 文件輸出與公開 API 文件註解警告檢查
+- [ ] T002 建立 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`，加入 xUnit、Moq、Microsoft.AspNetCore.Mvc.Testing、Microsoft.EntityFrameworkCore.Sqlite、coverlet.collector 套件參考
 - [ ] T003 [P] 建立 SQLite 測試資料庫 fixture 於 `BookKeeping2.Tests/TestSupport/SqliteTestDatabase.cs`
 - [ ] T004 [P] 建立 Razor Pages 整合測試 factory 於 `BookKeeping2.Tests/TestSupport/BookKeepingWebApplicationFactory.cs`
 - [ ] T005 [P] 建立可固定 Asia/Taipei 今日的測試時間服務於 `BookKeeping2.Tests/TestSupport/FakeTaipeiDateService.cs`
@@ -53,9 +53,9 @@
 - [ ] T015 [P] 建立 CSV 匯入批次與錯誤實體於 `BookKeeping2/Models/CsvImports/CsvImportBatch.cs`、`BookKeeping2/Models/CsvImports/CsvImportError.cs`
 - [ ] T016 [P] 建立稽核事件與應用設定實體於 `BookKeeping2/Models/Audit/AuditEvent.cs`、`BookKeeping2/Models/Settings/AppSetting.cs`
 - [ ] T017 建立 EF Core DbContext 與 DbSet 於 `BookKeeping2/Data/AppDbContext.cs`
-- [ ] T018 建立 EF Core entity configuration 於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CategoryConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`
+- [ ] T018 建立 EF Core entity configuration 於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CategoryConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportBatchConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/CsvImportErrorConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AuditEventConfiguration.cs`、`BookKeeping2/Data/EntityConfigurations/AppSettingConfiguration.cs`
 - [ ] T019 建立預設分類與站台設定 seed 於 `BookKeeping2/Data/SeedData/DefaultSeedData.cs`、`BookKeeping2/Data/SeedData/DatabaseInitializer.cs`
-- [ ] T020 建立 EF Core migration design-time factory 與初始 migration snapshot 於 `BookKeeping2/Data/AppDbContextFactory.cs`、`BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`
+- [ ] T020 建立 EF Core migration design-time factory、`InitialCreate` migration 與初始 migration snapshot 於 `BookKeeping2/Data/AppDbContextFactory.cs`、`BookKeeping2/Data/Migrations/*_InitialCreate.cs`、`BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`
 - [ ] T021 更新 SQLite connection string 與資料庫路徑設定於 `BookKeeping2/appsettings.json`、`BookKeeping2/appsettings.Development.json`
 - [ ] T022 建立共用驗證訊息與輸入安全 helper 於 `BookKeeping2/Validation/FinancialValidationMessages.cs`、`BookKeeping2/Validation/TextInputSanitizer.cs`
 - [ ] T023 建立稽核服務介面與遮罩策略於 `BookKeeping2/Services/Audit/IAuditService.cs`、`BookKeeping2/Services/Audit/AuditService.cs`、`BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
@@ -76,9 +76,9 @@
 
 - [ ] T026 [P] [US1] 撰寫交易金額、日期、分類與帳戶驗證單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
 - [ ] T027 [P] [US1] 撰寫 minor units 精度與 overflow 單元測試於 `BookKeeping2.Tests/Unit/Common/MoneyMinorUnitConverterTests.cs`
-- [ ] T028 [P] [US1] 撰寫新增、編輯、軟刪除交易頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
+- [ ] T028 [P] [US1] 撰寫新增、編輯、軟刪除交易頁面整合測試，並驗證明細列表與首頁摘要 1 秒內反映變更，於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
 - [ ] T029 [P] [US1] 撰寫重複提交與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFormSecurityTests.cs`
-- [ ] T030 [US1] 執行交易相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T030 [US1] 執行交易相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 1
 
@@ -107,9 +107,9 @@
 ### Tests for User Story 2（必須先寫且先失敗）
 
 - [ ] T042 [P] [US2] 撰寫 SQLite 持久化與重新啟動資料保留整合測試於 `BookKeeping2.Tests/Integration/Persistence/SqlitePersistenceTests.cs`
-- [ ] T043 [P] [US2] 撰寫跨 client 資料一致整合測試於 `BookKeeping2.Tests/Integration/Persistence/CrossBrowserConsistencyTests.cs`
+- [ ] T043 [P] [US2] 撰寫跨 client 單一帳本資料一致整合測試，並驗證 V1 無站內帳號、角色或每使用者資料隔離行為於 `BookKeeping2.Tests/Integration/Persistence/CrossBrowserConsistencyTests.cs`
 - [ ] T044 [P] [US2] 撰寫最後儲存版本與異動摘要單元測試於 `BookKeeping2.Tests/Unit/Transactions/LastWriteWinsAuditTests.cs`
-- [ ] T045 [US2] 執行持久化相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T045 [US2] 執行持久化相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 2
 
@@ -135,7 +135,7 @@
 - [ ] T052 [P] [US3] 撰寫分類 normalized name 唯一性、預設分類與封存規則單元測試於 `BookKeeping2.Tests/Unit/Categories/CategoryServiceTests.cs`
 - [ ] T053 [P] [US3] 撰寫帳戶 normalized name 唯一性與餘額計算單元測試於 `BookKeeping2.Tests/Unit/Accounts/AccountServiceTests.cs`
 - [ ] T054 [P] [US3] 撰寫分類與帳戶管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/CategoryAndAccountPagesTests.cs`
-- [ ] T055 [US3] 執行分類與帳戶相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T055 [US3] 執行分類與帳戶相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 3
 
@@ -162,9 +162,9 @@
 
 ### Tests for User Story 4（必須先寫且先失敗）
 
-- [ ] T066 [P] [US4] 撰寫月報總額、分類佔比與跨年月份歸屬單元測試於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
+- [ ] T066 [P] [US4] 撰寫月報總額、分類佔比、跨年月份歸屬與 100 筆月報 2 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
 - [ ] T067 [P] [US4] 撰寫報表頁面與空白狀態整合測試於 `BookKeeping2.Tests/Integration/Pages/ReportsPageTests.cs`
-- [ ] T068 [US4] 執行報表相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T068 [US4] 執行報表相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 4
 
@@ -189,10 +189,10 @@
 
 ### Tests for User Story 5（必須先寫且先失敗）
 
-- [ ] T077 [P] [US5] 撰寫預算使用率、剩餘金額、超支金額與月份重算單元測試於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
+- [ ] T077 [P] [US5] 撰寫預算使用率、剩餘金額、超支金額、月份重算與 1 秒內提醒狀態計算單元測試於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
 - [ ] T078 [P] [US5] 撰寫預算管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
-- [ ] T079 [P] [US5] 撰寫首頁預算進度與提醒整合測試於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
-- [ ] T080 [US5] 執行預算相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T079 [P] [US5] 撰寫首頁預算進度與 1 秒內提醒呈現整合測試於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
+- [ ] T080 [US5] 執行預算相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 5
 
@@ -217,10 +217,10 @@
 
 ### Tests for User Story 6（必須先寫且先失敗）
 
-- [ ] T089 [P] [US6] 撰寫 CSV 匯出欄位順序、日期範圍與未刪除交易規則單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
+- [ ] T089 [P] [US6] 撰寫 CSV 匯出欄位順序、日期範圍、未刪除交易規則與 1,000 筆匯出 5 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
 - [ ] T090 [P] [US6] 撰寫 CSV 特殊字元與公式注入防護單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportSecurityTests.cs`
 - [ ] T091 [P] [US6] 撰寫 CSV 匯出頁面下載回應整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
-- [ ] T092 [US6] 執行 CSV 匯出相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T092 [US6] 執行 CSV 匯出相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 6
 
@@ -243,10 +243,10 @@
 
 ### Tests for User Story 7（必須先寫且先失敗）
 
-- [ ] T099 [P] [US7] 撰寫 CSV 標題列、欄位數、空檔案與檔案大小限制單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
-- [ ] T100 [P] [US7] 撰寫 CSV 逐列驗證、自動建立分類與部分失敗單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
+- [ ] T099 [P] [US7] 撰寫 CSV 標題列、欄位數、空檔案、檔案大小限制與 100 筆標準 CSV 10 秒內解析單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
+- [ ] T100 [P] [US7] 撰寫 CSV 逐列驗證、自動建立分類、部分失敗與 100 筆匯入 10 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
 - [ ] T101 [P] [US7] 撰寫 CSV 匯入頁面、錯誤摘要與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`
-- [ ] T102 [US7] 執行 CSV 匯入相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T102 [US7] 執行 CSV 匯入相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 7
 
@@ -274,7 +274,7 @@
 - [ ] T111 [P] [US8] 撰寫交易查詢條件 AND 邏輯、日期與金額範圍單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
 - [ ] T112 [P] [US8] 撰寫交易明細篩選頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFilterPageTests.cs`
 - [ ] T113 [P] [US8] 撰寫 10,000 筆資料篩選效能整合測試於 `BookKeeping2.Tests/Integration/Performance/TransactionQueryPerformanceTests.cs`
-- [ ] T114 [US8] 執行搜尋篩選相關測試並確認因尚未實作而失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T114 [US8] 執行搜尋篩選相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 8
 
@@ -298,12 +298,15 @@
 - [ ] T123 [P] 更新使用者文件或 README 連結於 `docs/readme-template.md`
 - [ ] T124 [P] 調整回應式版面、320px 寬度與圖表容器樣式於 `BookKeeping2/wwwroot/css/site.css`
 - [ ] T125 [P] 統一 toast、alert 與可關閉錯誤訊息互動於 `BookKeeping2/wwwroot/js/site.js`
-- [ ] T126 檢查所有使用者面向 UI 文字與驗證訊息為繁體中文於 `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [ ] T126 檢查主要導覽入口（首頁、明細、新增、報表、設定或更多功能）與所有使用者面向 UI 文字、驗證訊息為繁體中文於 `BookKeeping2/Pages/Shared/_Layout.cshtml`
 - [ ] T127 檢查敏感財務資料遮罩、CSV 稽核與預算警告稽核於 `BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
-- [ ] T128 檢查 CSP、HTTPS/HSTS、antiforgery 與 no-store 下載回應於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`
-- [ ] T129 執行全套測試並修正失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T130 執行 web 專案建置並修正警告或錯誤於 `BookKeeping2/BookKeeping2.csproj`
-- [ ] T131 依 quickstart 完成 320px 手機與桌面手動驗證紀錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [ ] T128 檢查 CSP、HTTPS/HSTS、antiforgery、no-store 下載回應、套件弱點掃描與安全 header 風險紀錄於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`
+- [ ] T129 執行全套測試、收集 coverage，確認關鍵業務邏輯測試覆蓋率達 80% 以上並修正失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T130 執行 web 專案建置、XML 文件註解檢查並修正警告或錯誤於 `BookKeeping2/BookKeeping2.csproj`
+- [ ] T131 依 quickstart 完成 320px 手機、常見桌面寬度與 30 秒內首次新增交易手動驗證紀錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [ ] T132 [P] 執行 WCAG 2.1 AA 核心可及性驗證，涵蓋鍵盤操作、語意標記與對比度，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [ ] T133 [P] 執行隱私與未授權第三方傳輸檢查，確認未經使用者明確操作或部署設定允許時外部網路請求為 0，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [ ] T134 執行成功標準時間量測，涵蓋 SC-002、SC-003、SC-004、SC-005、SC-007 與 SC-008，並記錄量測資料於 `specs/001-personal-bookkeeping-tool/quickstart.md`
 
 ---
 
@@ -342,6 +345,7 @@
 - 每個故事的 `[P]` 測試任務可平行撰寫，但同一故事的實作任務應依序完成以避免同檔衝突
 - US4、US5、US6 在 P1 故事完成後可由不同開發者平行處理
 - US7 與 US8 在相關 P1/P2 基礎完成後可平行處理
+- T122、T123、T124、T125、T126、T127、T128、T132、T133 可在目標故事完成後平行；T134 必須在相關效能測試與 UI 流程完成後執行
 
 ---
 
@@ -406,7 +410,7 @@ Task: "T113 撰寫 10,000 筆資料效能測試於 BookKeeping2.Tests/Integratio
 1. 團隊共同完成 Setup 與 Foundational
 2. P1 完成後，報表、預算、CSV 匯出可分派給不同開發者
 3. P3 可由 CSV 匯入與交易查詢兩條工作線平行推進
-4. 合併前執行 `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` 與 `dotnet build BookKeeping2/BookKeeping2.csproj`
+4. 合併前執行 `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj`、coverage 80% 門檻檢查、套件弱點掃描、可及性/隱私驗證與 `dotnet build BookKeeping2/BookKeeping2.csproj`
 
 ---
 

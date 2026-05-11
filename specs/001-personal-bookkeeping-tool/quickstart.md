@@ -37,7 +37,10 @@ dotnet run --project BookKeeping2/BookKeeping2.csproj --launch-profile https
 
 ```powershell
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj
+dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --collect "XPlat Code Coverage"
 ```
+
+關鍵業務邏輯，尤其是金額計算、交易寫入、報表、預算與 CSV 匯入匯出，coverage 必須達 80% 以上。
 
 測試範圍至少包含:
 
@@ -50,6 +53,23 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj
 - 預算 80% 與 100% 提醒
 - CSV 匯入、匯出、特殊字元與公式注入防護
 - Razor Pages 表單驗證與 antiforgery
+- 主要成功標準時間門檻: 交易反映 1 秒、100 筆月報 2 秒、1,000 筆 CSV 匯出 5 秒、100 筆 CSV 匯入 10 秒、預算提醒 1 秒、10,000 筆篩選 2 秒
+
+## 品質閘門
+
+合併或交付前需完成:
+
+```powershell
+dotnet build BookKeeping2/BookKeeping2.csproj
+dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --collect "XPlat Code Coverage"
+dotnet list BookKeeping2/BookKeeping2.csproj package --vulnerable --include-transitive
+dotnet list BookKeeping2.Tests/BookKeeping2.Tests.csproj package --vulnerable --include-transitive
+```
+
+- 公開 API 必須具備 XML 文件註解；具複雜行為或金融計算的 API 必須包含範例。
+- 安全掃描不得有未處理的高風險套件弱點。
+- 未經使用者明確操作或部署設定允許時，瀏覽器網路面板不得出現第三方傳輸。
+- WCAG 2.1 AA 核心檢查需涵蓋鍵盤操作、語意標記與對比度。
 
 ## 開發順序建議
 
@@ -67,8 +87,15 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj
 - 編輯金額為 200 後，報表與帳戶餘額同步更新。
 - 刪除交易後，一般列表與報表不顯示該交易。
 - 清除瀏覽器快取或換瀏覽器後，資料仍存在。
+- 首次使用者流程可在 30 秒內完成第一筆交易新增。
+- 新增、編輯或刪除交易後，明細列表與首頁摘要在 1 秒內反映變更。
 - 320px 手機寬度與桌面寬度下，文字、表單與圖表不重疊。
+- 鍵盤可完成主要流程，表單欄位與錯誤訊息具備語意標記，文字與控制項對比度符合 WCAG 2.1 AA 核心要求。
 - CSV 匯出可被試算表開啟，備註逗號、引號、換行與公式風險皆安全。
+- 100 筆月報在 2 秒內呈現且統計結果符合測試資料。
+- 1,000 筆 CSV 匯出在 5 秒內完成；100 筆標準 CSV 匯入在 10 秒內完成並列出成功/失敗摘要。
+- 10,000 筆交易套用單一篩選條件後在 2 秒內呈現結果。
+- 開啟瀏覽器網路面板完成主要流程，確認未授權第三方傳輸為 0。
 
 ## 部署注意事項
 
