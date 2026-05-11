@@ -217,19 +217,19 @@
 
 ### Tests for User Story 6（必須先寫且先失敗）
 
-- [ ] T089 [P] [US6] 撰寫 CSV 匯出欄位順序、日期範圍、未刪除交易規則與 1,000 筆匯出 5 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
-- [ ] T090 [P] [US6] 撰寫 CSV 特殊字元與公式注入防護單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportSecurityTests.cs`
-- [ ] T091 [P] [US6] 撰寫 CSV 匯出頁面下載回應整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
-- [ ] T092 [US6] 執行 CSV 匯出相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T089 [P] [US6] 撰寫 CSV 匯出欄位順序、日期範圍、未刪除交易規則與 1,000 筆匯出 5 秒內完成單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
+- [X] T090 [P] [US6] 撰寫 CSV 特殊字元與公式注入防護單元測試於 `BookKeeping2.Tests/Unit/Csv/CsvExportSecurityTests.cs`
+- [X] T091 [P] [US6] 撰寫 CSV 匯出頁面下載回應整合測試於 `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
+- [X] T092 [US6] 執行 CSV 匯出相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 6
 
-- [ ] T093 [P] [US6] 建立 CSV row 與匯出選項型別於 `BookKeeping2/Services/Csv/CsvTransactionRow.cs`、`BookKeeping2/Services/Csv/CsvExportOptions.cs`
-- [ ] T094 [US6] 建立 CSV 匯出服務介面於 `BookKeeping2/Services/Csv/ICsvExportService.cs`
-- [ ] T095 [US6] 實作 CsvHelper 匯出、RFC 4180 寫入與公式注入前綴於 `BookKeeping2/Services/Csv/CsvExportService.cs`
-- [ ] T096 [US6] 實作 CSV 匯出 PageModel、no-store 下載回應與稽核事件於 `BookKeeping2/Pages/Csv/Export.cshtml.cs`
-- [ ] T097 [US6] 實作 CSV 匯出 Razor Page 與日期範圍表單於 `BookKeeping2/Pages/Csv/Export.cshtml`
-- [ ] T098 [US6] 執行並修正 CSV 匯出相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T093 [P] [US6] 建立 CSV row 與匯出選項型別於 `BookKeeping2/Services/Csv/CsvTransactionRow.cs`、`BookKeeping2/Services/Csv/CsvExportOptions.cs`
+- [X] T094 [US6] 建立 CSV 匯出服務介面於 `BookKeeping2/Services/Csv/ICsvExportService.cs`
+- [X] T095 [US6] 實作 CsvHelper 匯出、RFC 4180 寫入與公式注入前綴於 `BookKeeping2/Services/Csv/CsvExportService.cs`
+- [X] T096 [US6] 實作 CSV 匯出 PageModel、no-store 下載回應與稽核事件於 `BookKeeping2/Pages/Csv/Export.cshtml.cs`
+- [X] T097 [US6] 實作 CSV 匯出 Razor Page 與日期範圍表單於 `BookKeeping2/Pages/Csv/Export.cshtml`
+- [X] T098 [US6] 執行並修正 CSV 匯出相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 6 必須可獨立下載安全且可被試算表解析的 CSV。
 

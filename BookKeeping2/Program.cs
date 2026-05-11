@@ -3,6 +3,7 @@ using BookKeeping2.Services.Accounts;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Budgets;
 using BookKeeping2.Services.Categories;
+using BookKeeping2.Services.Csv;
 using BookKeeping2.Services.Reports;
 using BookKeeping2.Services.Security;
 using BookKeeping2.Services.Time;
@@ -38,6 +39,7 @@ public class Program
         builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IBudgetService, BudgetService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
+        builder.Services.AddScoped<ICsvExportService, CsvExportService>();
         builder.Services.AddScoped<IReportService, ReportService>();
         builder.Services.AddScoped<TransactionFormOptionsService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
