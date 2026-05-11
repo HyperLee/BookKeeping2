@@ -27,13 +27,13 @@
 
 **目的**: 建立功能所需的專案、測試與工具基礎。
 
-- [ ] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考，啟用 XML 文件輸出與公開 API 文件註解警告檢查，並在 `.editorconfig` 確認私有欄位命名規則與憲章差異的實作決策
-- [ ] T002 建立 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`，加入 xUnit、Moq、Microsoft.AspNetCore.Mvc.Testing、Microsoft.EntityFrameworkCore.Sqlite、coverlet.collector 套件參考
-- [ ] T003 [P] 建立 SQLite 測試資料庫 fixture 於 `BookKeeping2.Tests/TestSupport/SqliteTestDatabase.cs`
-- [ ] T004 [P] 建立 Razor Pages 整合測試 factory 於 `BookKeeping2.Tests/TestSupport/BookKeepingWebApplicationFactory.cs`
-- [ ] T005 [P] 建立可固定 Asia/Taipei 今日的測試時間服務於 `BookKeeping2.Tests/TestSupport/FakeTaipeiDateService.cs`
-- [ ] T006 更新 `BookKeeping2.slnx`，納入 `BookKeeping2/BookKeeping2.csproj` 與 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T007 建立測試共用資料產生器於 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
+- [X] T001 更新 `BookKeeping2/BookKeeping2.csproj`，加入 EF Core SQLite、EF Core Design、Serilog.AspNetCore、Ganss.Xss、CsvHelper 套件參考，啟用 XML 文件輸出與公開 API 文件註解警告檢查，並在 `.editorconfig` 確認私有欄位命名規則與憲章差異的實作決策
+- [X] T002 建立 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`，加入 xUnit、Moq、Microsoft.AspNetCore.Mvc.Testing、Microsoft.EntityFrameworkCore.Sqlite、coverlet.collector 套件參考
+- [X] T003 [P] 建立 SQLite 測試資料庫 fixture 於 `BookKeeping2.Tests/TestSupport/SqliteTestDatabase.cs`
+- [X] T004 [P] 建立 Razor Pages 整合測試 factory 於 `BookKeeping2.Tests/TestSupport/BookKeepingWebApplicationFactory.cs`
+- [X] T005 [P] 建立可固定 Asia/Taipei 今日的測試時間服務於 `BookKeeping2.Tests/TestSupport/FakeTaipeiDateService.cs`
+- [X] T006 更新 `BookKeeping2.slnx`，納入 `BookKeeping2/BookKeeping2.csproj` 與 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T007 建立測試共用資料產生器於 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
 
 ---
 

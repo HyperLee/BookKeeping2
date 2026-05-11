@@ -241,6 +241,10 @@ dotnet_naming_rule.public_fields_should_be_pascalcase.severity = suggestion
 dotnet_naming_rule.public_fields_should_be_pascalcase.symbols = public_fields
 dotnet_naming_rule.public_fields_should_be_pascalcase.style = pascalcase
 
+# Implementation decision for specs/001-personal-bookkeeping-tool:
+# the constitution prefers private field camelCase, but this repository currently
+# encodes _camelCase. Keep the existing analyzer rule for this feature and avoid
+# broad private-field renaming until governance and .editorconfig are reconciled.
 dotnet_naming_rule.private_fields_should_be__camelcase.severity = suggestion
 dotnet_naming_rule.private_fields_should_be__camelcase.symbols = private_fields
 dotnet_naming_rule.private_fields_should_be__camelcase.style = _camelcase
