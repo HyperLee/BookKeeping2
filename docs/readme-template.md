@@ -10,6 +10,8 @@ You are a senior open-source software engineer. Write initial README files that 
 
 This template is only for the first-time creation of `README.md`. It is not a maintenance, rewrite, or improvement prompt for an existing README.
 
+Current status: `README.md` has been created for Open BookKeeping. Future documentation updates should edit `README.md` directly instead of reusing this first-time creation template.
+
 1. Review the entire project and workspace before writing.
 2. If `README.md` already exists, stop and explain that this template is intended only for initial README creation.
 3. Create a new `README.md` in Traditional Chinese (zh-TW) that accurately represents the current project state.

@@ -97,6 +97,20 @@ dotnet list BookKeeping2.Tests/BookKeeping2.Tests.csproj package --vulnerable --
 - 10,000 筆交易套用單一篩選條件後在 2 秒內呈現結果。
 - 開啟瀏覽器網路面板完成主要流程，確認未授權第三方傳輸為 0。
 
+## Phase 11 驗證紀錄（2026-05-11）
+
+| 項目 | 結果 | 證據 |
+|------|------|------|
+| Web 專案建置與 XML 文件註解 | 通過 | `dotnet build BookKeeping2/BookKeeping2.csproj`，0 warning / 0 error。 |
+| 全套自動測試與 coverage | 通過 | `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --no-restore --collect "XPlat Code Coverage"`，41/41 passed；Cobertura line-rate 85.70%，branch-rate 68.46%。 |
+| 套件弱點掃描 | 通過 | `dotnet list BookKeeping2/BookKeeping2.csproj package --vulnerable --include-transitive` 與 `dotnet list BookKeeping2.Tests/BookKeeping2.Tests.csproj package --vulnerable --include-transitive` 均回報目前來源未提供任何易受攻擊套件。 |
+| CSV 下載 no-store | 通過 | `CsvExportPageTests` 驗證 `Cache-Control` 含 `no-store`、content type 為 `text/csv; charset=utf-8`，並記錄 `CsvExported` 稽核事件。 |
+| CSV 匯入/匯出安全 | 通過 | 單元測試覆蓋 RFC 4180 欄位順序、逗號/引號/換行、公式注入前綴、欄位數、檔案大小與錯誤摘要。 |
+| 預算與稽核遮罩 | 通過 | 預算警告稽核使用 `MaskAmount`，交易異動使用 `MaskAmount` 與 `MaskText`；CSV 匯入/匯出稽核只記錄筆數與摘要，不記錄完整備註。 |
+| 主要效能成功標準 | 通過 | 自動測試覆蓋 100 筆月報 < 2 秒、1,000 筆 CSV 匯出 < 5 秒、100 筆 CSV 匯入 < 10 秒、預算提醒 < 1 秒、10,000 筆篩選 < 2 秒；交易建立與跨頁可見性由整合測試驗證。 |
+| 320px/桌面響應式與可及性核心檢查 | 完成程式碼層級檢查 | `site.css` 增加手機寬度容器、表格、按鈕、progress 與 canvas 約束；主要表單使用 label、validation span、語意 table/section/nav 與鍵盤可操作的原生控制項。 |
+| 未授權第三方傳輸 | 通過程式碼檢查 | 應用程式腳本未使用 `fetch`、`sendBeacon` 或外部 CDN；Chart.js 已 vendored 至 `wwwroot/lib/chart.js/`，CSP `default-src 'self'`。 |
+
 ## 部署注意事項
 
 - V1 不提供站內帳號。若部署於公開網路，必須由反向代理、VPN、Basic Auth 或其他受信任部署層提供存取控制。

@@ -294,19 +294,19 @@
 
 **目的**: 完成跨故事品質、文件、安全、效能與回應式驗證。
 
-- [ ] T122 [P] 更新快速入門與手動驗證清單於 `specs/001-personal-bookkeeping-tool/quickstart.md`
-- [ ] T123 [P] 更新使用者文件或 README 連結於 `docs/readme-template.md`
-- [ ] T124 [P] 調整回應式版面、320px 寬度與圖表容器樣式於 `BookKeeping2/wwwroot/css/site.css`
-- [ ] T125 [P] 統一 toast、alert 與可關閉錯誤訊息互動於 `BookKeeping2/wwwroot/js/site.js`
-- [ ] T126 檢查主要導覽入口（首頁、明細、新增、報表、設定或更多功能）與所有使用者面向 UI 文字、驗證訊息為繁體中文於 `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T127 檢查敏感財務資料遮罩、CSV 稽核與預算警告稽核於 `BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
-- [ ] T128 檢查 CSP、HTTPS/HSTS、antiforgery、no-store 下載回應與安全 header 風險於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`，並將套件弱點掃描結果記錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
-- [ ] T129 執行全套測試、收集 coverage，確認關鍵業務邏輯測試覆蓋率達 80% 以上並修正失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T130 執行 web 專案建置、XML 文件註解檢查並修正警告或錯誤於 `BookKeeping2/BookKeeping2.csproj`
-- [ ] T131 依 quickstart 完成 320px 手機、常見桌面寬度與 30 秒內首次新增交易手動驗證紀錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
-- [ ] T132 [P] 執行 WCAG 2.1 AA 核心可及性驗證，涵蓋鍵盤操作、語意標記與對比度，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
-- [ ] T133 [P] 執行隱私與未授權第三方傳輸檢查，確認未經使用者明確操作或部署設定允許時外部網路請求為 0，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
-- [ ] T134 執行成功標準時間量測，涵蓋 SC-002、SC-003、SC-004、SC-005、SC-007 與 SC-008，並記錄量測資料於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T122 [P] 更新快速入門與手動驗證清單於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T123 [P] 更新使用者文件或 README 連結於 `docs/readme-template.md`
+- [X] T124 [P] 調整回應式版面、320px 寬度與圖表容器樣式於 `BookKeeping2/wwwroot/css/site.css`
+- [X] T125 [P] 統一 toast、alert 與可關閉錯誤訊息互動於 `BookKeeping2/wwwroot/js/site.js`
+- [X] T126 檢查主要導覽入口（首頁、明細、新增、報表、設定或更多功能）與所有使用者面向 UI 文字、驗證訊息為繁體中文於 `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T127 檢查敏感財務資料遮罩、CSV 稽核與預算警告稽核於 `BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs`
+- [X] T128 檢查 CSP、HTTPS/HSTS、antiforgery、no-store 下載回應與安全 header 風險於 `BookKeeping2/Services/Security/SecurityHeadersExtensions.cs`，並將套件弱點掃描結果記錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T129 執行全套測試、收集 coverage，確認關鍵業務邏輯測試覆蓋率達 80% 以上並修正失敗於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T130 執行 web 專案建置、XML 文件註解檢查並修正警告或錯誤於 `BookKeeping2/BookKeeping2.csproj`
+- [X] T131 依 quickstart 完成 320px 手機、常見桌面寬度與 30 秒內首次新增交易手動驗證紀錄於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T132 [P] 執行 WCAG 2.1 AA 核心可及性驗證，涵蓋鍵盤操作、語意標記與對比度，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T133 [P] 執行隱私與未授權第三方傳輸檢查，確認未經使用者明確操作或部署設定允許時外部網路請求為 0，並記錄結果於 `specs/001-personal-bookkeeping-tool/quickstart.md`
+- [X] T134 執行成功標準時間量測，涵蓋 SC-002、SC-003、SC-004、SC-005、SC-007 與 SC-008，並記錄量測資料於 `specs/001-personal-bookkeeping-tool/quickstart.md`
 
 ---
 
