@@ -17,10 +17,53 @@
     </div>
 }
 
-@if (Model.Transactions.Count == 0)
+<form method="get" class="row g-3 align-items-end mb-3">
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.StartDate"></label>
+        <input class="form-control" asp-for="Filter.StartDate" type="date" />
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.EndDate"></label>
+        <input class="form-control" asp-for="Filter.EndDate" type="date" />
+        <span class="text-danger small" asp-validation-for="Filter.EndDate"></span>
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.CategoryId"></label>
+        <select class="form-select" asp-for="Filter.CategoryId" asp-items="Model.Options.Categories">
+            <option value="">全部分類</option>
+        </select>
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.AccountId"></label>
+        <select class="form-select" asp-for="Filter.AccountId" asp-items="Model.Options.Accounts">
+            <option value="">全部帳戶</option>
+        </select>
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.MinAmount"></label>
+        <input class="form-control" asp-for="Filter.MinAmount" inputmode="decimal" />
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.MaxAmount"></label>
+        <input class="form-control" asp-for="Filter.MaxAmount" inputmode="decimal" />
+        <span class="text-danger small" asp-validation-for="Filter.MaxAmount"></span>
+    </div>
+    <div class="col-12 col-md-4">
+        <label class="form-label" asp-for="Filter.Keyword"></label>
+        <input class="form-control" asp-for="Filter.Keyword" />
+    </div>
+    <div class="col-12 col-md-2">
+        <input asp-for="Filter.PageSize" type="hidden" />
+        <button type="submit" class="btn btn-outline-primary w-100">篩選</button>
+    </div>
+</form>
+
+<div class="mb-2 text-muted">篩選結果 @Model.Transactions.TotalCount 筆</div>
+
+@if (Model.Transactions.Items.Count == 0)
 {
     <div class="alert alert-info" role="status">
-        目前尚無交易紀錄。
+        沒有符合條件的交易。
     </div>
 }
 else
@@ -39,7 +82,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var transaction in Model.Transactions)
+                @foreach (var transaction in Model.Transactions.Items)
                 {
                     <tr>
                         <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
@@ -57,4 +100,9 @@ else
             </tbody>
         </table>
     </div>
+    <partial name="_Pagination" model="Model.Transactions" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

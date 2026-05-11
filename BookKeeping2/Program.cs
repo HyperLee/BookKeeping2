@@ -43,6 +43,7 @@ public class Program
         builder.Services.AddScoped<ICsvImportService, CsvImportService>();
         builder.Services.AddScoped<IReportService, ReportService>();
         builder.Services.AddScoped<TransactionFormOptionsService>();
+        builder.Services.AddScoped<ITransactionQueryService, TransactionQueryService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<AuditLogMaskingPolicy>();
         builder.Services.AddSingleton<TextInputSanitizer>();

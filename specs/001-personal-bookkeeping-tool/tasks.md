@@ -271,20 +271,20 @@
 
 ### Tests for User Story 8（必須先寫且先失敗）
 
-- [ ] T111 [P] [US8] 撰寫交易查詢條件 AND 邏輯、日期與金額範圍單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
-- [ ] T112 [P] [US8] 撰寫交易明細篩選頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFilterPageTests.cs`
-- [ ] T113 [P] [US8] 撰寫 10,000 筆資料篩選效能整合測試於 `BookKeeping2.Tests/Integration/Performance/TransactionQueryPerformanceTests.cs`
-- [ ] T114 [US8] 執行搜尋篩選相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T111 [P] [US8] 撰寫交易查詢條件 AND 邏輯、日期與金額範圍單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
+- [X] T112 [P] [US8] 撰寫交易明細篩選頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFilterPageTests.cs`
+- [X] T113 [P] [US8] 撰寫 10,000 筆資料篩選效能整合測試於 `BookKeeping2.Tests/Integration/Performance/TransactionQueryPerformanceTests.cs`
+- [X] T114 [US8] 執行搜尋篩選相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 8
 
-- [ ] T115 [P] [US8] 建立交易篩選輸入與分頁 ViewModel 於 `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`、`BookKeeping2/ViewModels/Transactions/PagedTransactionListViewModel.cs`
-- [ ] T116 [US8] 建立交易查詢服務介面與查詢條件型別於 `BookKeeping2/Services/Transactions/ITransactionQueryService.cs`、`BookKeeping2/Services/Transactions/TransactionQuery.cs`
-- [ ] T117 [US8] 實作交易查詢、分頁、關鍵字搜尋與索引友善排序於 `BookKeeping2/Services/Transactions/TransactionQueryService.cs`
-- [ ] T118 [US8] 更新交易明細 PageModel 支援篩選、分頁與欄位驗證於 `BookKeeping2/Pages/Transactions/Index.cshtml.cs`
-- [ ] T119 [US8] 更新交易明細 Razor Page 加入篩選表單與結果摘要於 `BookKeeping2/Pages/Transactions/Index.cshtml`
-- [ ] T120 [US8] 建立共用分頁 partial 於 `BookKeeping2/Pages/Shared/_Pagination.cshtml`
-- [ ] T121 [US8] 執行並修正搜尋篩選相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T115 [P] [US8] 建立交易篩選輸入與分頁 ViewModel 於 `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`、`BookKeeping2/ViewModels/Transactions/PagedTransactionListViewModel.cs`
+- [X] T116 [US8] 建立交易查詢服務介面與查詢條件型別於 `BookKeeping2/Services/Transactions/ITransactionQueryService.cs`、`BookKeeping2/Services/Transactions/TransactionQuery.cs`
+- [X] T117 [US8] 實作交易查詢、分頁、關鍵字搜尋與索引友善排序於 `BookKeeping2/Services/Transactions/TransactionQueryService.cs`
+- [X] T118 [US8] 更新交易明細 PageModel 支援篩選、分頁與欄位驗證於 `BookKeeping2/Pages/Transactions/Index.cshtml.cs`
+- [X] T119 [US8] 更新交易明細 Razor Page 加入篩選表單與結果摘要於 `BookKeeping2/Pages/Transactions/Index.cshtml`
+- [X] T120 [US8] 建立共用分頁 partial 於 `BookKeeping2/Pages/Shared/_Pagination.cshtml`
+- [X] T121 [US8] 執行並修正搜尋篩選相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 8 必須可獨立驗證複合篩選與大量資料可用性。
 
