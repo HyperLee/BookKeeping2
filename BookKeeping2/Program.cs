@@ -1,6 +1,7 @@
 using BookKeeping2.Data;
 using BookKeeping2.Services.Accounts;
 using BookKeeping2.Services.Audit;
+using BookKeeping2.Services.Budgets;
 using BookKeeping2.Services.Categories;
 using BookKeeping2.Services.Reports;
 using BookKeeping2.Services.Security;
@@ -35,6 +36,7 @@ public class Program
         builder.Services.AddScoped<ITaipeiDateService, TaipeiDateService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
         builder.Services.AddScoped<IAccountService, AccountService>();
+        builder.Services.AddScoped<IBudgetService, BudgetService>();
         builder.Services.AddScoped<ICategoryService, CategoryService>();
         builder.Services.AddScoped<IReportService, ReportService>();
         builder.Services.AddScoped<TransactionFormOptionsService>();

@@ -189,21 +189,21 @@
 
 ### Tests for User Story 5（必須先寫且先失敗）
 
-- [ ] T077 [P] [US5] 撰寫預算使用率、剩餘金額、超支金額、月份重算與 1 秒內提醒狀態計算單元測試於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
-- [ ] T078 [P] [US5] 撰寫預算管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
-- [ ] T079 [P] [US5] 撰寫首頁預算進度與 1 秒內提醒呈現整合測試於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
-- [ ] T080 [US5] 執行預算相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T077 [P] [US5] 撰寫預算使用率、剩餘金額、超支金額、月份重算與 1 秒內提醒狀態計算單元測試於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
+- [X] T078 [P] [US5] 撰寫預算管理頁面整合測試於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
+- [X] T079 [P] [US5] 撰寫首頁預算進度與 1 秒內提醒呈現整合測試於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
+- [X] T080 [US5] 執行預算相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 5
 
-- [ ] T081 [P] [US5] 建立預算 ViewModel 於 `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`
-- [ ] T082 [US5] 建立預算服務介面與提醒狀態型別於 `BookKeeping2/Services/Budgets/IBudgetService.cs`、`BookKeeping2/Services/Budgets/BudgetAlertState.cs`
-- [ ] T083 [US5] 實作預算 CRUD、支出彙總、80%/100% 提醒與稽核事件於 `BookKeeping2/Services/Budgets/BudgetService.cs`
-- [ ] T084 [US5] 實作預算管理 PageModel 於 `BookKeeping2/Pages/Budgets/Index.cshtml.cs`
-- [ ] T085 [US5] 實作預算管理 Razor Page 與提醒 UI 於 `BookKeeping2/Pages/Budgets/Index.cshtml`
-- [ ] T086 [US5] 更新首頁 PageModel 顯示預算進度、帳戶餘額與最近交易於 `BookKeeping2/Pages/Index.cshtml.cs`
-- [ ] T087 [US5] 更新首頁 Razor Page 顯示本月收入、支出、結餘、預算進度與空白狀態於 `BookKeeping2/Pages/Index.cshtml`
-- [ ] T088 [US5] 執行並修正預算相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T081 [P] [US5] 建立預算 ViewModel 於 `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`
+- [X] T082 [US5] 建立預算服務介面與提醒狀態型別於 `BookKeeping2/Services/Budgets/IBudgetService.cs`、`BookKeeping2/Services/Budgets/BudgetAlertState.cs`
+- [X] T083 [US5] 實作預算 CRUD、支出彙總、80%/100% 提醒與稽核事件於 `BookKeeping2/Services/Budgets/BudgetService.cs`
+- [X] T084 [US5] 實作預算管理 PageModel 於 `BookKeeping2/Pages/Budgets/Index.cshtml.cs`
+- [X] T085 [US5] 實作預算管理 Razor Page 與提醒 UI 於 `BookKeeping2/Pages/Budgets/Index.cshtml`
+- [X] T086 [US5] 更新首頁 PageModel 顯示預算進度、帳戶餘額與最近交易於 `BookKeeping2/Pages/Index.cshtml.cs`
+- [X] T087 [US5] 更新首頁 Razor Page 顯示本月收入、支出、結餘、預算進度與空白狀態於 `BookKeeping2/Pages/Index.cshtml`
+- [X] T088 [US5] 執行並修正預算相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 5 必須可獨立展示預算設定、提醒與首頁進度。
 

@@ -1,0 +1,106 @@
+@page
+@using System.Globalization
+@model BookKeeping2.Pages.Budgets.IndexModel
+@{
+    ViewData["Title"] = "預算管理";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <h1 class="h3 mb-0">預算管理</h1>
+    <form method="get" class="d-flex align-items-end gap-2">
+        <div>
+            <label class="form-label mb-1" asp-for="Month">預算月份</label>
+            <input class="form-control" asp-for="Month" type="month" value="@Model.Month" />
+            <span class="text-danger small" asp-validation-for="Month"></span>
+        </div>
+        <button type="submit" class="btn btn-outline-primary">查看</button>
+    </form>
+</div>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @statusMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+    </div>
+}
+
+<section aria-labelledby="budget-form-heading" class="mb-4">
+    <h2 id="budget-form-heading" class="h5">設定分類預算</h2>
+    <form method="post" class="row g-3 align-items-end">
+        <input asp-for="Input.BudgetMonth" type="hidden" />
+        <div class="col-12 col-md-5">
+            <label class="form-label" asp-for="Input.CategoryId"></label>
+            <select class="form-select" asp-for="Input.CategoryId">
+                <option value="">請選擇支出分類</option>
+                @foreach (var category in Model.Options.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+            <span class="text-danger small" asp-validation-for="Input.CategoryId"></span>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="form-label" asp-for="Input.Amount"></label>
+            <input class="form-control" asp-for="Input.Amount" inputmode="decimal" />
+            <span class="text-danger small" asp-validation-for="Input.Amount"></span>
+        </div>
+        <div class="col-12 col-md-3">
+            <button type="submit" class="btn btn-primary w-100">儲存預算</button>
+        </div>
+    </form>
+</section>
+
+<section aria-labelledby="budget-list-heading">
+    <h2 id="budget-list-heading" class="h5">本月預算進度</h2>
+
+    @if (Model.Budgets.Count == 0)
+    {
+        <div class="alert alert-info" role="status">本月尚未設定預算。</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">分類</th>
+                        <th scope="col" class="text-end">預算</th>
+                        <th scope="col" class="text-end">已使用</th>
+                        <th scope="col">使用率</th>
+                        <th scope="col">提醒</th>
+                        <th scope="col" class="text-end">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var budget in Model.Budgets)
+                    {
+                        decimal progressWidth = Math.Min(budget.UsagePercentage, 100m);
+                        <tr>
+                            <td>@budget.CategoryName</td>
+                            <td class="text-end">@budget.Amount.ToString("N0", CultureInfo.CurrentCulture)</td>
+                            <td class="text-end">@budget.SpentAmount.ToString("N0", CultureInfo.CurrentCulture)</td>
+                            <td>
+                                <div class="progress" role="progressbar" aria-valuenow="@budget.UsagePercentage.ToString("N2", CultureInfo.InvariantCulture)" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar @budget.ProgressBarClass" style="width: @progressWidth.ToString("N2", CultureInfo.InvariantCulture)%">
+                                        @budget.UsagePercentage.ToString("N2", CultureInfo.CurrentCulture)%
+                                    </div>
+                                </div>
+                            </td>
+                            <td>@budget.AlertText</td>
+                            <td class="text-end">
+                                <form method="post" asp-page-handler="Delete" asp-route-id="@budget.BudgetId" asp-route-month="@Model.Month">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

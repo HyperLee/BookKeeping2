@@ -4,6 +4,7 @@ using BookKeeping2.Models.Categories;
 using BookKeeping2.Models.Common;
 using BookKeeping2.Models.Transactions;
 using BookKeeping2.Services.Audit;
+using BookKeeping2.Services.Budgets;
 using BookKeeping2.Services.Common;
 using BookKeeping2.Services.Time;
 using BookKeeping2.Validation;
@@ -24,6 +25,7 @@ public sealed class TransactionService : ITransactionService
     private readonly AuditLogMaskingPolicy maskingPolicy;
     private readonly TextInputSanitizer sanitizer;
     private readonly TransactionFormOptionsService formOptionsService;
+    private readonly IBudgetService? budgetService;
 
     /// <summary>
     /// Initializes a new transaction service.
@@ -34,13 +36,15 @@ public sealed class TransactionService : ITransactionService
     /// <param name="maskingPolicy">The audit masking policy.</param>
     /// <param name="sanitizer">The text sanitizer.</param>
     /// <param name="formOptionsService">The form options service.</param>
+    /// <param name="budgetService">The optional budget service.</param>
     public TransactionService(
         AppDbContext dbContext,
         ITaipeiDateService dateService,
         IAuditService auditService,
         AuditLogMaskingPolicy maskingPolicy,
         TextInputSanitizer? sanitizer = null,
-        TransactionFormOptionsService? formOptionsService = null)
+        TransactionFormOptionsService? formOptionsService = null,
+        IBudgetService? budgetService = null)
     {
         this.dbContext = dbContext;
         this.dateService = dateService;
@@ -48,6 +52,7 @@ public sealed class TransactionService : ITransactionService
         this.maskingPolicy = maskingPolicy;
         this.sanitizer = sanitizer ?? new TextInputSanitizer();
         this.formOptionsService = formOptionsService ?? new TransactionFormOptionsService(dbContext);
+        this.budgetService = budgetService;
     }
 
     /// <inheritdoc />
@@ -156,6 +161,11 @@ public sealed class TransactionService : ITransactionService
             transaction.Id.ToString(),
             transaction.LastChangeSummary,
             cancellationToken: cancellationToken);
+        if (input.Type == TransactionType.Expense && budgetService is not null)
+        {
+            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, cancellationToken);
+        }
+
         await transactionScope.CommitAsync(cancellationToken);
 
         return TransactionResult.Success(transaction.Id);
@@ -196,6 +206,11 @@ public sealed class TransactionService : ITransactionService
             transaction.Id.ToString(),
             transaction.LastChangeSummary,
             cancellationToken: cancellationToken);
+        if (input.Type == TransactionType.Expense && budgetService is not null)
+        {
+            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, cancellationToken);
+        }
+
         await transactionScope.CommitAsync(cancellationToken);
 
         return TransactionResult.Success(transaction.Id);

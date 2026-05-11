@@ -1,7 +1,10 @@
 using BookKeeping2.Data;
 using BookKeeping2.Models.Common;
+using BookKeeping2.Services.Accounts;
+using BookKeeping2.Services.Budgets;
 using BookKeeping2.Services.Common;
 using BookKeeping2.Services.Time;
+using BookKeeping2.ViewModels.Budgets;
 using BookKeeping2.ViewModels.Transactions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,16 +18,22 @@ public class IndexModel : PageModel
 {
     private readonly AppDbContext dbContext;
     private readonly ITaipeiDateService dateService;
+    private readonly IBudgetService budgetService;
+    private readonly IAccountService accountService;
 
     /// <summary>
     /// Initializes a new dashboard page model.
     /// </summary>
     /// <param name="dbContext">The application database context.</param>
     /// <param name="dateService">The Taipei date service.</param>
-    public IndexModel(AppDbContext dbContext, ITaipeiDateService dateService)
+    /// <param name="budgetService">The budget service.</param>
+    /// <param name="accountService">The account service.</param>
+    public IndexModel(AppDbContext dbContext, ITaipeiDateService dateService, IBudgetService budgetService, IAccountService accountService)
     {
         this.dbContext = dbContext;
         this.dateService = dateService;
+        this.budgetService = budgetService;
+        this.accountService = accountService;
     }
 
     /// <summary>
@@ -46,6 +55,16 @@ public class IndexModel : PageModel
     /// Gets recent visible transactions.
     /// </summary>
     public IReadOnlyList<TransactionListItemViewModel> RecentTransactions { get; private set; } = [];
+
+    /// <summary>
+    /// Gets account balance summaries.
+    /// </summary>
+    public IReadOnlyList<AccountBalanceSummary> AccountBalances { get; private set; } = [];
+
+    /// <summary>
+    /// Gets current month budget summaries.
+    /// </summary>
+    public IReadOnlyList<BudgetStatusViewModel> BudgetSummaries { get; private set; } = [];
 
     /// <summary>
     /// Handles the dashboard request.
@@ -88,5 +107,8 @@ public class IndexModel : PageModel
                 Note = transaction.Note
             })
             .ToList();
+
+        AccountBalances = await accountService.GetBalanceSummariesAsync(includeArchived: false);
+        BudgetSummaries = await budgetService.ListMonthlyAsync(monthStart);
     }
 }
