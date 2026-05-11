@@ -1,0 +1,29 @@
+@page "{id:long}"
+@model BookKeeping2.Pages.Transactions.DeleteModel
+@{
+    ViewData["Title"] = "刪除交易";
+}
+
+<h1 class="h3 mb-3">刪除交易</h1>
+
+<div class="alert alert-warning" role="alert">
+    確定要刪除此交易嗎？刪除後將不會出現在一般明細與報表中。
+</div>
+
+<dl class="row">
+    <dt class="col-sm-3">日期</dt>
+    <dd class="col-sm-9">@Model.Transaction.TransactionDate.ToString("yyyy-MM-dd")</dd>
+    <dt class="col-sm-3">類型</dt>
+    <dd class="col-sm-9">@Model.Transaction.TypeText</dd>
+    <dt class="col-sm-3">金額</dt>
+    <dd class="col-sm-9">@Model.Transaction.Amount.ToString("N0")</dd>
+    <dt class="col-sm-3">分類</dt>
+    <dd class="col-sm-9">@Model.Transaction.CategoryName</dd>
+    <dt class="col-sm-3">帳戶</dt>
+    <dd class="col-sm-9">@Model.Transaction.AccountName</dd>
+</dl>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">確認刪除</button>
+    <a class="btn btn-outline-secondary" asp-page="/Transactions/Index">取消</a>
+</form>

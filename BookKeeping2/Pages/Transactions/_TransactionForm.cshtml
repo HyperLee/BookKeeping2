@@ -1,0 +1,42 @@
+@using BookKeeping2.Models.Common
+@model BookKeeping2.Pages.Transactions.TransactionFormPageModel
+
+<div class="row g-3 mb-3">
+    <div class="col-md-4">
+        <label asp-for="Input.TransactionDate" class="form-label"></label>
+        <input asp-for="Input.TransactionDate" class="form-control" type="date" />
+        <span asp-validation-for="Input.TransactionDate" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Input.Type" class="form-label"></label>
+        <select asp-for="Input.Type" class="form-select">
+            <option value="@TransactionType.Expense">支出</option>
+            <option value="@TransactionType.Income">收入</option>
+        </select>
+        <span asp-validation-for="Input.Type" class="text-danger"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Input.Amount" class="form-label"></label>
+        <input asp-for="Input.Amount" class="form-control" inputmode="decimal" />
+        <span asp-validation-for="Input.Amount" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Input.CategoryId" class="form-label"></label>
+        <select asp-for="Input.CategoryId" asp-items="Model.Options.Categories" class="form-select">
+            <option value="">請選擇分類</option>
+        </select>
+        <span asp-validation-for="Input.CategoryId" class="text-danger"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Input.AccountId" class="form-label"></label>
+        <select asp-for="Input.AccountId" asp-items="Model.Options.Accounts" class="form-select">
+            <option value="">請選擇帳戶</option>
+        </select>
+        <span asp-validation-for="Input.AccountId" class="text-danger"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Input.Note" class="form-label"></label>
+        <textarea asp-for="Input.Note" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Input.Note" class="text-danger"></span>
+    </div>
+</div>

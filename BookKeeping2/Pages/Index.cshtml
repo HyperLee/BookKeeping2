@@ -1,10 +1,67 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "首頁";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <h1 class="h3 mb-0">首頁</h1>
+    <a class="btn btn-primary" asp-page="/Transactions/Create">新增交易</a>
 </div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="border rounded p-3 h-100">
+            <div class="text-muted">本月收入</div>
+            <div class="fs-4">@Model.MonthlyIncome.ToString("N0")</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="border rounded p-3 h-100">
+            <div class="text-muted">本月支出</div>
+            <div class="fs-4">@Model.MonthlyExpense.ToString("N0")</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="border rounded p-3 h-100">
+            <div class="text-muted">本月結餘</div>
+            <div class="fs-4">@Model.MonthlyBalance.ToString("N0")</div>
+        </div>
+    </div>
+</div>
+
+<section aria-labelledby="recent-transactions-heading">
+    <div class="d-flex align-items-center justify-content-between mb-2">
+        <h2 id="recent-transactions-heading" class="h5 mb-0">最近交易</h2>
+        <a asp-page="/Transactions/Index">查看明細</a>
+    </div>
+
+    @if (Model.RecentTransactions.Count == 0)
+    {
+        <div class="alert alert-info" role="status">本月尚無紀錄</div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-sm align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">日期</th>
+                        <th scope="col">分類</th>
+                        <th scope="col" class="text-end">金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var transaction in Model.RecentTransactions)
+                    {
+                        <tr>
+                            <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
+                            <td>@transaction.CategoryName</td>
+                            <td class="text-end">@transaction.Amount.ToString("N0")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

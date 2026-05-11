@@ -3,6 +3,7 @@ using BookKeeping2.Data.SeedData;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Security;
 using BookKeeping2.Services.Time;
+using BookKeeping2.Services.Transactions;
 using BookKeeping2.Validation;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,6 +28,7 @@ public class Program
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
         builder.Services.AddScoped<ITaipeiDateService, TaipeiDateService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<AuditLogMaskingPolicy>();
         builder.Services.AddSingleton<TextInputSanitizer>();
         builder.Services.AddRazorPages();
@@ -38,7 +40,11 @@ public class Program
             DatabaseInitializer.InitializeAsync(scope.ServiceProvider).GetAwaiter().GetResult();
         }
 
-        if (!app.Environment.IsDevelopment())
+        if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
+        {
+            app.UseDeveloperExceptionPage();
+        }
+        else
         {
             app.UseExceptionHandler("/Error");
             app.UseHsts();

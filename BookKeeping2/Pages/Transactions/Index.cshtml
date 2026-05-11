@@ -1,0 +1,60 @@
+@page
+@model BookKeeping2.Pages.Transactions.IndexModel
+@{
+    ViewData["Title"] = "交易明細";
+}
+
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <h1 class="h3 mb-0">交易明細</h1>
+    <a class="btn btn-primary" asp-page="/Transactions/Create">新增交易</a>
+</div>
+
+@if (TempData["StatusMessage"] is string statusMessage)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @statusMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+    </div>
+}
+
+@if (Model.Transactions.Count == 0)
+{
+    <div class="alert alert-info" role="status">
+        目前尚無交易紀錄。
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">日期</th>
+                    <th scope="col">類型</th>
+                    <th scope="col" class="text-end">金額</th>
+                    <th scope="col">分類</th>
+                    <th scope="col">帳戶</th>
+                    <th scope="col">備註</th>
+                    <th scope="col" class="text-end">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var transaction in Model.Transactions)
+                {
+                    <tr>
+                        <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
+                        <td>@transaction.TypeText</td>
+                        <td class="text-end">@transaction.Amount.ToString("N0")</td>
+                        <td>@transaction.CategoryName</td>
+                        <td>@transaction.AccountName</td>
+                        <td>@transaction.Note</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="/Transactions/Edit" asp-route-id="@transaction.Id">編輯</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-page="/Transactions/Delete" asp-route-id="@transaction.Id">刪除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

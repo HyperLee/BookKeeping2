@@ -1,4 +1,6 @@
 using System;
+using BookKeeping2.Data;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +8,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BookKeeping2.Data.Migrations;
 
 /// <inheritdoc />
+[DbContext(typeof(AppDbContext))]
+[Migration("20260511000000_InitialCreate")]
 public partial class InitialCreate : Migration
 {
     /// <inheritdoc />

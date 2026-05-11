@@ -1,0 +1,21 @@
+@page "{id:long}"
+@model BookKeeping2.Pages.Transactions.EditModel
+@{
+    ViewData["Title"] = "編輯交易";
+}
+
+<h1 class="h3 mb-3">編輯交易</h1>
+
+<form method="post" class="bookkeeping-form" data-disable-on-submit="true">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <partial name="_TransactionForm" model="Model" />
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">儲存變更</button>
+        <a class="btn btn-outline-secondary" asp-page="/Transactions/Index">取消</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/transactions.js" asp-append-version="true"></script>
+}

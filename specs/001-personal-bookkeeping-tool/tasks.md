@@ -74,25 +74,25 @@
 
 ### Tests for User Story 1（必須先寫且先失敗）
 
-- [ ] T026 [P] [US1] 撰寫交易金額、日期、分類與帳戶驗證單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
-- [ ] T027 [P] [US1] 撰寫 minor units 精度與 overflow 單元測試於 `BookKeeping2.Tests/Unit/Common/MoneyMinorUnitConverterTests.cs`
-- [ ] T028 [P] [US1] 撰寫新增、編輯、軟刪除交易頁面整合測試，並驗證明細列表與首頁摘要 1 秒內反映變更，於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
-- [ ] T029 [P] [US1] 撰寫重複提交與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFormSecurityTests.cs`
-- [ ] T030 [US1] 執行交易相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T026 [P] [US1] 撰寫交易金額、日期、分類與帳戶驗證單元測試於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
+- [X] T027 [P] [US1] 撰寫 minor units 精度與 overflow 單元測試於 `BookKeeping2.Tests/Unit/Common/MoneyMinorUnitConverterTests.cs`
+- [X] T028 [P] [US1] 撰寫新增、編輯、軟刪除交易頁面整合測試，並驗證明細列表與首頁摘要 1 秒內反映變更，於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
+- [X] T029 [P] [US1] 撰寫重複提交與 antiforgery 整合測試於 `BookKeeping2.Tests/Integration/Pages/TransactionFormSecurityTests.cs`
+- [X] T030 [US1] 執行交易相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 1
 
-- [ ] T031 [P] [US1] 建立交易輸入模型於 `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`
-- [ ] T032 [P] [US1] 建立交易列表與表單選項 ViewModel 於 `BookKeeping2/ViewModels/Transactions/TransactionListItemViewModel.cs`、`BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`
-- [ ] T033 [US1] 建立交易服務介面與結果型別於 `BookKeeping2/Services/Transactions/ITransactionService.cs`、`BookKeeping2/Services/Transactions/TransactionResult.cs`
-- [ ] T034 [US1] 實作交易新增、編輯、軟刪除、查詢與稽核邏輯於 `BookKeeping2/Services/Transactions/TransactionService.cs`
-- [ ] T035 [US1] 實作交易明細 PageModel 於 `BookKeeping2/Pages/Transactions/Index.cshtml.cs`
-- [ ] T036 [US1] 實作交易明細 Razor Page 與刪除入口於 `BookKeeping2/Pages/Transactions/Index.cshtml`
-- [ ] T037 [US1] 實作新增交易 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Create.cshtml`、`BookKeeping2/Pages/Transactions/Create.cshtml.cs`
-- [ ] T038 [US1] 實作編輯交易 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Edit.cshtml`、`BookKeeping2/Pages/Transactions/Edit.cshtml.cs`
-- [ ] T039 [US1] 實作刪除確認 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Delete.cshtml`、`BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
-- [ ] T040 [US1] 加入防重複提交與欄位回饋腳本於 `BookKeeping2/wwwroot/js/transactions.js`
-- [ ] T041 [US1] 執行並修正交易相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T031 [P] [US1] 建立交易輸入模型於 `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`
+- [X] T032 [P] [US1] 建立交易列表與表單選項 ViewModel 於 `BookKeeping2/ViewModels/Transactions/TransactionListItemViewModel.cs`、`BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`
+- [X] T033 [US1] 建立交易服務介面與結果型別於 `BookKeeping2/Services/Transactions/ITransactionService.cs`、`BookKeeping2/Services/Transactions/TransactionResult.cs`
+- [X] T034 [US1] 實作交易新增、編輯、軟刪除、查詢與稽核邏輯於 `BookKeeping2/Services/Transactions/TransactionService.cs`
+- [X] T035 [US1] 實作交易明細 PageModel 於 `BookKeeping2/Pages/Transactions/Index.cshtml.cs`
+- [X] T036 [US1] 實作交易明細 Razor Page 與刪除入口於 `BookKeeping2/Pages/Transactions/Index.cshtml`
+- [X] T037 [US1] 實作新增交易 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Create.cshtml`、`BookKeeping2/Pages/Transactions/Create.cshtml.cs`
+- [X] T038 [US1] 實作編輯交易 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Edit.cshtml`、`BookKeeping2/Pages/Transactions/Edit.cshtml.cs`
+- [X] T039 [US1] 實作刪除確認 Razor Page 與 PageModel 於 `BookKeeping2/Pages/Transactions/Delete.cshtml`、`BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
+- [X] T040 [US1] 加入防重複提交與欄位回饋腳本於 `BookKeeping2/wwwroot/js/transactions.js`
+- [X] T041 [US1] 執行並修正交易相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 1 必須可獨立運作、獨立測試並可展示。
 
