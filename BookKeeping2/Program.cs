@@ -1,5 +1,4 @@
 using BookKeeping2.Data;
-using BookKeeping2.Data.SeedData;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Security;
 using BookKeeping2.Services.Time;
@@ -22,10 +21,14 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.Configure<BookKeepingDbOptions>(builder.Configuration.GetSection(BookKeepingDbOptions.SectionName));
+        var dbOptions = builder.Configuration.GetSection(BookKeepingDbOptions.SectionName).Get<BookKeepingDbOptions>()
+            ?? new BookKeepingDbOptions();
         string connectionString = builder.Configuration.GetConnectionString("BookKeepingDatabase")
-            ?? "Data Source=App_Data/bookkeeping.db";
+            ?? dbOptions.ToConnectionString();
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
+        builder.Services.AddHostedService<DatabaseStartupService>();
         builder.Services.AddScoped<ITaipeiDateService, TaipeiDateService>();
         builder.Services.AddScoped<IAuditService, AuditService>();
         builder.Services.AddScoped<ITransactionService, TransactionService>();
@@ -34,11 +37,6 @@ public class Program
         builder.Services.AddRazorPages();
 
         var app = builder.Build();
-
-        using (IServiceScope scope = app.Services.CreateScope())
-        {
-            DatabaseInitializer.InitializeAsync(scope.ServiceProvider).GetAwaiter().GetResult();
-        }
 
         if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Testing"))
         {

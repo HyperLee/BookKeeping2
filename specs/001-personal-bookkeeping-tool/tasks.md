@@ -106,19 +106,19 @@
 
 ### Tests for User Story 2（必須先寫且先失敗）
 
-- [ ] T042 [P] [US2] 撰寫 SQLite 持久化與重新啟動資料保留整合測試於 `BookKeeping2.Tests/Integration/Persistence/SqlitePersistenceTests.cs`
-- [ ] T043 [P] [US2] 撰寫跨 client 單一帳本資料一致整合測試，並驗證 V1 無站內帳號、角色或每使用者資料隔離行為於 `BookKeeping2.Tests/Integration/Persistence/CrossBrowserConsistencyTests.cs`
-- [ ] T044 [P] [US2] 撰寫最後儲存版本與異動摘要單元測試於 `BookKeeping2.Tests/Unit/Transactions/LastWriteWinsAuditTests.cs`
-- [ ] T045 [US2] 執行持久化相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T042 [P] [US2] 撰寫 SQLite 持久化與重新啟動資料保留整合測試於 `BookKeeping2.Tests/Integration/Persistence/SqlitePersistenceTests.cs`
+- [X] T043 [P] [US2] 撰寫跨 client 單一帳本資料一致整合測試，並驗證 V1 無站內帳號、角色或每使用者資料隔離行為於 `BookKeeping2.Tests/Integration/Persistence/CrossBrowserConsistencyTests.cs`
+- [X] T044 [P] [US2] 撰寫最後儲存版本與異動摘要單元測試於 `BookKeeping2.Tests/Unit/Transactions/LastWriteWinsAuditTests.cs`
+- [X] T045 [US2] 執行持久化相關測試、確認因尚未實作而失敗，並取得使用者或維護者對測試意圖確認於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ### Implementation for User Story 2
 
-- [ ] T046 [US2] 建立資料庫路徑與初始化選項於 `BookKeeping2/Data/BookKeepingDbOptions.cs`
-- [ ] T047 [US2] 實作資料庫啟動初始化服務於 `BookKeeping2/Data/DatabaseStartupService.cs`
-- [ ] T048 [US2] 更新 SQLite connection string 與環境設定讀取於 `BookKeeping2/appsettings.json`、`BookKeeping2/appsettings.Development.json`
-- [ ] T049 [US2] 補齊交易寫入 transaction scope 與最後儲存異動摘要於 `BookKeeping2/Services/Transactions/TransactionService.cs`
-- [ ] T050 [US2] 更新首頁資料讀取使用持久化來源於 `BookKeeping2/Pages/Index.cshtml.cs`
-- [ ] T051 [US2] 執行並修正持久化相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T046 [US2] 建立資料庫路徑與初始化選項於 `BookKeeping2/Data/BookKeepingDbOptions.cs`
+- [X] T047 [US2] 實作資料庫啟動初始化服務於 `BookKeeping2/Data/DatabaseStartupService.cs`
+- [X] T048 [US2] 更新 SQLite connection string 與環境設定讀取於 `BookKeeping2/appsettings.json`、`BookKeeping2/appsettings.Development.json`
+- [X] T049 [US2] 補齊交易寫入 transaction scope 與最後儲存異動摘要於 `BookKeeping2/Services/Transactions/TransactionService.cs`
+- [X] T050 [US2] 更新首頁資料讀取使用持久化來源於 `BookKeeping2/Pages/Index.cshtml.cs`
+- [X] T051 [US2] 執行並修正持久化相關測試直到通過於 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 2 必須證明清除瀏覽器快取或換瀏覽器後資料仍由站台資料庫提供。
 
