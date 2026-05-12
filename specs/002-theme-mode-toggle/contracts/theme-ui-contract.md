@@ -2,7 +2,7 @@
 
 ## Scope
 
-此 contract 定義 Razor Pages 使用者介面與瀏覽器端狀態的 observable behavior。沒有新增 HTTP API、資料庫 contract 或外部服務 contract。
+此 contract 定義 Razor Pages 使用者介面與瀏覽器端狀態的 observable behavior。驗證範圍包含所有目前可由使用者直接瀏覽的 Razor Pages：首頁、隱私權頁、錯誤頁、帳戶、分類、預算、交易清單、新增交易、編輯交易、刪除交易、CSV 匯入、CSV 匯出與報表；shared partial 與 validation partial 透過其宿主頁面驗證。沒有新增 HTTP API、資料庫 contract 或外部服務 contract。
 
 ## Global Theme Contract
 
@@ -10,7 +10,7 @@
 - 可選擇在 `<html>` 上同步 `data-theme-mode="light|dark|system"`，用於測試與 CSS hook；此值不得取代 `data-bs-theme`。
 - 若偏好不存在、無效或 localStorage 無法讀取，選取模式必須視為 `system`。
 - 若 `system` 無法判斷系統偏好，有效主題必須 fallback 為 `light`。
-- 首次繪製前初始化必須出現在 Bootstrap CSS 前，並且只能讀取 allow-list 主題偏好與 `matchMedia`。
+- 目標瀏覽器環境中，首次繪製前初始化必須出現在 Bootstrap CSS 前，並且只能讀取 allow-list 主題偏好與 `matchMedia`；若必要瀏覽器能力被封鎖，頁面不得產生 script error，且必須在可執行後儘早套用 `system` / `light` fallback。
 
 ## Local Storage Contract
 
@@ -45,11 +45,12 @@ Observable requirements:
 
 ## Non-Home Page Contract
 
-`/Privacy`、`/Error` 與其他站內 Razor Pages:
+除首頁外，所有目前可由使用者直接瀏覽的站內 Razor Pages:
 
 - 必須套用 `<html data-bs-theme>` 推導出的有效主題。
 - 不得渲染 `[data-theme-mode-control]` 或任何主題選擇 radio/select/button group。
 - 不得因頁面不同而覆寫使用者已選定的主題模式。
+- 在首頁切換主題後，使用者導覽至任一站內頁面時，該頁面必須在 1 秒內呈現一致有效主題。
 
 ## Runtime JavaScript Contract
 
@@ -60,13 +61,14 @@ Observable requirements:
 - 監聽 `storage` event，當 `bookkeeping.theme.mode` 改變時重新讀取、推導與套用主題。
 - 當模式為 `system` 時監聽 `prefers-color-scheme` change，系統偏好變更後重新套用有效主題。
 - localStorage 或 matchMedia 發生例外時不得讓頁面 script 中斷；必須 fallback 到 `system` / `light`。
+- 行為驗證必須包含真實瀏覽器或等效環境，覆蓋 `localStorage`、`storage` event、`matchMedia`、首次繪製前套用與 1 秒/2 秒時間限制；靜態 markup 測試不得作為唯一證據。
 
 ## Accessibility Contract
 
 - 控制項必須有可見群組標籤，且每個選項都有可點擊 label。
 - 焦點指示在亮色與暗黑主題下都必須可見。
 - 主題切換不得讓目前焦點元素消失或被不可見樣式覆蓋。
-- 主要文字、連結、按鈕、表單、表格、alert、驗證訊息與 footer/nav 在 light/dark 有效主題下都必須符合 WCAG 2.2 AA 對比。
+- 主要文字、連結、按鈕、表單、表格、圖表、alert、驗證訊息與 footer/nav 在所有目前可由使用者直接瀏覽的站內頁面，以及 light/dark 有效主題下，都必須符合 WCAG 2.2 AA 對比。
 
 ## Data Integrity Contract
 

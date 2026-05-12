@@ -21,7 +21,7 @@
 
 ## Decision: 首次繪製前在 `_Layout.cshtml` head 內執行最小初始化 script
 
-**Rationale**: FR-015 與 SC-008 要求技術可行時避免先顯示相反主題。外部 script 需等待額外資源載入，較難保證在 CSS 套用前完成。head 內小型同步 script 可在 Bootstrap CSS 載入前讀取 allow-list localStorage 值、推導有效主題並設定 `document.documentElement.dataset.bsTheme`。
+**Rationale**: FR-015 與 SC-008 要求在目標瀏覽器環境中避免先顯示相反主題。外部 script 需等待額外資源載入，較難保證在 CSS 套用前完成。head 內小型同步 script 可在 Bootstrap CSS 載入前讀取 allow-list localStorage 值、推導有效主題並設定 `document.documentElement.dataset.bsTheme`。若使用者或瀏覽器設定封鎖必要能力，頁面仍需在可執行後儘早 fallback 且不得產生 script error。
 
 **Alternatives considered**:
 
@@ -58,9 +58,9 @@
 
 ## Decision: 以整合測試驗證 Razor markup，以瀏覽器驗證補足互動與可及性
 
-**Rationale**: `WebApplicationFactory` 已存在，可先測首頁包含控制項、其他頁不包含控制項、layout 包含 head 初始化 hook 與 `site.js`。跨分頁同步、首次繪製前主題、系統偏好、對比與焦點狀態需要真實瀏覽器能力，後續可用 Playwright、axe-core 或手動 QA 補足。
+**Rationale**: `WebApplicationFactory` 已存在，可先測首頁包含控制項、所有其他使用者可瀏覽頁不包含控制項、layout 包含 head 初始化 hook 與 `site.js`。跨分頁同步、首次繪製前主題、系統偏好、1 秒/2 秒時間限制、對比與焦點狀態需要真實瀏覽器能力，因此必須用 Playwright、axe-core 或等效瀏覽器工具補足，手動 QA 只能作為輔助驗證。
 
 **Alternatives considered**:
 
 - 只做手動測試: 無法滿足憲章測試優先要求。
-- 只做 xUnit markup 測試: 無法實證 localStorage、media query 與 cross-tab 行為。
+- 只做 xUnit markup 測試: 無法實證 localStorage、media query、首次繪製前套用與 cross-tab 行為。
