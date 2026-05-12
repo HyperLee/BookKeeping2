@@ -115,12 +115,12 @@
 
 **Purpose**: Final validation and constitutional checks across the feature.
 
-- [ ] T027 Run full project build for `BookKeeping2/BookKeeping2.csproj`
-- [ ] T028 Run full automated test suite for `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T029 [P] Verify the feature did not add SQLite schema, EF Core migration, cookie, session, server log, or audit persistence changes under `BookKeeping2/Data/`, `BookKeeping2/Migrations/`, and `BookKeeping2/Program.cs`
-- [ ] T030 [P] Verify all user-facing theme text remains Traditional Chinese in `BookKeeping2/Pages/Index.cshtml`, `BookKeeping2/Pages/Shared/_Layout.cshtml`, and `BookKeeping2/wwwroot/js/site.js`
-- [ ] T031 [P] Verify theme switching code does not submit forms, call finance endpoints, or expose sensitive data in `BookKeeping2/wwwroot/js/site.js`
-- [ ] T032 Complete the quickstart validation checklist and update any discovered follow-up notes in `specs/002-theme-mode-toggle/quickstart.md`
+- [X] T027 Run full project build for `BookKeeping2/BookKeeping2.csproj`
+- [X] T028 Run full automated test suite for `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T029 [P] Verify the feature did not add SQLite schema, EF Core migration, cookie, session, server log, or audit persistence changes under `BookKeeping2/Data/`, `BookKeeping2/Migrations/`, and `BookKeeping2/Program.cs`
+- [X] T030 [P] Verify all user-facing theme text remains Traditional Chinese in `BookKeeping2/Pages/Index.cshtml`, `BookKeeping2/Pages/Shared/_Layout.cshtml`, and `BookKeeping2/wwwroot/js/site.js`
+- [X] T031 [P] Verify theme switching code does not submit forms, call finance endpoints, or expose sensitive data in `BookKeeping2/wwwroot/js/site.js`
+- [X] T032 Complete the quickstart validation checklist and update any discovered follow-up notes in `specs/002-theme-mode-toggle/quickstart.md`
 
 ---
 

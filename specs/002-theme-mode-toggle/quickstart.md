@@ -55,6 +55,14 @@ Launch profiles:
 - 2026-05-12: `ThemeModePageTests` 與 `ThemeModeScriptContractTests` 覆蓋首頁控制項語意標記、非首頁不顯示控制項、pre-paint script 位於 Bootstrap CSS 前、`bookkeeping.theme.mode` allow-list、暗色模式表格、alert、footer、表單、focus-visible 與響應式樣式 contract。
 - 2026-05-12: 本功能未新增 SQLite schema、EF Core migration、cookie、session、server log 或 audit persistence；主題偏好只保存在瀏覽器 `localStorage`。
 
+### Phase 6 Final Validation
+
+- 2026-05-12: `dotnet build BookKeeping2/BookKeeping2.csproj --no-restore` 通過，0 warnings、0 errors。
+- 2026-05-12: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --no-restore` 通過，57/57 tests passed。
+- 2026-05-12: `git diff --name-only origin/main...HEAD -- BookKeeping2/Data BookKeeping2/Migrations BookKeeping2/Program.cs` 無輸出，確認本功能未變更資料層、migration 或 host setup。
+- 2026-05-12: 已檢查 `BookKeeping2/Pages/Index.cshtml`、`BookKeeping2/Pages/Shared/_Layout.cshtml`、`BookKeeping2/wwwroot/js/site.js`，使用者面向主題文字維持繁體中文。
+- 2026-05-12: 已檢查 `BookKeeping2/wwwroot/js/site.js`，主題切換沒有 `.submit()`、`fetch()`、`XMLHttpRequest` 或交易、帳戶、預算、分類、CSV、報表 endpoint 呼叫。
+
 ## Expected Implementation Order
 
 1. 先新增會失敗的整合測試，覆蓋首頁控制項、所有非首頁使用者可瀏覽頁不顯示控制項、layout 初始化 hook 與靜態資源引用。
