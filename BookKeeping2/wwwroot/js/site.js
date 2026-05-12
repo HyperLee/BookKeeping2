@@ -16,7 +16,7 @@
 
     function writeMode(mode) {
         try {
-            window.localStorage.setItem(storageKey, mode);
+            localStorage.setItem(storageKey, normalizeMode(mode));
         } catch {
             return;
         }
@@ -45,9 +45,14 @@
 
     function applyTheme(mode) {
         const normalizedMode = normalizeMode(mode);
+        const focusedElement = document.activeElement;
         const root = document.documentElement;
         root.dataset.themeMode = normalizedMode;
         root.dataset.bsTheme = deriveEffectiveTheme(normalizedMode);
+        if (focusedElement instanceof HTMLElement && document.contains(focusedElement)) {
+            focusedElement.focus({ preventScroll: true });
+        }
+
         return normalizedMode;
     }
 
@@ -82,6 +87,15 @@
     } else if (systemPreferenceQuery && typeof systemPreferenceQuery.addListener === 'function') {
         systemPreferenceQuery.addListener(handleSystemPreferenceChange);
     }
+
+    window.addEventListener('storage', event => {
+        if (event.key !== storageKey) {
+            return;
+        }
+
+        currentMode = applyTheme(readMode());
+        syncThemeControl(currentMode);
+    });
 
     const themeControl = document.querySelector('[data-theme-mode-control]');
     if (themeControl instanceof HTMLElement) {

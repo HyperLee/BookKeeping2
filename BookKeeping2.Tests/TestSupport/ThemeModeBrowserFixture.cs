@@ -33,15 +33,21 @@ public sealed class ThemeModeBrowserFixture : IAsyncLifetime
 
     public async Task<IPage> NewPageAsync(BookKeepingWebApplicationFactory factory)
     {
+        IBrowserContext context = await NewContextAsync(factory);
+        return await context.NewPageAsync();
+    }
+
+    public async Task<IBrowserContext> NewContextAsync(BookKeepingWebApplicationFactory factory)
+    {
         if (browser is null)
         {
             throw new InvalidOperationException("Browser fixture has not been initialized.");
         }
 
-        IPage page = await browser.NewPageAsync(new() { BaseURL = BrowserBaseUrl });
+        IBrowserContext context = await browser.NewContextAsync(new() { BaseURL = BrowserBaseUrl });
         HttpClient client = factory.CreateClient();
-        await page.RouteAsync($"{BrowserBaseUrl}/**", route => FulfillFromFactoryAsync(route, client));
-        return page;
+        await context.RouteAsync($"{BrowserBaseUrl}/**", route => FulfillFromFactoryAsync(route, client));
+        return context;
     }
 
     private static async Task FulfillFromFactoryAsync(IRoute route, HttpClient client)

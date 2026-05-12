@@ -88,6 +88,34 @@ public sealed partial class ThemeModePageTests
         Assert.True(siteScriptIndex >= 0, "The shared site.js reference should remain rendered.");
     }
 
+    [Fact]
+    public async Task Home_page_theme_control_uses_accessible_grouping_and_labels()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+
+        string html = await GetSuccessfulHtmlAsync(client, HomeRoute);
+
+        Assert.Contains("<legend", html, StringComparison.Ordinal);
+        Assert.Contains("主題模式", html, StringComparison.Ordinal);
+        Assert.Contains("for=\"theme-mode-light\"", html, StringComparison.Ordinal);
+        Assert.Contains("for=\"theme-mode-dark\"", html, StringComparison.Ordinal);
+        Assert.Contains("for=\"theme-mode-system\"", html, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Shared_theme_styles_cover_dark_contrast_focus_and_responsive_surfaces()
+    {
+        string css = ReadProjectFile("BookKeeping2", "wwwroot", "css", "site.css");
+
+        Assert.Contains("[data-bs-theme=\"dark\"]", css, StringComparison.Ordinal);
+        Assert.Contains(".theme-mode-control .form-check-input:focus-visible", css, StringComparison.Ordinal);
+        Assert.Contains(".table", css, StringComparison.Ordinal);
+        Assert.Contains(".alert", css, StringComparison.Ordinal);
+        Assert.Contains(".footer", css, StringComparison.Ordinal);
+        Assert.Contains("@media (max-width: 575.98px)", css, StringComparison.Ordinal);
+    }
+
     private static async Task<string> GetSuccessfulHtmlAsync(HttpClient client, string route)
     {
         HttpResponseMessage response = await client.GetAsync(route);

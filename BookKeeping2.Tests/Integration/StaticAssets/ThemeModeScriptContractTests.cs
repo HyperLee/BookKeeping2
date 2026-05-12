@@ -38,6 +38,32 @@ public sealed partial class ThemeModeScriptContractTests
         Assert.Contains("currentMode === 'system'", script, StringComparison.Ordinal);
     }
 
+    [Fact]
+    public void Runtime_script_validates_storage_key_and_writes_only_allow_list_modes()
+    {
+        string script = ReadSiteScript();
+
+        Assert.Contains("bookkeeping.theme.mode", script, StringComparison.Ordinal);
+        Assert.Contains("normalizeMode", script, StringComparison.Ordinal);
+        Assert.Contains("localStorage.setItem(storageKey, normalizeMode(mode))", script, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Runtime_script_does_not_submit_forms_or_call_finance_endpoints()
+    {
+        string script = ReadSiteScript();
+
+        Assert.DoesNotContain(".submit(", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("fetch(", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("XMLHttpRequest", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Transactions", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Accounts", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Budgets", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Categories", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Csv", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("/Reports", script, StringComparison.Ordinal);
+    }
+
     private static string FindRepositoryRoot()
     {
         DirectoryInfo? directory = new(AppContext.BaseDirectory);

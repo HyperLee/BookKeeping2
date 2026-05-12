@@ -93,19 +93,19 @@
 
 ### Tests for User Story 3
 
-- [ ] T019 [US3] Add failing script contract test for allow-list validation, invalid `localStorage` fallback to `system`, and storage key `bookkeeping.theme.mode` in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs`
-- [ ] T020 [US3] Add failing script contract and browser tests for `storage` event synchronization within 2 seconds, no finance endpoint calls, and no form submissions from theme switching code in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
-- [ ] T021 [US3] Add failing accessibility markup, focus-style, responsive, and axe/WCAG tests for the homepage control, shared styles, and all current user-facing Razor Pages in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T019 [US3] Add failing script contract test for allow-list validation, invalid `localStorage` fallback to `system`, and storage key `bookkeeping.theme.mode` in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs`
+- [X] T020 [US3] Add failing script contract and browser tests for `storage` event synchronization within 2 seconds, no finance endpoint calls, and no form submissions from theme switching code in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T021 [US3] Add failing accessibility markup, focus-style, responsive, and axe/WCAG tests for the homepage control, shared styles, and all current user-facing Razor Pages in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **確認閘門**: 開始 T022 前，必須先執行 T019-T021，確認它們因預期原因失敗，並取得使用者或維護者確認測試意圖符合 US3。
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Harden the pre-paint script with allow-list validation, `localStorage` try/catch handling, `data-theme-mode`, and safe `system` fallback in `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T023 [US3] Harden runtime behavior for validated reads/writes, `storage` event synchronization, exception fallback, and focus preservation in `BookKeeping2/wwwroot/js/site.js`
-- [ ] T024 [US3] Update responsive, contrast, and focus-visible styles for homepage cards, nav, forms, tables, charts, alerts, footer, and theme controls across all current user-facing Razor Pages in `BookKeeping2/wwwroot/css/site.css`
-- [ ] T025 [US3] Execute manual responsive, persistence, cross-tab, keyboard, 1-second post-navigation, pre-paint, fallback, and contrast checks from `specs/002-theme-mode-toggle/quickstart.md`
-- [ ] T026 [US3] Run targeted US3 tests in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`, `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs`, and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T022 [US3] Harden the pre-paint script with allow-list validation, `localStorage` try/catch handling, `data-theme-mode`, and safe `system` fallback in `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T023 [US3] Harden runtime behavior for validated reads/writes, `storage` event synchronization, exception fallback, and focus preservation in `BookKeeping2/wwwroot/js/site.js`
+- [X] T024 [US3] Update responsive, contrast, and focus-visible styles for homepage cards, nav, forms, tables, charts, alerts, footer, and theme controls across all current user-facing Razor Pages in `BookKeeping2/wwwroot/css/site.css`
+- [X] T025 [US3] Execute manual responsive, persistence, cross-tab, keyboard, 1-second post-navigation, pre-paint, fallback, and contrast checks from `specs/002-theme-mode-toggle/quickstart.md`
+- [X] T026 [US3] Run targeted US3 tests in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`, `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs`, and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **Checkpoint**: All user stories are independently functional and verified.
 

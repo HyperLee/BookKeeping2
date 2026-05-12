@@ -49,6 +49,12 @@ Launch profiles:
 10. 檢查亮色與暗黑主題下所有目前可由使用者直接瀏覽的站內頁面的主要文字、連結、按鈕、表單、表格、圖表、alert、驗證訊息與焦點狀態符合 WCAG 2.2 AA。
 11. 以真實瀏覽器或等效工具驗證目標瀏覽器環境中首次繪製前已套用有效主題；若封鎖網站儲存或外觀偏好查詢，確認頁面無 script error 且套用安全 fallback。
 
+### Phase 5 Validation Notes
+
+- 2026-05-12: `ThemeModeBrowserTests` 覆蓋首頁切換後 1 秒內跨頁一致、`system` 依瀏覽器色彩偏好推導、2 秒內系統偏好更新、無效 localStorage 值 fallback、同 origin 分頁 2 秒內同步、主題切換不呼叫財務端點、不送出表單，以及 390px、768px、1280px 寬度下首頁控制項不產生水平溢出且可取得焦點。
+- 2026-05-12: `ThemeModePageTests` 與 `ThemeModeScriptContractTests` 覆蓋首頁控制項語意標記、非首頁不顯示控制項、pre-paint script 位於 Bootstrap CSS 前、`bookkeeping.theme.mode` allow-list、暗色模式表格、alert、footer、表單、focus-visible 與響應式樣式 contract。
+- 2026-05-12: 本功能未新增 SQLite schema、EF Core migration、cookie、session、server log 或 audit persistence；主題偏好只保存在瀏覽器 `localStorage`。
+
 ## Expected Implementation Order
 
 1. 先新增會失敗的整合測試，覆蓋首頁控制項、所有非首頁使用者可瀏覽頁不顯示控制項、layout 初始化 hook 與靜態資源引用。

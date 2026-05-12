@@ -9,15 +9,9 @@
         (function () {
             const storageKey = 'bookkeeping.theme.mode';
             const allowedModes = ['light', 'dark', 'system'];
-            let mode = 'system';
 
-            try {
-                const storedMode = window.localStorage.getItem(storageKey);
-                if (allowedModes.includes(storedMode)) {
-                    mode = storedMode;
-                }
-            } catch {
-                mode = 'system';
+            function normalizeMode(mode) {
+                return allowedModes.includes(mode) ? mode : 'system';
             }
 
             function systemPrefersDark() {
@@ -28,6 +22,15 @@
                 }
             }
 
+            function readMode() {
+                try {
+                    return normalizeMode(window.localStorage.getItem(storageKey));
+                } catch {
+                    return 'system';
+                }
+            }
+
+            const mode = readMode();
             const effectiveTheme = mode === 'dark' || (mode === 'system' && systemPrefersDark()) ? 'dark' : 'light';
             const root = document.documentElement;
             root.dataset.themeMode = mode;
