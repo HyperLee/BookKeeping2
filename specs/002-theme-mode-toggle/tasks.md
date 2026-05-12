@@ -17,8 +17,8 @@
 
 **Purpose**: Confirm the existing ASP.NET Core Razor Pages project and test project are ready before feature work.
 
-- [ ] T001 Run baseline build and test commands for `BookKeeping2/BookKeeping2.csproj` and `BookKeeping2.Tests/BookKeeping2.Tests.csproj`, recording any pre-existing failures in `specs/002-theme-mode-toggle/quickstart.md`
-- [ ] T002 Review current layout, homepage, static assets, and UI contract insertion points in `BookKeeping2/Pages/Shared/_Layout.cshtml`, `BookKeeping2/Pages/Index.cshtml`, `BookKeeping2/wwwroot/css/site.css`, `BookKeeping2/wwwroot/js/site.js`, and `specs/002-theme-mode-toggle/contracts/theme-ui-contract.md`
+- [X] T001 Run baseline build and test commands for `BookKeeping2/BookKeeping2.csproj` and `BookKeeping2.Tests/BookKeeping2.Tests.csproj`, recording any pre-existing failures in `specs/002-theme-mode-toggle/quickstart.md`
+- [X] T002 Review current layout, homepage, static assets, and UI contract insertion points in `BookKeeping2/Pages/Shared/_Layout.cshtml`, `BookKeeping2/Pages/Index.cshtml`, `BookKeeping2/wwwroot/css/site.css`, `BookKeeping2/wwwroot/js/site.js`, and `specs/002-theme-mode-toggle/contracts/theme-ui-contract.md`
 
 ---
 

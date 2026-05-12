@@ -13,6 +13,11 @@ dotnet build BookKeeping2/BookKeeping2.csproj
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj
 ```
 
+### Baseline Verification
+
+- 2026-05-12 Phase 1 baseline: `dotnet build BookKeeping2/BookKeeping2.csproj` 通過，0 warnings、0 errors。
+- 2026-05-12 Phase 1 baseline: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` 通過，41/41 tests passed；沒有既有失敗需要記錄。
+
 若需要 coverage:
 
 ```powershell
