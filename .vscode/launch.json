@@ -1,0 +1,45 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "BookKeeping2: Debug Web (https)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build BookKeeping2",
+            "program": "${workspaceFolder}/BookKeeping2/bin/Debug/net10.0/BookKeeping2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/BookKeeping2",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "launchSettingsProfile": "https",
+            "launchSettingsFilePath": "${workspaceFolder}/BookKeeping2/Properties/launchSettings.json",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
+        },
+        {
+            "name": "BookKeeping2: Debug Web (http)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build BookKeeping2",
+            "program": "${workspaceFolder}/BookKeeping2/bin/Debug/net10.0/BookKeeping2.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/BookKeeping2",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "launchSettingsProfile": "http",
+            "launchSettingsFilePath": "${workspaceFolder}/BookKeeping2/Properties/launchSettings.json",
+            "serverReadyAction": {
+                "action": "openExternally",
+                "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+            }
+        },
+        {
+            "name": "BookKeeping2: Attach to .NET Process",
+            "type": "coreclr",
+            "request": "attach",
+            "processId": "${command:pickProcess}"
+        }
+    ]
+}
