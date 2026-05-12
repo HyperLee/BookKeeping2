@@ -28,8 +28,8 @@
 
 **Critical**: No user story implementation should begin until this phase is complete.
 
-- [ ] T003 Create `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` with `BookKeepingWebApplicationFactory`, route constants for all current user-facing Razor Pages, seeded transaction id support for `/Transactions/Edit/{id}` and `/Transactions/Delete/{id}`, and shared assertions for `[data-theme-mode-control]`
-- [ ] T004 [P] Update `BookKeeping2.Tests/BookKeeping2.Tests.csproj` with Playwright/axe-core or equivalent browser test dependencies, create `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` with helpers to read `BookKeeping2/Pages/Shared/_Layout.cshtml` and `BookKeeping2/wwwroot/js/site.js`, and create `BookKeeping2.Tests/TestSupport/ThemeModeBrowserFixture.cs`
+- [X] T003 Create `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` with `BookKeepingWebApplicationFactory`, route constants for all current user-facing Razor Pages, seeded transaction id support for `/Transactions/Edit/{id}` and `/Transactions/Delete/{id}`, and shared assertions for `[data-theme-mode-control]`
+- [X] T004 [P] Update `BookKeeping2.Tests/BookKeeping2.Tests.csproj` with Playwright/axe-core or equivalent browser test dependencies, create `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` with helpers to read `BookKeeping2/Pages/Shared/_Layout.cshtml` and `BookKeeping2/wwwroot/js/site.js`, and create `BookKeeping2.Tests/TestSupport/ThemeModeBrowserFixture.cs`
 
 **Checkpoint**: Test scaffolding exists and story-specific failing tests can now be added.
 
