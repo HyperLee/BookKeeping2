@@ -15,15 +15,8 @@ Delete only explicit single-path files when deletion is required. If a task trul
 bulk deletion, stop and ask the user to perform that cleanup manually.
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure, shell commands,
-and other important information, read the current plan before changing code.
-
-Current plan: `specs/001-personal-bookkeeping-tool/plan.md`.
-
-Before implementation, read the active feature artifacts in
-`specs/001-personal-bookkeeping-tool/` as applicable:
-`spec.md`, `plan.md`, `research.md`, `data-model.md`, `quickstart.md`, and
-`contracts/`. If `tasks.md` exists, follow it as the execution source of truth.
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
 <!-- SPECKIT END -->
 
 ## Project Snapshot

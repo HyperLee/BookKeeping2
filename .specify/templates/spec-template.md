@@ -1,137 +1,128 @@
-# 功能規格: [FEATURE NAME]
+# Feature Specification: [FEATURE NAME]
 
-**功能分支**: `[###-feature-name]`
-**建立日期**: [DATE]
-**狀態**: Draft
-**輸入**: 使用者描述: "$ARGUMENTS"
+**Feature Branch**: `[###-feature-name]`  
+**Created**: [DATE]  
+**Status**: Draft  
+**Input**: User description: "$ARGUMENTS"
 
-<!--
-  本文件 MUST 使用繁體中文 zh-TW。
-  需求描述 MUST 著重使用者價值與可驗收行為，不描述實作細節。
--->
-
-## 使用者情境與測試 *(mandatory)*
+## User Scenarios & Testing *(mandatory)*
 
 <!--
-  IMPORTANT:
-  使用者故事 MUST 依業務價值排序，P1 為最重要。
-  每個故事 MUST 可獨立開發、獨立測試、獨立展示，並能交付可用的 MVP 增量。
+  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
+  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
+  you should still have a viable MVP (Minimum Viable Product) that delivers value.
+  
+  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
+  Think of each story as a standalone slice of functionality that can be:
+  - Developed independently
+  - Tested independently
+  - Deployed independently
+  - Demonstrated to users independently
 -->
 
-### 使用者故事 1 - [簡短標題] (Priority: P1)
+### User Story 1 - [Brief Title] (Priority: P1)
 
-[用一般使用者能理解的語言描述此使用者旅程]
+[Describe this user journey in plain language]
 
-**優先原因**: [說明此故事的業務價值，以及為何是此優先級]
+**Why this priority**: [Explain the value and why it has this priority level]
 
-**獨立測試**: [描述只完成此故事時如何驗證，例如完成某操作並得到某價值]
+**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
 
-**驗收情境**:
+**Acceptance Scenarios**:
 
-1. **Given** [初始狀態]，**When** [使用者動作]，**Then** [預期結果]
-2. **Given** [初始狀態]，**When** [使用者動作]，**Then** [預期結果]
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+2. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-### 使用者故事 2 - [簡短標題] (Priority: P2)
+### User Story 2 - [Brief Title] (Priority: P2)
 
-[用一般使用者能理解的語言描述此使用者旅程]
+[Describe this user journey in plain language]
 
-**優先原因**: [說明此故事的業務價值，以及為何是此優先級]
+**Why this priority**: [Explain the value and why it has this priority level]
 
-**獨立測試**: [描述此故事如何獨立驗證]
+**Independent Test**: [Describe how this can be tested independently]
 
-**驗收情境**:
+**Acceptance Scenarios**:
 
-1. **Given** [初始狀態]，**When** [使用者動作]，**Then** [預期結果]
-
----
-
-### 使用者故事 3 - [簡短標題] (Priority: P3)
-
-[用一般使用者能理解的語言描述此使用者旅程]
-
-**優先原因**: [說明此故事的業務價值，以及為何是此優先級]
-
-**獨立測試**: [描述此故事如何獨立驗證]
-
-**驗收情境**:
-
-1. **Given** [初始狀態]，**When** [使用者動作]，**Then** [預期結果]
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
 ---
 
-[依需要新增更多使用者故事，每個故事都必須有優先級]
+### User Story 3 - [Brief Title] (Priority: P3)
 
-### 邊界情況
+[Describe this user journey in plain language]
 
-<!--
-  ACTION REQUIRED:
-  補齊此功能的真實邊界條件。記帳功能 MUST 特別考慮金額、日期、
-  分類、重複提交、刪除與資料復原。
--->
+**Why this priority**: [Explain the value and why it has this priority level]
 
-- 當 [邊界條件] 發生時，系統如何處理？
-- 當 [錯誤情境] 發生時，系統如何回饋使用者並保護資料？
+**Independent Test**: [Describe how this can be tested independently]
 
-## 需求 *(mandatory)*
+**Acceptance Scenarios**:
 
-<!--
-  ACTION REQUIRED:
-  功能需求 MUST 可驗證，並使用 MUST/SHOULD/MAY 表示強制程度。
-  若需求不清楚，使用 NEEDS CLARIFICATION 標註並提出具體問題。
--->
+1. **Given** [initial state], **When** [action], **Then** [expected outcome]
 
-### 功能需求
+---
 
-- **FR-001**: 系統 MUST [具體能力，例如「允許使用者新增支出紀錄」]
-- **FR-002**: 系統 MUST [具體驗證，例如「驗證金額為正 decimal 值」]
-- **FR-003**: 使用者 MUST 能夠 [關鍵互動，例如「依月份篩選帳目」]
-- **FR-004**: 系統 MUST [資料需求，例如「保存帳目分類與交易日期」]
-- **FR-005**: 系統 MUST [稽核或安全行為，例如「記錄帳目異動事件」]
+[Add more user stories as needed, each with an assigned priority]
 
-*不清楚需求標註範例:*
-
-- **FR-006**: 系統 MUST 透過 [NEEDS CLARIFICATION: 未指定驗證方式] 驗證使用者身分
-- **FR-007**: 系統 MUST 保留帳目資料 [NEEDS CLARIFICATION: 未指定保留期間]
-
-### 憲章對齊需求 *(mandatory)*
-
-- **資料完整性**: [說明金額精確度、交易原子性、日期與分類驗證、刪除保護]
-- **安全與隱私**: [說明輸入驗證、CSRF、XSS、防止敏感財務資料外洩]
-- **稽核與可觀察性**: [說明需要記錄哪些安全事件、帳目異動與錯誤]
-- **使用者體驗**: [說明繁體中文訊息、驗證回饋、回應式與可及性需求]
-- **效能**: [說明頁面載入、查詢、報表或大量資料情境的可測量要求]
-
-若某項不適用，MUST 寫明「N/A」與原因。
-
-### 關鍵實體 *(功能涉及資料時必填)*
-
-- **[實體 1]**: [代表什麼、主要屬性、重要驗證規則，不描述資料庫實作]
-- **[實體 2]**: [代表什麼、與其他實體的關係、資料完整性限制]
-
-## 成功標準 *(mandatory)*
+### Edge Cases
 
 <!--
-  ACTION REQUIRED:
-  定義可測量、技術無關的成功標準。避免使用「好用」「快速」等不可驗證描述。
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right edge cases.
 -->
 
-### 可衡量成果
+- What happens when [boundary condition]?
+- How does system handle [error scenario]?
 
-- **SC-001**: [可量測指標，例如「使用者可在 30 秒內完成一筆支出紀錄」]
-- **SC-002**: [效能指標，例如「月份報表在 1,000 筆交易內 2 秒內產生」]
-- **SC-003**: [正確性指標，例如「金額加總與分類統計結果 100% 符合測試資料」]
-- **SC-004**: [業務指標，例如「降低使用者手動對帳時間」]
-
-## 假設
+## Requirements *(mandatory)*
 
 <!--
-  ACTION REQUIRED:
-  記錄當功能描述未指定細節時採用的合理預設。假設不可與憲章衝突。
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right functional requirements.
 -->
 
-- [目標使用者假設，例如「使用者主要以桌面與手機瀏覽器操作」]
-- [範圍邊界假設，例如「預算功能不包含於 v1」]
-- [資料或環境假設，例如「資料儲存沿用現有方案」]
-- [外部依賴假設，例如「需要既有使用者身分資料」]
+### Functional Requirements
+
+- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
+- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
+- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
+- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
+- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+
+*Example of marking unclear requirements:*
+
+- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
+- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+
+### Key Entities *(include if feature involves data)*
+
+- **[Entity 1]**: [What it represents, key attributes without implementation]
+- **[Entity 2]**: [What it represents, relationships to other entities]
+
+## Success Criteria *(mandatory)*
+
+<!--
+  ACTION REQUIRED: Define measurable success criteria.
+  These must be technology-agnostic and measurable.
+-->
+
+### Measurable Outcomes
+
+- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
+- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
+- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
+- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+
+## Assumptions
+
+<!--
+  ACTION REQUIRED: The content in this section represents placeholders.
+  Fill them out with the right assumptions based on reasonable defaults
+  chosen when the feature description did not specify certain details.
+-->
+
+- [Assumption about target users, e.g., "Users have stable internet connectivity"]
+- [Assumption about scope boundaries, e.g., "Mobile support is out of scope for v1"]
+- [Assumption about data/environment, e.g., "Existing authentication system will be reused"]
+- [Dependency on existing system/service, e.g., "Requires access to the existing user profile API"]
