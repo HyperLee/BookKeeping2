@@ -1,17 +1,38 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-Hant-TW">
+<html lang="zh-Hant-TW" data-bs-theme="light" data-theme-mode="system">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Open BookKeeping</title>
     <script type="importmap"></script>
+    <script>
+        (function () {
+            const storageKey = 'bookkeeping.theme.mode';
+            const allowedModes = ['light', 'dark', 'system'];
+            let mode = 'system';
+
+            try {
+                const storedMode = window.localStorage.getItem(storageKey);
+                if (allowedModes.includes(storedMode)) {
+                    mode = storedMode;
+                }
+            } catch {
+                mode = 'system';
+            }
+
+            const effectiveTheme = mode === 'dark' ? 'dark' : 'light';
+            const root = document.documentElement;
+            root.dataset.themeMode = mode;
+            root.dataset.bsTheme = effectiveTheme;
+        }());
+    </script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BookKeeping2.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-body-tertiary border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">Open BookKeeping</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -21,31 +42,31 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">首頁</a>
+                            <a class="nav-link" asp-area="" asp-page="/Index">首頁</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Transactions/Index">明細</a>
+                            <a class="nav-link" asp-area="" asp-page="/Transactions/Index">明細</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Transactions/Create">新增</a>
+                            <a class="nav-link" asp-area="" asp-page="/Transactions/Create">新增</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Categories/Index">分類</a>
+                            <a class="nav-link" asp-area="" asp-page="/Categories/Index">分類</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Accounts/Index">帳戶</a>
+                            <a class="nav-link" asp-area="" asp-page="/Accounts/Index">帳戶</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Reports/Index">報表</a>
+                            <a class="nav-link" asp-area="" asp-page="/Reports/Index">報表</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Budgets/Index">預算</a>
+                            <a class="nav-link" asp-area="" asp-page="/Budgets/Index">預算</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Csv/Export">CSV 匯出</a>
+                            <a class="nav-link" asp-area="" asp-page="/Csv/Export">CSV 匯出</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Csv/Import">CSV 匯入</a>
+                            <a class="nav-link" asp-area="" asp-page="/Csv/Import">CSV 匯入</a>
                         </li>
                     </ul>
                 </div>

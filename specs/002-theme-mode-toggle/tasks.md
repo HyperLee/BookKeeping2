@@ -43,20 +43,20 @@
 
 ### Tests for User Story 1
 
-- [ ] T005 [US1] Add failing homepage markup test for `fieldset[data-theme-mode-control]`, three `themeMode` radio values, and labels「亮色模式」「暗黑模式」「跟隨系統」in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`
-- [ ] T006 [US1] Add failing non-homepage test verifying every current user-facing Razor Page except `/` does not render `[data-theme-mode-control]` in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`
-- [ ] T007 [US1] Add failing layout and browser tests verifying the pre-paint theme initialization script appears before Bootstrap CSS, `~/js/site.js` remains referenced, and post-homepage navigation applies the chosen effective theme within 1 second in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T005 [US1] Add failing homepage markup test for `fieldset[data-theme-mode-control]`, three `themeMode` radio values, and labels「亮色模式」「暗黑模式」「跟隨系統」in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`
+- [X] T006 [US1] Add failing non-homepage test verifying every current user-facing Razor Page except `/` does not render `[data-theme-mode-control]` in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs`
+- [X] T007 [US1] Add failing layout and browser tests verifying the pre-paint theme initialization script appears before Bootstrap CSS, `~/js/site.js` remains referenced, and post-homepage navigation applies the chosen effective theme within 1 second in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **確認閘門**: 開始 T008 前，必須先執行 T005-T007，確認它們因預期原因失敗，並取得使用者或維護者確認測試意圖符合 US1。
 
 ### Implementation for User Story 1
 
-- [ ] T008 [US1] Add a minimal pre-paint theme initialization script before the Bootstrap stylesheet in `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T009 [US1] Update Bootstrap theme-compatible navbar/link classes and preserve shared static asset references in `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T010 [US1] Add the zh-TW radio `fieldset` theme mode control with stable selectors and labels to `BookKeeping2/Pages/Index.cshtml`
-- [ ] T011 [US1] Implement core theme mode selection, current-page application, control checked-state synchronization, and `localStorage` writes in `BookKeeping2/wwwroot/js/site.js`
-- [ ] T012 [US1] Add theme control layout, light/dark compatible colors, and visible focus styling in `BookKeeping2/wwwroot/css/site.css`
-- [ ] T013 [US1] Run targeted US1 tests in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T008 [US1] Add a minimal pre-paint theme initialization script before the Bootstrap stylesheet in `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T009 [US1] Update Bootstrap theme-compatible navbar/link classes and preserve shared static asset references in `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T010 [US1] Add the zh-TW radio `fieldset` theme mode control with stable selectors and labels to `BookKeeping2/Pages/Index.cshtml`
+- [X] T011 [US1] Implement core theme mode selection, current-page application, control checked-state synchronization, and `localStorage` writes in `BookKeeping2/wwwroot/js/site.js`
+- [X] T012 [US1] Add theme control layout, light/dark compatible colors, and visible focus styling in `BookKeeping2/wwwroot/css/site.css`
+- [X] T013 [US1] Run targeted US1 tests in `BookKeeping2.Tests/Integration/Pages/ThemeModePageTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **Checkpoint**: User Story 1 is functional and testable independently as the MVP.
 
