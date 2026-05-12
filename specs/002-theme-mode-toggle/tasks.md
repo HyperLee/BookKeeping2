@@ -70,16 +70,16 @@
 
 ### Tests for User Story 2
 
-- [ ] T014 [US2] Add failing script contract and browser tests for `matchMedia('(prefers-color-scheme: dark)')`, `system` derivation, 2-second system preference updates, and light fallback behavior in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
-- [ ] T015 [US2] Add failing script contract and browser tests that explicit `light` and `dark` modes bypass system preference changes in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T014 [US2] Add failing script contract and browser tests for `matchMedia('(prefers-color-scheme: dark)')`, `system` derivation, 2-second system preference updates, and light fallback behavior in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T015 [US2] Add failing script contract and browser tests that explicit `light` and `dark` modes bypass system preference changes in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **確認閘門**: 開始 T016 前，必須先執行 T014-T015，確認它們因預期原因失敗，並取得使用者或維護者確認測試意圖符合 US2。
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Extend the pre-paint script to derive `system` mode from `matchMedia('(prefers-color-scheme: dark)')` with light fallback in `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T017 [US2] Extend runtime behavior to subscribe to `prefers-color-scheme` changes only when mode is `system`, leaving explicit `light` and `dark` modes unchanged in `BookKeeping2/wwwroot/js/site.js`
-- [ ] T018 [US2] Run targeted US2 tests in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
+- [X] T016 [US2] Extend the pre-paint script to derive `system` mode from `matchMedia('(prefers-color-scheme: dark)')` with light fallback in `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T017 [US2] Extend runtime behavior to subscribe to `prefers-color-scheme` changes only when mode is `system`, leaving explicit `light` and `dark` modes unchanged in `BookKeeping2/wwwroot/js/site.js`
+- [X] T018 [US2] Run targeted US2 tests in `BookKeeping2.Tests/Integration/StaticAssets/ThemeModeScriptContractTests.cs` and `BookKeeping2.Tests/Integration/Browser/ThemeModeBrowserTests.cs`
 
 **Checkpoint**: User Story 2 works independently for system-following behavior.
 

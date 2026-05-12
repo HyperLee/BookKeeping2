@@ -18,6 +18,26 @@ public sealed partial class ThemeModeScriptContractTests
         return File.ReadAllText(SiteScriptPath);
     }
 
+    [Fact]
+    public void Pre_paint_script_derives_system_mode_from_preferred_color_scheme_with_light_fallback()
+    {
+        string layout = ReadLayout();
+
+        Assert.Contains("matchMedia('(prefers-color-scheme: dark)')", layout, StringComparison.Ordinal);
+        Assert.Contains("system", layout, StringComparison.Ordinal);
+        Assert.Contains("light", layout, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void Runtime_script_updates_system_mode_from_preferred_color_scheme_only_when_selected()
+    {
+        string script = ReadSiteScript();
+
+        Assert.Contains("matchMedia('(prefers-color-scheme: dark)')", script, StringComparison.Ordinal);
+        Assert.Contains("addEventListener('change'", script, StringComparison.Ordinal);
+        Assert.Contains("currentMode === 'system'", script, StringComparison.Ordinal);
+    }
+
     private static string FindRepositoryRoot()
     {
         DirectoryInfo? directory = new(AppContext.BaseDirectory);

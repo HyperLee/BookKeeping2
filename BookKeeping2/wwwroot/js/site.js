@@ -22,8 +22,25 @@
         }
     }
 
+    function getSystemPreferenceQuery() {
+        try {
+            return window.matchMedia('(prefers-color-scheme: dark)');
+        } catch {
+            return null;
+        }
+    }
+
     function deriveEffectiveTheme(mode) {
-        return mode === 'dark' ? 'dark' : 'light';
+        if (mode === 'dark') {
+            return 'dark';
+        }
+
+        if (mode === 'light') {
+            return 'light';
+        }
+
+        const systemPreferenceQuery = getSystemPreferenceQuery();
+        return systemPreferenceQuery && systemPreferenceQuery.matches ? 'dark' : 'light';
     }
 
     function applyTheme(mode) {
@@ -49,8 +66,22 @@
         });
     }
 
-    const currentMode = applyTheme(readMode());
+    let currentMode = applyTheme(readMode());
     syncThemeControl(currentMode);
+
+    const systemPreferenceQuery = getSystemPreferenceQuery();
+    function handleSystemPreferenceChange() {
+        if (currentMode === 'system') {
+            currentMode = applyTheme(currentMode);
+            syncThemeControl(currentMode);
+        }
+    }
+
+    if (systemPreferenceQuery && typeof systemPreferenceQuery.addEventListener === 'function') {
+        systemPreferenceQuery.addEventListener('change', handleSystemPreferenceChange);
+    } else if (systemPreferenceQuery && typeof systemPreferenceQuery.addListener === 'function') {
+        systemPreferenceQuery.addListener(handleSystemPreferenceChange);
+    }
 
     const themeControl = document.querySelector('[data-theme-mode-control]');
     if (themeControl instanceof HTMLElement) {
@@ -62,8 +93,8 @@
 
             const selectedMode = normalizeMode(target.value);
             writeMode(selectedMode);
-            applyTheme(selectedMode);
-            syncThemeControl(selectedMode);
+            currentMode = applyTheme(selectedMode);
+            syncThemeControl(currentMode);
         });
     }
 
