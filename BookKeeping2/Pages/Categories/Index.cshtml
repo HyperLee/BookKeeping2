@@ -55,7 +55,7 @@
             @foreach (var category in Model.Categories)
             {
                 <tr>
-                    <td>@category.Name</td>
+                    <td>@SystemDisplayLocalizer.GetCategoryName(category.Name, category.IsDefault)</td>
                     <td>@category.TypeText</td>
                     <td>@(category.IsArchived ? SharedLocalizer["已封存"] : category.IsDefault ? SharedLocalizer["預設"] : SharedLocalizer["自訂"])</td>
                 </tr>

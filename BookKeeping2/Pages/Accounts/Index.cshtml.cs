@@ -2,6 +2,7 @@ using BookKeeping2.Services.Accounts;
 using BookKeeping2.ViewModels.Accounts;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 
 namespace BookKeeping2.Pages.Accounts;
 
@@ -11,14 +12,17 @@ namespace BookKeeping2.Pages.Accounts;
 public sealed class IndexModel : PageModel
 {
     private readonly IAccountService accountService;
+    private readonly IStringLocalizer<SharedResource> localizer;
 
     /// <summary>
     /// Initializes an account management page.
     /// </summary>
     /// <param name="accountService">The account service.</param>
-    public IndexModel(IAccountService accountService)
+    /// <param name="localizer">The shared UI localizer.</param>
+    public IndexModel(IAccountService accountService, IStringLocalizer<SharedResource> localizer)
     {
         this.accountService = accountService;
+        this.localizer = localizer;
     }
 
     /// <summary>
@@ -68,7 +72,7 @@ public sealed class IndexModel : PageModel
             return Page();
         }
 
-        TempData["StatusMessage"] = "帳戶已新增。";
+        TempData["StatusMessage"] = localizer["帳戶已新增。"].Value;
         return RedirectToPage();
     }
 }

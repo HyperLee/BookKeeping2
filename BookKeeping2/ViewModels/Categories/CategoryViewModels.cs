@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BookKeeping2.Localization;
 using BookKeeping2.Models.Common;
 
 namespace BookKeeping2.ViewModels.Categories;
@@ -57,9 +58,9 @@ public sealed class CategoryListItemViewModel
     public TransactionType Type { get; set; }
 
     /// <summary>
-    /// Gets the Traditional Chinese type label.
+    /// Gets the display-only type label.
     /// </summary>
-    public string TypeText => Type == TransactionType.Income ? "收入" : "支出";
+    public string TypeText => SystemDisplayLocalizer.GetTransactionTypeText(Type);
 
     /// <summary>
     /// Gets or sets whether the category is default.

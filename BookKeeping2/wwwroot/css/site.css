@@ -110,6 +110,7 @@ canvas {
 
 .navbar-nav {
   gap: 0.125rem;
+  flex-wrap: wrap;
 }
 
 .footer {
@@ -128,6 +129,7 @@ canvas {
   border: 1px solid var(--bs-border-color);
   border-radius: 0.5rem;
   background-color: var(--bs-tertiary-bg);
+  min-inline-size: 0;
 }
 
 .language-control {
@@ -151,6 +153,7 @@ canvas {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.25rem 0.75rem;
+  min-width: 0;
 }
 
 .language-control .form-check,

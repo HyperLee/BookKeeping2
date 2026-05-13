@@ -84,4 +84,42 @@ public sealed class LanguageToggleBrowserTests : IClassFixture<LanguageToggleBro
         await Assertions.Expect(returnPage.GetByText("Monthly Income")).ToBeVisibleAsync(new() { Timeout = 1_000 });
         await context.CloseAsync();
     }
+
+    [Fact]
+    public async Task Language_control_theme_control_and_long_english_text_remain_responsive_and_focusable()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        IBrowserContext context = await fixture.NewContextAsync(factory);
+        await context.AddCookiesAsync(
+        [
+            new()
+            {
+                Name = "bookkeeping.ui.language",
+                Value = "en",
+                Domain = "bookkeeping-language.test",
+                Path = "/"
+            }
+        ]);
+        IPage page = await context.NewPageAsync();
+
+        foreach (int width in new[] { 390, 768, 1280 })
+        {
+            await page.SetViewportSizeAsync(width, 900);
+            await page.GotoAsync("/");
+
+            await Assertions.Expect(page.Locator("[data-language-control]")).ToBeVisibleAsync();
+            await Assertions.Expect(page.Locator("[data-theme-mode-control]")).ToBeVisibleAsync();
+            await page.GetByLabel("Dark Mode").CheckAsync();
+            await Assertions.Expect(page.Locator("html")).ToHaveAttributeAsync("data-bs-theme", "dark", new() { Timeout = 1_000 });
+
+            double scrollWidth = await page.EvaluateAsync<double>("document.documentElement.scrollWidth");
+            double clientWidth = await page.EvaluateAsync<double>("document.documentElement.clientWidth");
+            Assert.True(scrollWidth <= clientWidth + 1, $"Language layout should not overflow horizontally at {width}px.");
+
+            await page.GetByLabel("English").FocusAsync();
+            await Assertions.Expect(page.Locator(":focus")).ToBeVisibleAsync();
+        }
+
+        await context.CloseAsync();
+    }
 }

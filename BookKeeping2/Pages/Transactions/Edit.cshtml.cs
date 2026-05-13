@@ -1,6 +1,7 @@
 using BookKeeping2.Services.Transactions;
 using BookKeeping2.ViewModels.Transactions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 
 namespace BookKeeping2.Pages.Transactions;
 
@@ -10,14 +11,17 @@ namespace BookKeeping2.Pages.Transactions;
 public sealed class EditModel : TransactionFormPageModel
 {
     private readonly ITransactionService transactionService;
+    private readonly IStringLocalizer<SharedResource> localizer;
 
     /// <summary>
     /// Initializes a new edit page model.
     /// </summary>
     /// <param name="transactionService">The transaction service.</param>
-    public EditModel(ITransactionService transactionService)
+    /// <param name="localizer">The shared UI localizer.</param>
+    public EditModel(ITransactionService transactionService, IStringLocalizer<SharedResource> localizer)
     {
         this.transactionService = transactionService;
+        this.localizer = localizer;
     }
 
     /// <summary>
@@ -58,7 +62,7 @@ public sealed class EditModel : TransactionFormPageModel
             return Page();
         }
 
-        TempData["StatusMessage"] = "交易已更新。";
+        TempData["StatusMessage"] = localizer["交易已更新。"].Value;
         return RedirectToPage("/Transactions/Index");
     }
 

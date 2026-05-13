@@ -1,4 +1,5 @@
 using BookKeeping2.Data;
+using BookKeeping2.Localization;
 using BookKeeping2.Models.Common;
 using BookKeeping2.ViewModels.Transactions;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -36,14 +37,23 @@ public sealed class TransactionFormOptionsService
             categories = categories.Where(category => category.Type == type);
         }
 
+        var categoryRows = await categories
+            .OrderBy(category => category.Type)
+            .ThenBy(category => category.DisplayOrder)
+            .ThenBy(category => category.Name)
+            .Select(category => new
+            {
+                category.Id,
+                category.Name,
+                category.IsDefault
+            })
+            .ToListAsync(cancellationToken);
+
         return new TransactionFormOptionsViewModel
         {
-            Categories = await categories
-                .OrderBy(category => category.Type)
-                .ThenBy(category => category.DisplayOrder)
-                .ThenBy(category => category.Name)
-                .Select(category => new SelectListItem(category.Name, category.Id.ToString()))
-                .ToListAsync(cancellationToken),
+            Categories = categoryRows
+                .Select(category => new SelectListItem(SystemDisplayLocalizer.GetCategoryName(category.Name, category.IsDefault), category.Id.ToString()))
+                .ToList(),
             Accounts = await dbContext.Accounts
                 .AsNoTracking()
                 .Where(account => !account.IsArchived)

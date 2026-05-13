@@ -2,6 +2,7 @@ using BookKeeping2.Services.Categories;
 using BookKeeping2.ViewModels.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 
 namespace BookKeeping2.Pages.Categories;
 
@@ -11,14 +12,17 @@ namespace BookKeeping2.Pages.Categories;
 public sealed class IndexModel : PageModel
 {
     private readonly ICategoryService categoryService;
+    private readonly IStringLocalizer<SharedResource> localizer;
 
     /// <summary>
     /// Initializes a category management page.
     /// </summary>
     /// <param name="categoryService">The category service.</param>
-    public IndexModel(ICategoryService categoryService)
+    /// <param name="localizer">The shared UI localizer.</param>
+    public IndexModel(ICategoryService categoryService, IStringLocalizer<SharedResource> localizer)
     {
         this.categoryService = categoryService;
+        this.localizer = localizer;
     }
 
     /// <summary>
@@ -68,7 +72,7 @@ public sealed class IndexModel : PageModel
             return Page();
         }
 
-        TempData["StatusMessage"] = "分類已新增。";
+        TempData["StatusMessage"] = localizer["分類已新增。"].Value;
         return RedirectToPage();
     }
 }

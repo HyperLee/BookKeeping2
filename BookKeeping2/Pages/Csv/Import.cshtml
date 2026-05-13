@@ -25,7 +25,7 @@
     <section aria-labelledby="csv-import-result-heading">
         <h2 id="csv-import-result-heading" class="h5">@SharedLocalizer["匯入結果"]</h2>
         <div class="alert @(Model.Result.FailedRows > 0 ? "alert-warning" : "alert-success")" role="status">
-            @Model.Result.Summary
+            @CsvImportResultFormatter.FormatForCurrentUi(Model.Result)
         </div>
 
         @if (Model.Result.CreatedCategories.Count > 0)

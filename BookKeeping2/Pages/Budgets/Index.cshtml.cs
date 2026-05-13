@@ -4,6 +4,7 @@ using BookKeeping2.Services.Time;
 using BookKeeping2.ViewModels.Budgets;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 
 namespace BookKeeping2.Pages.Budgets;
 
@@ -14,16 +15,19 @@ public sealed class IndexModel : PageModel
 {
     private readonly IBudgetService budgetService;
     private readonly ITaipeiDateService dateService;
+    private readonly IStringLocalizer<SharedResource> localizer;
 
     /// <summary>
     /// Initializes a budget management page.
     /// </summary>
     /// <param name="budgetService">The budget service.</param>
     /// <param name="dateService">The Taipei date service.</param>
-    public IndexModel(IBudgetService budgetService, ITaipeiDateService dateService)
+    /// <param name="localizer">The shared UI localizer.</param>
+    public IndexModel(IBudgetService budgetService, ITaipeiDateService dateService, IStringLocalizer<SharedResource> localizer)
     {
         this.budgetService = budgetService;
         this.dateService = dateService;
+        this.localizer = localizer;
     }
 
     /// <summary>
@@ -86,7 +90,7 @@ public sealed class IndexModel : PageModel
             return Page();
         }
 
-        TempData["StatusMessage"] = "預算已儲存。";
+        TempData["StatusMessage"] = localizer["預算已儲存。"].Value;
         return RedirectToPage(new { Month = Input.BudgetMonth.ToString("yyyy-MM", CultureInfo.InvariantCulture) });
     }
 
@@ -99,7 +103,7 @@ public sealed class IndexModel : PageModel
     {
         DateOnly selectedMonth = ResolveSelectedMonth();
         BudgetResult result = await budgetService.DeleteAsync(id);
-        TempData["StatusMessage"] = result.Succeeded ? "預算已刪除。" : "找不到預算設定。";
+        TempData["StatusMessage"] = result.Succeeded ? localizer["預算已刪除。"].Value : "找不到預算設定。";
         return RedirectToPage(new { Month = selectedMonth.ToString("yyyy-MM", CultureInfo.InvariantCulture) });
     }
 

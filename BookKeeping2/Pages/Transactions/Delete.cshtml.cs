@@ -2,6 +2,7 @@ using BookKeeping2.Services.Transactions;
 using BookKeeping2.ViewModels.Transactions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Localization;
 
 namespace BookKeeping2.Pages.Transactions;
 
@@ -11,14 +12,17 @@ namespace BookKeeping2.Pages.Transactions;
 public sealed class DeleteModel : PageModel
 {
     private readonly ITransactionService transactionService;
+    private readonly IStringLocalizer<SharedResource> localizer;
 
     /// <summary>
     /// Initializes a new delete page model.
     /// </summary>
     /// <param name="transactionService">The transaction service.</param>
-    public DeleteModel(ITransactionService transactionService)
+    /// <param name="localizer">The shared UI localizer.</param>
+    public DeleteModel(ITransactionService transactionService, IStringLocalizer<SharedResource> localizer)
     {
         this.transactionService = transactionService;
+        this.localizer = localizer;
     }
 
     /// <summary>
@@ -56,7 +60,7 @@ public sealed class DeleteModel : PageModel
             return NotFound();
         }
 
-        TempData["StatusMessage"] = "交易已刪除。";
+        TempData["StatusMessage"] = localizer["交易已刪除。"].Value;
         return RedirectToPage("/Transactions/Index");
     }
 }

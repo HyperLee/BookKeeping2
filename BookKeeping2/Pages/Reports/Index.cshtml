@@ -52,7 +52,7 @@ else
     <div class="row g-4">
         <div class="col-12 col-lg-7">
             <h2 class="h5">@SharedLocalizer["每日趨勢"]</h2>
-            <canvas id="monthlyTrendChart" data-points='@trendJson' aria-label='@SharedLocalizer["月度收支趨勢圖"]' role="img"></canvas>
+            <canvas id="monthlyTrendChart" data-points='@trendJson' data-income-label='@SharedLocalizer["收入"]' data-expense-label='@SharedLocalizer["支出"]' aria-label='@SharedLocalizer["月度收支趨勢圖"]' role="img"></canvas>
         </div>
         <div class="col-12 col-lg-5">
             <h2 class="h5">@SharedLocalizer["支出分類佔比"]</h2>

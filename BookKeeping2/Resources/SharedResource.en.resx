@@ -384,4 +384,25 @@
   <data name="關鍵字" xml:space="preserve">
     <value>Keyword</value>
   </data>
+  <data name="帳戶已新增。" xml:space="preserve">
+    <value>Account created.</value>
+  </data>
+  <data name="分類已新增。" xml:space="preserve">
+    <value>Category created.</value>
+  </data>
+  <data name="預算已儲存。" xml:space="preserve">
+    <value>Budget saved.</value>
+  </data>
+  <data name="預算已刪除。" xml:space="preserve">
+    <value>Budget deleted.</value>
+  </data>
+  <data name="交易已新增。" xml:space="preserve">
+    <value>Transaction created.</value>
+  </data>
+  <data name="交易已更新。" xml:space="preserve">
+    <value>Transaction updated.</value>
+  </data>
+  <data name="交易已刪除。" xml:space="preserve">
+    <value>Transaction deleted.</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
 using BookKeeping2.Data;
+using BookKeeping2.Localization;
 using BookKeeping2.Models.Audit;
 using BookKeeping2.Models.Budgets;
 using BookKeeping2.Models.Categories;
@@ -85,19 +86,29 @@ public sealed class BudgetService : IBudgetService
     /// <inheritdoc />
     public async Task<BudgetFormOptionsViewModel> GetFormOptionsAsync(CancellationToken cancellationToken = default)
     {
-        List<BudgetCategoryOptionViewModel> categories = await dbContext.Categories
+        var categories = await dbContext.Categories
             .AsNoTracking()
             .Where(category => category.Type == TransactionType.Expense && !category.IsArchived)
             .OrderBy(category => category.DisplayOrder)
             .ThenBy(category => category.Name)
-            .Select(category => new BudgetCategoryOptionViewModel
+            .Select(category => new
             {
-                Id = category.Id,
-                Name = category.Name
+                category.Id,
+                category.Name,
+                category.IsDefault
             })
             .ToListAsync(cancellationToken);
 
-        return new BudgetFormOptionsViewModel { Categories = categories };
+        return new BudgetFormOptionsViewModel
+        {
+            Categories = categories
+                .Select(category => new BudgetCategoryOptionViewModel
+                {
+                    Id = category.Id,
+                    Name = SystemDisplayLocalizer.GetCategoryName(category.Name, category.IsDefault)
+                })
+                .ToList()
+        };
     }
 
     /// <inheritdoc />

@@ -1,6 +1,11 @@
 using System.Net;
 using System.Text.RegularExpressions;
+using BookKeeping2.Data;
+using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.Categories;
+using BookKeeping2.Models.Common;
 using BookKeeping2.Tests.TestSupport;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
 namespace BookKeeping2.Tests.Integration.Pages;
@@ -169,6 +174,84 @@ public sealed partial class LanguageTogglePageTests
         Assert.Contains(response.Headers.GetValues("Set-Cookie"), value => value.StartsWith("bookkeeping.ui.language=zh-TW", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public async Task English_transaction_form_localizes_display_names_but_keeps_validation_messages_traditional_chinese()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add("Cookie", "bookkeeping.ui.language=en");
+        string createPage = await GetSuccessfulHtmlAsync(client, "/Transactions/Create");
+        string token = ExtractRequestVerificationToken(createPage);
+
+        HttpResponseMessage response = await client.PostAsync("/Transactions/Create", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["Input.TransactionDate"] = "2026-05-11",
+            ["Input.Type"] = "Expense",
+            ["Input.Amount"] = "0",
+            ["Input.CategoryId"] = "0",
+            ["Input.AccountId"] = "0"
+        }));
+        string html = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
+
+        Assert.True(response.IsSuccessStatusCode, html);
+        Assert.Contains("Date", html, StringComparison.Ordinal);
+        Assert.Contains("Amount", html, StringComparison.Ordinal);
+        Assert.Contains("Category", html, StringComparison.Ordinal);
+        Assert.Contains("金額不可超過 TWD 999,999,999.99。", html, StringComparison.Ordinal);
+        Assert.Contains("請選擇有效分類。", html, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task English_account_post_localizes_success_status_and_preserves_custom_user_data()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = true,
+            HandleCookies = true
+        });
+        client.DefaultRequestHeaders.Add("Cookie", "bookkeeping.ui.language=en");
+        string accountName = $"Travel Wallet {Guid.NewGuid():N}";
+        string page = await GetSuccessfulHtmlAsync(client, "/Accounts");
+        string token = ExtractRequestVerificationToken(page);
+
+        HttpResponseMessage response = await client.PostAsync("/Accounts", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["Input.Name"] = accountName,
+            ["Input.Type"] = AccountType.Cash.ToString(),
+            ["Input.OpeningBalance"] = "1000",
+            ["Input.IconKey"] = "wallet",
+            ["Input.DisplayOrder"] = "1"
+        }));
+        string html = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
+
+        Assert.True(response.IsSuccessStatusCode, html);
+        Assert.Contains("Account created.", html, StringComparison.Ordinal);
+        Assert.Contains(accountName, html, StringComparison.Ordinal);
+        Assert.DoesNotContain("帳戶已新增。", html, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task English_mode_localizes_system_labels_and_default_categories_without_translating_custom_categories()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        await SeedCustomCategoryAndAccountAsync(factory);
+        HttpClient client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add("Cookie", "bookkeeping.ui.language=en");
+
+        string categories = await GetSuccessfulHtmlAsync(client, "/Categories");
+        string accounts = await GetSuccessfulHtmlAsync(client, "/Accounts");
+
+        Assert.Contains("Food & Dining", categories, StringComparison.Ordinal);
+        Assert.Contains("Expense", categories, StringComparison.Ordinal);
+        Assert.Contains("Pet Supplies", categories, StringComparison.Ordinal);
+        Assert.Contains("Custom", categories, StringComparison.Ordinal);
+        Assert.Contains("Bank", accounts, StringComparison.Ordinal);
+        Assert.Contains("測試銀行", accounts, StringComparison.Ordinal);
+    }
+
     private static async Task<string> GetSuccessfulHtmlAsync(HttpClient client, string route)
     {
         HttpResponseMessage response = await client.GetAsync(route);
@@ -182,6 +265,32 @@ public sealed partial class LanguageTogglePageTests
         Match match = AntiforgeryTokenRegex().Match(html);
         Assert.True(match.Success, "Antiforgery token should be rendered.");
         return WebUtility.HtmlDecode(match.Groups["token"].Value);
+    }
+
+    private static async Task SeedCustomCategoryAndAccountAsync(BookKeepingWebApplicationFactory factory)
+    {
+        using IServiceScope scope = factory.Services.CreateScope();
+        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        context.Categories.Add(new Category
+        {
+            Name = "Pet Supplies",
+            NormalizedName = "PET SUPPLIES",
+            Type = TransactionType.Expense,
+            IconKey = "tag",
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        });
+        context.Accounts.Add(new Account
+        {
+            Name = "測試銀行",
+            NormalizedName = "測試銀行",
+            Type = AccountType.Bank,
+            IconKey = "bank",
+            Currency = "TWD",
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        });
+        await context.SaveChangesAsync();
     }
 
     private static Regex LanguageRadioRegex(string value, bool requiredChecked)

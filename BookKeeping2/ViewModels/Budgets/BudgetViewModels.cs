@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BookKeeping2.Localization;
 using BookKeeping2.Services.Budgets;
 
 namespace BookKeeping2.ViewModels.Budgets;
@@ -90,14 +91,9 @@ public sealed class BudgetStatusViewModel
     public BudgetAlertState AlertState { get; set; }
 
     /// <summary>
-    /// Gets the Traditional Chinese alert text.
+    /// Gets the display-only alert text.
     /// </summary>
-    public string AlertText => AlertState switch
-    {
-        BudgetAlertState.Exceeded => $"已超出預算 {OverspentAmount:N0}",
-        BudgetAlertState.NearLimit => "接近預算上限",
-        _ => "使用率正常"
-    };
+    public string AlertText => SystemDisplayLocalizer.GetBudgetAlertText(AlertState, OverspentAmount);
 
     /// <summary>
     /// Gets the progress bar CSS class.

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using BookKeeping2.Localization;
 using BookKeeping2.Models.Accounts;
 
 namespace BookKeeping2.ViewModels.Accounts;
@@ -63,16 +64,9 @@ public sealed class AccountListItemViewModel
     public AccountType Type { get; set; }
 
     /// <summary>
-    /// Gets the Traditional Chinese account type label.
+    /// Gets the display-only account type label.
     /// </summary>
-    public string TypeText => Type switch
-    {
-        AccountType.Bank => "銀行",
-        AccountType.CreditCard => "信用卡",
-        AccountType.EWallet => "電子支付",
-        AccountType.Other => "其他",
-        _ => "現金"
-    };
+    public string TypeText => SystemDisplayLocalizer.GetAccountTypeText(Type);
 
     /// <summary>
     /// Gets or sets the current balance.
