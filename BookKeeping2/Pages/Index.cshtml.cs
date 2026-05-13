@@ -132,8 +132,11 @@ public class IndexModel : PageModel
             selectedLanguage,
             new CookieOptions
             {
+                Expires = DateTimeOffset.UtcNow.Add(UiLanguageOptions.CookieLifetime),
+                HttpOnly = true,
                 Path = "/",
                 SameSite = SameSiteMode.Lax,
+                Secure = Request.IsHttps,
                 IsEssential = true
             });
 

@@ -89,6 +89,86 @@ public sealed partial class LanguageTogglePageTests
         Assert.Contains(response.Headers.GetValues("Set-Cookie"), value => value.StartsWith("bookkeeping.ui.language=en", StringComparison.Ordinal));
     }
 
+    [Fact]
+    public async Task Missing_or_invalid_language_cookie_renders_default_traditional_chinese()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient missingCookieClient = factory.CreateClient();
+        HttpClient invalidCookieClient = factory.CreateClient();
+        invalidCookieClient.DefaultRequestHeaders.Add("Cookie", "bookkeeping.ui.language=fr");
+
+        string missingCookieHtml = await GetSuccessfulHtmlAsync(missingCookieClient, HomeRoute);
+        string invalidCookieHtml = await GetSuccessfulHtmlAsync(invalidCookieClient, HomeRoute);
+
+        Assert.Contains("lang=\"zh-Hant-TW\"", missingCookieHtml, StringComparison.Ordinal);
+        Assert.Contains("本月收入", missingCookieHtml, StringComparison.Ordinal);
+        Assert.Matches(LanguageRadioRegex("zh-TW", requiredChecked: true), missingCookieHtml);
+        Assert.Contains("lang=\"zh-Hant-TW\"", invalidCookieHtml, StringComparison.Ordinal);
+        Assert.Contains("本月收入", invalidCookieHtml, StringComparison.Ordinal);
+        Assert.Matches(LanguageRadioRegex("zh-TW", requiredChecked: true), invalidCookieHtml);
+    }
+
+    [Fact]
+    public async Task Accept_language_header_does_not_switch_default_ui_to_english()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+        using HttpRequestMessage request = new(HttpMethod.Get, HomeRoute);
+        request.Headers.AcceptLanguage.ParseAdd("en-US,en;q=0.9");
+
+        HttpResponseMessage response = await client.SendAsync(request);
+        string html = WebUtility.HtmlDecode(await response.Content.ReadAsStringAsync());
+
+        Assert.True(response.IsSuccessStatusCode, html);
+        Assert.Contains("lang=\"zh-Hant-TW\"", html, StringComparison.Ordinal);
+        Assert.Contains("本月收入", html, StringComparison.Ordinal);
+        Assert.DoesNotContain("Monthly Income", html, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public async Task Language_post_writes_one_year_secure_http_only_cookie_attributes()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient(new()
+        {
+            AllowAutoRedirect = false,
+            BaseAddress = new Uri("https://localhost")
+        });
+        string html = await GetSuccessfulHtmlAsync(client, HomeRoute);
+        string token = ExtractRequestVerificationToken(html);
+
+        HttpResponseMessage response = await client.PostAsync("/?handler=Language", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["uiLanguage"] = "en"
+        }));
+
+        string cookie = Assert.Single(response.Headers.GetValues("Set-Cookie"), value => value.StartsWith("bookkeeping.ui.language=en", StringComparison.Ordinal));
+        Assert.Contains("path=/", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("expires=", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("httponly", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("samesite=lax", cookie, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("secure", cookie, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public async Task Invalid_language_post_value_writes_default_language_cookie()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient(new() { AllowAutoRedirect = false });
+        string html = await GetSuccessfulHtmlAsync(client, HomeRoute);
+        string token = ExtractRequestVerificationToken(html);
+
+        HttpResponseMessage response = await client.PostAsync("/?handler=Language", new FormUrlEncodedContent(new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["uiLanguage"] = "fr"
+        }));
+
+        Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
+        Assert.Contains(response.Headers.GetValues("Set-Cookie"), value => value.StartsWith("bookkeeping.ui.language=zh-TW", StringComparison.Ordinal));
+    }
+
     private static async Task<string> GetSuccessfulHtmlAsync(HttpClient client, string route)
     {
         HttpResponseMessage response = await client.GetAsync(route);

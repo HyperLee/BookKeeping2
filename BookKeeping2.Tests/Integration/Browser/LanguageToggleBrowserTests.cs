@@ -54,4 +54,34 @@ public sealed class LanguageToggleBrowserTests : IClassFixture<LanguageToggleBro
         await Assertions.Expect(englishOption).ToBeCheckedAsync();
         await page.CloseAsync();
     }
+
+    [Fact]
+    public async Task Saved_english_language_survives_reload_and_return_visit_with_checked_option()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        IBrowserContext context = await fixture.NewContextAsync(factory);
+        await context.AddCookiesAsync(
+        [
+            new()
+            {
+                Name = "bookkeeping.ui.language",
+                Value = "en",
+                Domain = "bookkeeping-language.test",
+                Path = "/"
+            }
+        ]);
+        IPage page = await context.NewPageAsync();
+
+        await page.GotoAsync("/");
+        await page.ReloadAsync();
+
+        await Assertions.Expect(page.GetByLabel("English")).ToBeCheckedAsync();
+        await Assertions.Expect(page.GetByText("Monthly Income")).ToBeVisibleAsync(new() { Timeout = 1_000 });
+
+        IPage returnPage = await context.NewPageAsync();
+        await returnPage.GotoAsync("/");
+        await Assertions.Expect(returnPage.GetByLabel("English")).ToBeCheckedAsync();
+        await Assertions.Expect(returnPage.GetByText("Monthly Income")).ToBeVisibleAsync(new() { Timeout = 1_000 });
+        await context.CloseAsync();
+    }
 }

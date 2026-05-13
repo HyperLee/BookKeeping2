@@ -91,17 +91,17 @@
 
 > Confirm the test intent with the user or maintainer first. Then write these tests and confirm they fail before implementation.
 
-- [ ] T031 [P] [US2] Add failing missing-cookie, invalid-cookie, and ignored `Accept-Language` integration tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T032 [US2] Add failing cookie attribute and one-year expiry tests for the homepage POST handler in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T033 [P] [US2] Add failing reload, return visit, and checked selected option browser tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
+- [X] T031 [P] [US2] Add failing missing-cookie, invalid-cookie, and ignored `Accept-Language` integration tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [X] T032 [US2] Add failing cookie attribute and one-year expiry tests for the homepage POST handler in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [X] T033 [P] [US2] Add failing reload, return visit, and checked selected option browser tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T034 [US2] Harden the homepage language POST handler to allow-list values and write only `bookkeeping.ui.language` with Path, HttpOnly, IsEssential, SameSite, Secure, and one-year expiry in `BookKeeping2/Pages/Index.cshtml.cs`
-- [ ] T035 [US2] Ensure request localization ignores `Accept-Language` and falls back to `zh-TW` for missing or invalid Cookie values in `BookKeeping2/Program.cs`
-- [ ] T036 [US2] Ensure the homepage language control reflects the resolved current language after reloads and invalid Cookie fallback in `BookKeeping2/Pages/Index.cshtml`
-- [ ] T037 [US2] Add English translations for US2 fallback and selected-state keys while preserving Traditional Chinese user-facing validation/error correction messages in `BookKeeping2/Resources/SharedResource.en.resx`
-- [ ] T038 [US2] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~LanguageToggleBrowserTests|FullyQualifiedName~UiLanguageRequestCultureProviderTests"` and make US2 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T034 [US2] Harden the homepage language POST handler to allow-list values and write only `bookkeeping.ui.language` with Path, HttpOnly, IsEssential, SameSite, Secure, and one-year expiry in `BookKeeping2/Pages/Index.cshtml.cs`
+- [X] T035 [US2] Ensure request localization ignores `Accept-Language` and falls back to `zh-TW` for missing or invalid Cookie values in `BookKeeping2/Program.cs`
+- [X] T036 [US2] Ensure the homepage language control reflects the resolved current language after reloads and invalid Cookie fallback in `BookKeeping2/Pages/Index.cshtml`
+- [X] T037 [US2] Add English translations for US2 fallback and selected-state keys while preserving Traditional Chinese user-facing validation/error correction messages in `BookKeeping2/Resources/SharedResource.en.resx`
+- [X] T038 [US2] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~LanguageToggleBrowserTests|FullyQualifiedName~UiLanguageRequestCultureProviderTests"` and make US2 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Stories 1 and 2 both work independently.
 
