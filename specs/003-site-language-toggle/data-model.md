@@ -71,9 +71,9 @@
 |-------|------|-------|
 | `DefaultText` | string | 繁體中文文字，可作為 resource key |
 | `EnglishText` | string | `SharedResource.en.resx` 中的英文翻譯 |
-| `Context` | string | 頁面、partial、PageModel、service result 或 validation context |
+| `Context` | string | 頁面、partial、PageModel、non-error service result 或 DataAnnotations display context |
 | `AllowsHtml` | bool | 預設 `false`；本功能不本地化 HTML markup |
-| `IsRequired` | bool | 主要頁面、驗證、錯誤與狀態訊息均為 required |
+| `IsRequired` | bool | 主要頁面、DataAnnotations display、非錯誤狀態與確認訊息均為 required；錯誤/驗證修正訊息依憲章維持繁體中文 |
 
 **Validation**:
 
@@ -124,14 +124,14 @@
 |------|-------|-------|
 | 首頁 | `/` | 唯一顯示語言控制項；同時保留既有主題控制項 |
 | 隱私權頁 | `/Privacy` | 套用語言，不顯示語言控制項 |
-| 錯誤頁 | `/Error` | user-facing error text localizes without exposing internals |
+| 錯誤頁 | `/Error` | page chrome localizes without exposing internals; user-facing error text remains zh-TW |
 | 帳戶 | `/Accounts` | 表單、表格、狀態訊息、account type labels |
 | 分類 | `/Categories` | 表單、狀態、transaction type labels、default/custom distinction |
 | 預算 | `/Budgets` | 表單、進度、alert labels |
 | 交易清單 | `/Transactions` | filter labels、table、pagination、actions |
-| 新增交易 | `/Transactions/Create` | form labels/options/validation |
-| 編輯交易 | `/Transactions/Edit/{id}` | form labels/options/validation |
+| 新增交易 | `/Transactions/Create` | form labels/options localize; validation/error text remains zh-TW |
+| 編輯交易 | `/Transactions/Edit/{id}` | form labels/options localize; validation/error text remains zh-TW |
 | 刪除交易 | `/Transactions/Delete/{id}` | confirmation text and actions |
-| CSV 匯入 | `/Csv/Import` | page text/status/error presentation localizes; file contract remains zh-TW |
+| CSV 匯入 | `/Csv/Import` | page text and non-error status localize; error/validation text and file contract remain zh-TW |
 | CSV 匯出 | `/Csv/Export` | page text localizes; downloaded CSV contract remains zh-TW |
 | 報表 | `/Reports` | headings/chart labels/empty states localize; totals unchanged |

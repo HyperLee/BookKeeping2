@@ -104,12 +104,12 @@ All currently user-facing fixed interface text must localize:
 - table headers
 - helper text
 - empty states
-- success, warning and error messages
-- validation messages
-- confirmation messages
+- success messages, non-error status messages and confirmation messages
 - pagination text
 - chart labels and accessible chart names
 - system enum/status labels
+
+User-facing validation messages, error messages and actionable correction hints remain Traditional Chinese under the current constitution. English mode must keep those messages associated with the relevant fields or alerts, and must not render internal keys, blanks or placeholders.
 - default category display names
 
 English mode must not render:
@@ -152,7 +152,7 @@ Transaction type values in CSV:
 支出
 ```
 
-CSV parser expected headers and accepted transaction type values remain Traditional Chinese. English mode localizes only the CSV page UI, import/export status and validation presentation.
+CSV parser expected headers and accepted transaction type values remain Traditional Chinese. English mode localizes only the CSV page UI and non-error import/export status. User-facing CSV validation, error and correction messages remain Traditional Chinese.
 
 ## Accessibility And Layout Contract
 
@@ -163,7 +163,7 @@ Both languages must satisfy:
 - no content overlap at mobile, tablet and desktop widths
 - no horizontal overflow caused by longer English words
 - table and form controls remain readable
-- alert and validation text remains associated with the relevant control
+- alert, validation and error text remains associated with the relevant control
 - `html lang` reflects the resolved UI language
 
 Browser verification must include at least one desktop viewport and one mobile viewport. The existing theme mode behavior must continue to work in both languages.
@@ -174,7 +174,7 @@ Browser verification must include at least one desktop viewport and one mobile v
 - Use allow-list validation only.
 - Use anti-forgery protection for the language POST.
 - Do not emit raw HTML from resource strings.
-- Do not log raw Cookie values or user financial data.
+- Do not log raw Cookie values, resolved language preference values or user financial data.
 - Preserve `UseBookKeepingSecurityHeaders()`, HTTPS redirection and production HSTS behavior.
 
 ## Performance Contract

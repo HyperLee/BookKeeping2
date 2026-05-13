@@ -7,6 +7,8 @@
 
 **Organization**: 任務依使用者故事分組，讓每個故事可獨立實作、測試與驗收。
 
+**TDD Gate**: 每個 `Tests for User Story` 區段開始前，必須先向使用者或維護者確認該故事的失敗測試意圖；未取得確認前不得撰寫或執行該故事的測試任務。
+
 ## Format: `[ID] [P?] [Story] Description`
 
 - **[P]**: 可平行執行，因為修改不同檔案且不依賴尚未完成的任務
@@ -37,9 +39,9 @@
 - [ ] T009 [P] Add failing resource key, blank value, and placeholder coverage tests in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
 - [ ] T010 Implement `zh-TW` and `en` language constants, cookie name, cookie lifetime, and html lang mapping in `BookKeeping2/Localization/UiLanguageOptions.cs`
 - [ ] T011 Implement the custom Cookie-only request culture provider in `BookKeeping2/Localization/UiLanguageRequestCultureProvider.cs`
-- [ ] T012 Register localization services, DataAnnotations localization, supported UI cultures, the custom provider, and `UseRequestLocalization` ordering in `BookKeeping2/Program.cs`
+- [ ] T012 Register localization services, DataAnnotations display localization, supported UI cultures, the custom provider, and `UseRequestLocalization` ordering in `BookKeeping2/Program.cs`
 - [ ] T013 Add `SharedResource` localizer using/import support for Razor Pages in `BookKeeping2/Pages/_ViewImports.cshtml`
-- [ ] T014 Populate foundational English resource keys for language names, layout text, validation text, and shared actions in `BookKeeping2/Resources/SharedResource.en.resx`
+- [ ] T014 Populate foundational English resource keys for language names, layout text, DataAnnotations display text, and shared actions while keeping user-facing validation/error correction messages in Traditional Chinese in `BookKeeping2/Resources/SharedResource.en.resx`
 - [ ] T015 Run the foundational tests with `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~UiLanguageRequestCultureProviderTests|FullyQualifiedName~LanguageResourceCompletenessTests"` and make provider/resource tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: Foundation ready. User story implementation can now proceed in priority order or in parallel with clear file ownership.
@@ -54,10 +56,10 @@
 
 ### Tests for User Story 1
 
-> Write these tests first and confirm they fail before implementation.
+> Confirm the test intent with the user or maintainer first. Then write these tests and confirm they fail before implementation.
 
 - [ ] T016 [P] [US1] Add failing homepage language control, selected option, home-only control, and English rendering tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T017 [P] [US1] Add failing keyboard language selection and post-navigation language rendering tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
+- [ ] T017 [P] [US1] Add failing keyboard language selection, one-second selected-language rendering, and post-navigation language rendering tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
 - [ ] T018 [P] [US1] Add failing contract assertions for anti-forgery language form markup and no global text replacement in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
 
 ### Implementation for User Story 1
@@ -87,7 +89,7 @@
 
 ### Tests for User Story 2
 
-> Write these tests first and confirm they fail before implementation.
+> Confirm the test intent with the user or maintainer first. Then write these tests and confirm they fail before implementation.
 
 - [ ] T031 [P] [US2] Add failing missing-cookie, invalid-cookie, and ignored `Accept-Language` integration tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
 - [ ] T032 [US2] Add failing cookie attribute and one-year expiry tests for the homepage POST handler in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
@@ -98,7 +100,7 @@
 - [ ] T034 [US2] Harden the homepage language POST handler to allow-list values and write only `bookkeeping.ui.language` with Path, HttpOnly, IsEssential, SameSite, Secure, and one-year expiry in `BookKeeping2/Pages/Index.cshtml.cs`
 - [ ] T035 [US2] Ensure request localization ignores `Accept-Language` and falls back to `zh-TW` for missing or invalid Cookie values in `BookKeeping2/Program.cs`
 - [ ] T036 [US2] Ensure the homepage language control reflects the resolved current language after reloads and invalid Cookie fallback in `BookKeeping2/Pages/Index.cshtml`
-- [ ] T037 [US2] Add English translations for US2 fallback, selected-state, and validation-facing language keys in `BookKeeping2/Resources/SharedResource.en.resx`
+- [ ] T037 [US2] Add English translations for US2 fallback and selected-state keys while preserving Traditional Chinese user-facing validation/error correction messages in `BookKeeping2/Resources/SharedResource.en.resx`
 - [ ] T038 [US2] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~LanguageToggleBrowserTests|FullyQualifiedName~UiLanguageRequestCultureProviderTests"` and make US2 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Stories 1 and 2 both work independently.
@@ -107,31 +109,31 @@
 
 ## Phase 5: User Story 3 - 完整覆蓋既有介面文字與可用性 (Priority: P3)
 
-**Goal**: 英文模式涵蓋現有記帳流程的表單、驗證、狀態、錯誤、CSV 頁面訊息、圖表標籤與可用性，同時不翻譯使用者資料或改變財務結果。
+**Goal**: 英文模式涵蓋現有記帳流程的表單標籤、非錯誤狀態、CSV 頁面訊息、圖表標籤與可用性；使用者面向錯誤、驗證與可執行修正提示依憲章維持繁體中文，同時不翻譯使用者資料或改變財務結果。
 
-**Independent Test**: 在英文模式下操作新增交易、交易驗證、分類與帳戶管理、預算、報表、CSV 匯入匯出與 responsive layout，確認系統 UI 全為英文、資料原文與 CSV contract 保持不變。
+**Independent Test**: 在英文模式下操作新增交易、交易驗證、分類與帳戶管理、預算、報表、CSV 匯入匯出與 responsive layout，確認可翻譯 UI 為英文、錯誤/驗證修正訊息維持繁體中文、資料原文與 CSV contract 保持不變。
 
 ### Tests for User Story 3
 
-> Write these tests first and confirm they fail before implementation.
+> Confirm the test intent with the user or maintainer first. Then write these tests and confirm they fail before implementation.
 
-- [ ] T039 [P] [US3] Add failing DataAnnotations display and validation localization tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T040 [US3] Add failing account, category, budget, transaction, report, and CSV status message localization tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T041 [P] [US3] Add failing CSV export header and transaction type preservation tests for English mode in `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
-- [ ] T042 [P] [US3] Add failing CSV import Traditional Chinese contract preservation tests for English mode in `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`
-- [ ] T043 [P] [US3] Add failing mobile, tablet, desktop, focus, overflow, and theme-coexistence browser tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
+- [ ] T039 [P] [US3] Add failing DataAnnotations display localization tests and Traditional Chinese validation/error message preservation tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [ ] T040 [US3] Add failing account, category, budget, transaction, report, CSV non-error status message localization tests, and custom user-data invariant tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [ ] T041 [P] [US3] Add failing CSV export header, transaction type, amount/date, and custom account/category/note preservation tests for English mode in `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
+- [ ] T042 [P] [US3] Add failing CSV import Traditional Chinese contract, raw value, and persisted data preservation tests for English mode in `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`
+- [ ] T043 [P] [US3] Add failing mobile, tablet, desktop, focus, overflow, theme-coexistence, and one-second selected-language rendering browser tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T044 [US3] Localize DataAnnotations display names and validation messages in `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`, `BookKeeping2/ViewModels/Categories/CategoryViewModels.cs`, `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`, and `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`
-- [ ] T045 [US3] Localize shared financial validation messages without changing money/date rules in `BookKeeping2/Validation/FinancialValidationMessages.cs`
-- [ ] T046 [US3] Localize user-facing PageModel status messages in `BookKeeping2/Pages/Accounts/Index.cshtml.cs`, `BookKeeping2/Pages/Categories/Index.cshtml.cs`, `BookKeeping2/Pages/Budgets/Index.cshtml.cs`, `BookKeeping2/Pages/Transactions/Create.cshtml.cs`, `BookKeeping2/Pages/Transactions/Edit.cshtml.cs`, and `BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
-- [ ] T047 [US3] Localize user-facing service result and formatter messages while keeping audit summaries masked and stable in `BookKeeping2/Services/Accounts/AccountService.cs`, `BookKeeping2/Services/Categories/CategoryService.cs`, `BookKeeping2/Services/Budgets/BudgetService.cs`, `BookKeeping2/Services/Transactions/TransactionService.cs`, and `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
+- [ ] T044 [US3] Localize DataAnnotations display names while keeping validation/error messages in Traditional Chinese in `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`, `BookKeeping2/ViewModels/Categories/CategoryViewModels.cs`, `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`, and `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`
+- [ ] T045 [US3] Preserve shared financial validation messages in Traditional Chinese without changing money/date rules in `BookKeeping2/Validation/FinancialValidationMessages.cs`
+- [ ] T046 [US3] Localize non-error PageModel status messages while keeping user-facing error/correction messages in Traditional Chinese in `BookKeeping2/Pages/Accounts/Index.cshtml.cs`, `BookKeeping2/Pages/Categories/Index.cshtml.cs`, `BookKeeping2/Pages/Budgets/Index.cshtml.cs`, `BookKeeping2/Pages/Transactions/Create.cshtml.cs`, `BookKeeping2/Pages/Transactions/Edit.cshtml.cs`, and `BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
+- [ ] T047 [US3] Localize non-error service result and formatter messages while keeping user-facing errors in Traditional Chinese and audit summaries masked and stable in `BookKeeping2/Services/Accounts/AccountService.cs`, `BookKeeping2/Services/Categories/CategoryService.cs`, `BookKeeping2/Services/Budgets/BudgetService.cs`, `BookKeeping2/Services/Transactions/TransactionService.cs`, and `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
 - [ ] T048 [US3] Add display-only system label localization helpers for transaction type, account type, budget alert state, and default category labels in `BookKeeping2/Localization/SystemDisplayLocalizer.cs`
 - [ ] T049 [US3] Apply display-only localized labels without changing persisted values in `BookKeeping2/ViewModels/Categories/CategoryViewModels.cs`, `BookKeeping2/ViewModels/Transactions/TransactionListItemViewModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`, `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`, and `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`
-- [ ] T050 [US3] Localize CSV page UI, import result presentation, and export page copy while preserving CSV parser/exporter fixed Traditional Chinese contract in `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Import.cshtml.cs`, `BookKeeping2/Pages/Csv/Export.cshtml`, `BookKeeping2/Services/Csv/CsvExportService.cs`, and `BookKeeping2/Services/Csv/CsvImportParser.cs`
+- [ ] T050 [US3] Localize CSV page UI, non-error import result presentation, and export page copy while preserving CSV parser/exporter fixed Traditional Chinese contract and Traditional Chinese error/validation messages in `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Import.cshtml.cs`, `BookKeeping2/Pages/Csv/Export.cshtml`, `BookKeeping2/Services/Csv/CsvExportService.cs`, and `BookKeeping2/Services/Csv/CsvImportParser.cs`
 - [ ] T051 [US3] Localize report chart labels and accessible chart text without changing totals in `BookKeeping2/Pages/Reports/Index.cshtml` and `BookKeeping2/wwwroot/js/reports.js`
-- [ ] T052 [US3] Add remaining English resource entries for forms, validation, status, warnings, errors, enum labels, default categories, charts, CSV page UI, and confirmations in `BookKeeping2/Resources/SharedResource.en.resx`
+- [ ] T052 [US3] Add remaining English resource entries for forms, non-error status, enum labels, default categories, charts, CSV page UI, and confirmations while excluding user-facing validation/error correction messages from English resources in `BookKeeping2/Resources/SharedResource.en.resx`
 - [ ] T053 [US3] Adjust responsive layout, focus indicators, and long English text behavior for language controls, nav, tables, forms, alerts, and footer in `BookKeeping2/wwwroot/css/site.css`
 - [ ] T054 [US3] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~CsvExportPageTests|FullyQualifiedName~CsvImportPageTests|FullyQualifiedName~LanguageResourceCompletenessTests|FullyQualifiedName~LanguageToggleBrowserTests"` and make US3 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
@@ -143,7 +145,7 @@
 
 **Purpose**: 完成全功能驗證、回歸檢查與文件一致性確認。
 
-- [ ] T055 [P] Verify no SQLite schema, migration, audit, session, or localStorage persistence was added for language preference in `BookKeeping2/Data/AppDbContext.cs`, `BookKeeping2/Data/Migrations/`, `BookKeeping2/Services/Audit/AuditService.cs`, and `BookKeeping2/wwwroot/js/site.js`
+- [ ] T055 [P] Verify no SQLite schema, migration, audit, session, localStorage persistence, server log entry, or telemetry capture was added for language preference in `BookKeeping2/Data/AppDbContext.cs`, `BookKeeping2/Data/Migrations/`, `BookKeeping2/Services/Audit/AuditService.cs`, `BookKeeping2/Program.cs`, `BookKeeping2/Pages/Index.cshtml.cs`, and `BookKeeping2/wwwroot/js/site.js`
 - [ ] T056 [P] Verify the manual quickstart scenarios are still accurate after implementation in `specs/003-site-language-toggle/quickstart.md`
 - [ ] T057 [P] Run `dotnet build BookKeeping2.slnx` and fix build warnings or errors in `BookKeeping2.slnx`
 - [ ] T058 Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` and fix regressions in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
@@ -166,10 +168,11 @@
 
 - **US1 (P1)**: Can start after Foundational; no dependency on US2 or US3.
 - **US2 (P2)**: Can start after Foundational; uses the same homepage handler and culture provider as US1 but remains independently testable through Cookie/default behavior.
-- **US3 (P3)**: Can start after Foundational; completes coverage for validation, service messages, CSV contract, charts, responsive layout, and accessibility.
+- **US3 (P3)**: Can start after Foundational; completes coverage for Traditional Chinese validation/error preservation, non-error service messages, CSV contract, charts, responsive layout, and accessibility.
 
 ### Within Each User Story
 
+- Test intent must be confirmed with the user or maintainer before each story's tests are written.
 - Tests must be written first and observed failing before implementation.
 - Resource and provider foundations must exist before localized Razor/PageModel changes.
 - PageModel and service localization should precede browser verification.
@@ -182,7 +185,7 @@
 - T002-T007 can run in parallel after T001 ownership is agreed.
 - T008 and T009 can run in parallel because they touch different test files.
 - US1 tests T016-T018 can run in parallel.
-- US1 page localization tasks T022-T027 can run in parallel after T021 and T029 establish shared keys.
+- US1 page localization tasks T022-T027 can run in parallel after T021 establishes layout patterns; coordinate with the T029 resource owner as each page introduces keys.
 - US2 tests T031-T033 can run in parallel if file ownership in `LanguageTogglePageTests.cs` and `LanguageToggleBrowserTests.cs` is coordinated.
 - US3 tests T039-T043 can run in parallel by assigning different test files or non-overlapping regions.
 - US3 implementation T044-T053 can be split by page/service/resource/CSS ownership after shared display-label APIs are defined.
@@ -192,7 +195,7 @@
 
 ```text
 Task: "T016 Add failing homepage language control, selected option, home-only control, and English rendering tests in BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs"
-Task: "T017 Add failing keyboard language selection and post-navigation language rendering tests in BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs"
+Task: "T017 Add failing keyboard language selection, one-second rendering, and post-navigation language rendering tests in BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs"
 Task: "T018 Add failing contract assertions for anti-forgery language form markup and no global text replacement in BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs"
 ```
 
@@ -219,15 +222,15 @@ Task: "T036 Ensure the homepage language control reflects the resolved current l
 ## Parallel Example: User Story 3
 
 ```text
-Task: "T039 Add failing DataAnnotations localization tests in BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs"
+Task: "T039 Add failing DataAnnotations display localization and Traditional Chinese validation/error preservation tests in BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs"
 Task: "T041 Add failing CSV export contract tests in BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs"
 Task: "T042 Add failing CSV import contract tests in BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs"
 Task: "T043 Add failing responsive and accessibility browser tests in BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs"
 ```
 
 ```text
-Task: "T044 Localize DataAnnotations in BookKeeping2/ViewModels/"
-Task: "T047 Localize user-facing service result and formatter messages in BookKeeping2/Services/"
+Task: "T044 Localize DataAnnotations display names and preserve Traditional Chinese validation/error messages in BookKeeping2/ViewModels/"
+Task: "T047 Localize non-error service result and formatter messages while preserving Traditional Chinese errors in BookKeeping2/Services/"
 Task: "T050 Localize CSV page UI while preserving CSV contract in BookKeeping2/Pages/Csv/ and BookKeeping2/Services/Csv/"
 Task: "T053 Adjust responsive layout and focus behavior in BookKeeping2/wwwroot/css/site.css"
 ```
@@ -248,7 +251,7 @@ Task: "T053 Adjust responsive layout and focus behavior in BookKeeping2/wwwroot/
 1. Foundation ready: custom Cookie provider, localization services, shared resource file.
 2. US1: language switch is visible on homepage and applies to site pages.
 3. US2: default/fallback/persistence behavior is hardened and independently verified.
-4. US3: all existing UI surfaces, validation, CSV UI, charts, responsive layout, and accessibility are completed.
+4. US3: all existing UI surfaces, Traditional Chinese validation/error preservation, CSV UI, charts, responsive layout, and accessibility are completed.
 5. Polish: build, full tests, quickstart, and no-persistence/no-schema verification.
 
 ### Parallel Team Strategy
@@ -256,7 +259,7 @@ Task: "T053 Adjust responsive layout and focus behavior in BookKeeping2/wwwroot/
 1. One engineer owns `Program.cs`, `Localization/`, and resource conventions through Phase 2.
 2. One engineer owns Razor Page localization for US1.
 3. One engineer owns Cookie/default/persistence tests and handler hardening for US2.
-4. One engineer owns validation/service/CSV/chart/resource completeness for US3.
+4. One engineer owns validation/error preservation, service/CSV/chart/resource completeness for US3.
 5. Browser and CSS verification can run after each story reaches its checkpoint.
 
 ## Notes
@@ -266,3 +269,4 @@ Task: "T053 Adjust responsive layout and focus behavior in BookKeeping2/wwwroot/
 - Do not add SQLite schema, migrations, sessions, localStorage, audit events, or server logs for language preference.
 - Do not change CSV exported headers or transaction type values: `日期,類型,金額,分類,帳戶,備註`, `收入`, `支出`.
 - Do not translate user-entered account names, custom category names, transaction notes, or CSV raw values.
+- Keep user-facing validation, error, and actionable correction messages in Traditional Chinese unless the constitution is formally revised.

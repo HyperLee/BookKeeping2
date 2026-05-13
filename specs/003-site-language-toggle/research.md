@@ -2,13 +2,13 @@
 
 ## Decision: 使用 ASP.NET Core localization middleware 與 `.resx` 資源
 
-**Rationale**: 本專案是 Razor Pages 伺服器端輸出 UI。ASP.NET Core 官方 localization 指引將多語系分成三件事：讓內容可本地化、提供支援文化的資源、為每個 request 選擇 culture。`IStringLocalizer`/ResourceManager 可在執行期依 `CurrentUICulture` 查找字串；DataAnnotations localization 可覆蓋表單欄位顯示名稱與驗證訊息。現有預設語言已是繁體中文，因此以繁中 UI literal 作為預設 key，新增 `SharedResource.en.resx` 提供英文翻譯，可避免先建立大量 `zh-TW` 資源檔，同時保留預設繁中。
+**Rationale**: 本專案是 Razor Pages 伺服器端輸出 UI。ASP.NET Core 官方 localization 指引將多語系分成三件事：讓內容可本地化、提供支援文化的資源、為每個 request 選擇 culture。`IStringLocalizer`/ResourceManager 可在執行期依 `CurrentUICulture` 查找字串；DataAnnotations localization 可覆蓋表單欄位顯示名稱，但使用者面向驗證、錯誤與可執行修正提示依目前憲章維持繁體中文。現有預設語言已是繁體中文，因此以繁中 UI literal 作為預設 key，新增 `SharedResource.en.resx` 提供英文翻譯，可避免先建立大量 `zh-TW` 資源檔，同時保留預設繁中。
 
 **Alternatives considered**:
 
-- 手寫 dictionary/localization service：較難覆蓋 DataAnnotations 與 Razor Pages 標準流程，也容易和框架驗證訊息脫節。
-- 全站 client-side text replacement：有閃爍、可及性、SEO、無 JS fallback 與表單驗證不一致風險，且無法自然處理伺服器產生錯誤訊息。
-- `IViewLocalizer` 為每頁建立資源：適合 view-specific text，但本功能需要 layout、partial、PageModel、DataAnnotations 與 service result 共用字串；以 `SharedResource` 較符合目前小型站台。
+- 手寫 dictionary/localization service：較難覆蓋 DataAnnotations display 與 Razor Pages 標準流程，也容易和框架欄位顯示名稱脫節。
+- 全站 client-side text replacement：有閃爍、可及性、SEO、無 JS fallback 與表單欄位顯示不一致風險，且無法自然處理伺服器產生的繁體中文錯誤訊息。
+- `IViewLocalizer` 為每頁建立資源：適合 view-specific text，但本功能需要 layout、partial、PageModel、DataAnnotations display 與 non-error service result 共用字串；以 `SharedResource` 較符合目前小型站台。
 
 ## Decision: 語言偏好使用自訂 allow-listed Cookie provider
 
@@ -27,7 +27,7 @@
 **Alternatives considered**:
 
 - 英文模式同時設 `Culture=en-US`：能讓日期數字依英文文化呈現，但本規格未要求本地化資料格式，且可能改變既有金額/日期顯示。
-- 完全不使用 request culture，只在 Razor 注入 dictionary：會失去 DataAnnotations 與框架驗證的標準 localization pipeline。
+- 完全不使用 request culture，只在 Razor 注入 dictionary：會失去 DataAnnotations display 與 Razor Pages 標準 localization pipeline。
 
 ## Decision: 首頁使用非財務 POST handler 寫入 Cookie
 
@@ -41,7 +41,7 @@
 
 ## Decision: 使用者資料原文與 CSV 檔案契約不本地化
 
-**Rationale**: 規格明確要求不得翻譯或改寫使用者自行輸入或匯入的內容。帳戶名稱、使用者建立分類、交易備註、CSV 原始內容與資料庫保存值保持原文。系統定義列舉標籤與預設分類可在顯示層映射到英文，但不寫回資料庫。CSV 匯入匯出的欄位標題與交易類型值固定維持既有繁體中文格式，英文模式僅翻譯 CSV 頁面文字、狀態與驗證呈現。
+**Rationale**: 規格明確要求不得翻譯或改寫使用者自行輸入或匯入的內容。帳戶名稱、使用者建立分類、交易備註、CSV 原始內容與資料庫保存值保持原文。系統定義列舉標籤與預設分類可在顯示層映射到英文，但不寫回資料庫。CSV 匯入匯出的欄位標題與交易類型值固定維持既有繁體中文格式，英文模式僅翻譯 CSV 頁面文字與非錯誤狀態；CSV 驗證、錯誤與修正提示依憲章維持繁體中文。
 
 **Alternatives considered**:
 
@@ -50,7 +50,7 @@
 
 ## Decision: 測試以整合測試 + 資源完整性 + 真實瀏覽器驗證分層
 
-**Rationale**: 語言切換橫跨 request pipeline、Razor markup、DataAnnotations、服務回傳訊息、CSV 格式與 responsive UI。單一測試型態無法有效覆蓋。設計使用 `WebApplicationFactory` 驗證 Cookie、fallback、HTML 輸出與 CSV contract；用資源完整性測試確認英文模式不出現未翻譯 key 或空白文字；用 Playwright 真實瀏覽器驗證首頁控制項、鍵盤操作、重新整理/回訪、行動與桌面寬度、焦點狀態與內容不重疊。
+**Rationale**: 語言切換橫跨 request pipeline、Razor markup、DataAnnotations display、服務回傳訊息、CSV 格式與 responsive UI。單一測試型態無法有效覆蓋。設計使用 `WebApplicationFactory` 驗證 Cookie、fallback、HTML 輸出、繁體中文驗證/錯誤保留與 CSV contract；用資源完整性測試確認英文模式不出現未翻譯 key 或空白文字；用 Playwright 真實瀏覽器驗證首頁控制項、鍵盤操作、1 秒內呈現所選語言、重新整理/回訪、行動與桌面寬度、焦點狀態與內容不重疊。
 
 **Alternatives considered**:
 

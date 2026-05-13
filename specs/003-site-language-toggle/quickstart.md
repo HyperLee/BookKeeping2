@@ -10,16 +10,16 @@
 
 ## Implementation Order
 
-1. Add failing tests first:
-   - `LanguageTogglePageTests` for homepage control, non-home absence, selected language rendering, invalid Cookie fallback and ignored `Accept-Language`.
+1. Confirm each user story's test intent with the user or maintainer, then add failing tests:
+   - `LanguageTogglePageTests` for homepage control, non-home absence, selected language rendering, invalid Cookie fallback, ignored `Accept-Language`, Traditional Chinese validation/error preservation and data invariants.
    - `UiLanguageRequestCultureProviderTests` for allow-list, default, invalid and culture/UI culture resolution.
    - `LanguageResourceCompletenessTests` for English resource coverage and no blank/internal-key output.
-   - CSV tests proving exported headers and transaction type values remain `日期,類型,金額,分類,帳戶,備註`, `收入`, `支出` in English mode.
-   - Playwright tests for keyboard selection, reload/return persistence, mobile/desktop layout and focus visibility.
+   - CSV tests proving exported headers, transaction type values, raw values, amount/date values and persisted data remain `日期,類型,金額,分類,帳戶,備註`, `收入`, `支出` in English mode.
+   - Playwright tests for keyboard selection, one-second selected-language rendering, reload/return persistence, mobile/desktop layout and focus visibility.
 2. Register localization services and request localization middleware.
 3. Add `Localization/` helper types and `Resources/SharedResource.en.resx`.
 4. Add homepage language POST handler and localized language control.
-5. Localize layout, pages, partials, PageModel messages, DataAnnotations and user-facing service result messages.
+5. Localize layout, pages, partials, PageModel non-error messages, DataAnnotations display names and user-facing non-error service result messages; keep validation, error and actionable correction messages in Traditional Chinese.
 6. Add display-only localization for system enum labels and default category names.
 7. Verify CSV parser/exporter data contract remains unchanged.
 8. Run targeted and full verification.
