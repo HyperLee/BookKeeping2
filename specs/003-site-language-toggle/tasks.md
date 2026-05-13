@@ -145,11 +145,11 @@
 
 **Purpose**: 完成全功能驗證、回歸檢查與文件一致性確認。
 
-- [ ] T055 [P] Verify no SQLite schema, migration, audit, session, localStorage persistence, server log entry, or telemetry capture was added for language preference in `BookKeeping2/Data/AppDbContext.cs`, `BookKeeping2/Data/Migrations/`, `BookKeeping2/Services/Audit/AuditService.cs`, `BookKeeping2/Program.cs`, `BookKeeping2/Pages/Index.cshtml.cs`, and `BookKeeping2/wwwroot/js/site.js`
-- [ ] T056 [P] Verify the manual quickstart scenarios are still accurate after implementation in `specs/003-site-language-toggle/quickstart.md`
-- [ ] T057 [P] Run `dotnet build BookKeeping2.slnx` and fix build warnings or errors in `BookKeeping2.slnx`
-- [ ] T058 Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` and fix regressions in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T059 Inspect the final diff for resource keys, untranslated UI strings, CSV contract preservation, and responsive CSS scope in `BookKeeping2/Resources/SharedResource.en.resx`, `BookKeeping2/Pages/`, `BookKeeping2/Services/Csv/`, and `BookKeeping2/wwwroot/css/site.css`
+- [X] T055 [P] Verify no SQLite schema, migration, audit, session, localStorage persistence, server log entry, or telemetry capture was added for language preference in `BookKeeping2/Data/AppDbContext.cs`, `BookKeeping2/Data/Migrations/`, `BookKeeping2/Services/Audit/AuditService.cs`, `BookKeeping2/Program.cs`, `BookKeeping2/Pages/Index.cshtml.cs`, and `BookKeeping2/wwwroot/js/site.js`
+- [X] T056 [P] Verify the manual quickstart scenarios are still accurate after implementation in `specs/003-site-language-toggle/quickstart.md`
+- [X] T057 [P] Run `dotnet build BookKeeping2.slnx` and fix build warnings or errors in `BookKeeping2.slnx`
+- [X] T058 Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` and fix regressions in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T059 Inspect the final diff for resource keys, untranslated UI strings, CSV contract preservation, and responsive CSS scope in `BookKeeping2/Resources/SharedResource.en.resx`, `BookKeeping2/Pages/`, `BookKeeping2/Services/Csv/`, and `BookKeeping2/wwwroot/css/site.css`
 
 ---
 
