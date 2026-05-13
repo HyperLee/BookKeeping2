@@ -2,28 +2,28 @@
 @using BookKeeping2.Services.Csv
 @model BookKeeping2.Pages.Csv.ImportModel
 @{
-    ViewData["Title"] = "CSV 匯入";
+    ViewData["Title"] = SharedLocalizer["CSV 匯入"].Value;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">CSV 匯入</h1>
+    <h1 class="h3 mb-0">@SharedLocalizer["CSV 匯入"]</h1>
 </div>
 
 <form method="post" enctype="multipart/form-data" class="row g-3 align-items-end mb-4">
     <div class="col-12 col-md-8">
-        <label class="form-label" asp-for="Upload">CSV 檔案</label>
+        <label class="form-label" asp-for="Upload">@SharedLocalizer["CSV 檔案"]</label>
         <input class="form-control" asp-for="Upload" type="file" accept=".csv,text/csv" />
         <span class="text-danger small" asp-validation-for="Upload"></span>
     </div>
     <div class="col-12 col-md-4">
-        <button type="submit" class="btn btn-primary w-100">匯入 CSV</button>
+        <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["匯入 CSV"]</button>
     </div>
 </form>
 
 @if (Model.Result is not null)
 {
     <section aria-labelledby="csv-import-result-heading">
-        <h2 id="csv-import-result-heading" class="h5">匯入結果</h2>
+        <h2 id="csv-import-result-heading" class="h5">@SharedLocalizer["匯入結果"]</h2>
         <div class="alert @(Model.Result.FailedRows > 0 ? "alert-warning" : "alert-success")" role="status">
             @Model.Result.Summary
         </div>
@@ -31,7 +31,7 @@
         @if (Model.Result.CreatedCategories.Count > 0)
         {
             <div class="mb-3">
-                <span class="fw-semibold">自動新增分類：</span>@string.Join("、", Model.Result.CreatedCategories)
+                <span class="fw-semibold">@SharedLocalizer["自動新增分類："]</span>@string.Join("、", Model.Result.CreatedCategories)
             </div>
         }
 

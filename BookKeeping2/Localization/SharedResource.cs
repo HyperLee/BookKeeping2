@@ -1,4 +1,4 @@
-namespace BookKeeping2.Localization;
+namespace BookKeeping2;
 
 /// <summary>
 /// Marker type used to resolve shared UI localization resources.

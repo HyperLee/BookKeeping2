@@ -1,8 +1,8 @@
 ﻿@page
 @model PrivacyModel
 @{
-    ViewData["Title"] = "隱私說明";
+    ViewData["Title"] = SharedLocalizer["隱私說明"].Value;
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Open BookKeeping 以本機 SQLite 保存資料；除使用者主動匯入或匯出 CSV 外，應用程式不會將財務資料傳送至第三方服務。</p>
+<p>@SharedLocalizer["Open BookKeeping 以本機 SQLite 保存資料；除使用者主動匯入或匯出 CSV 外，應用程式不會將財務資料傳送至第三方服務。"]</p>

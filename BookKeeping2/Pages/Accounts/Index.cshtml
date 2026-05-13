@@ -2,16 +2,16 @@
 @using BookKeeping2.Models.Accounts
 @model BookKeeping2.Pages.Accounts.IndexModel
 @{
-    ViewData["Title"] = "帳戶管理";
+    ViewData["Title"] = SharedLocalizer["帳戶管理"].Value;
 }
 
-<h1 class="h3 mb-3">帳戶管理</h1>
+<h1 class="h3 mb-3">@SharedLocalizer["帳戶管理"]</h1>
 
 @if (TempData["StatusMessage"] is string statusMessage)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @statusMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@SharedLocalizer["關閉"]"></button>
     </div>
 }
 
@@ -25,11 +25,11 @@
     <div class="col-md-3">
         <label asp-for="Input.Type" class="form-label"></label>
         <select asp-for="Input.Type" class="form-select">
-            <option value="@AccountType.Cash">現金</option>
-            <option value="@AccountType.Bank">銀行</option>
-            <option value="@AccountType.CreditCard">信用卡</option>
-            <option value="@AccountType.EWallet">電子支付</option>
-            <option value="@AccountType.Other">其他</option>
+            <option value="@AccountType.Cash">@SharedLocalizer["現金"]</option>
+            <option value="@AccountType.Bank">@SharedLocalizer["銀行"]</option>
+            <option value="@AccountType.CreditCard">@SharedLocalizer["信用卡"]</option>
+            <option value="@AccountType.EWallet">@SharedLocalizer["電子支付"]</option>
+            <option value="@AccountType.Other">@SharedLocalizer["其他"]</option>
         </select>
     </div>
     <div class="col-md-2">
@@ -45,7 +45,7 @@
         <input asp-for="Input.DisplayOrder" class="form-control" />
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">新增帳戶</button>
+        <button type="submit" class="btn btn-primary">@SharedLocalizer["新增帳戶"]</button>
     </div>
 </form>
 
@@ -53,9 +53,9 @@
     <table class="table table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col">名稱</th>
-                <th scope="col">類型</th>
-                <th scope="col" class="text-end">目前餘額</th>
+                <th scope="col">@SharedLocalizer["名稱"]</th>
+                <th scope="col">@SharedLocalizer["類型"]</th>
+                <th scope="col" class="text-end">@SharedLocalizer["目前餘額"]</th>
             </tr>
         </thead>
         <tbody>

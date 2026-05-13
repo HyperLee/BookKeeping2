@@ -1,19 +1,19 @@
 @page
 @model BookKeeping2.Pages.Transactions.IndexModel
 @{
-    ViewData["Title"] = "交易明細";
+    ViewData["Title"] = SharedLocalizer["交易明細"].Value;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">交易明細</h1>
-    <a class="btn btn-primary" asp-page="/Transactions/Create">新增交易</a>
+    <h1 class="h3 mb-0">@SharedLocalizer["交易明細"]</h1>
+    <a class="btn btn-primary" asp-page="/Transactions/Create">@SharedLocalizer["新增交易"]</a>
 </div>
 
 @if (TempData["StatusMessage"] is string statusMessage)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @statusMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@SharedLocalizer["關閉"]"></button>
     </div>
 }
 
@@ -30,13 +30,13 @@
     <div class="col-12 col-md-3">
         <label class="form-label" asp-for="Filter.CategoryId"></label>
         <select class="form-select" asp-for="Filter.CategoryId" asp-items="Model.Options.Categories">
-            <option value="">全部分類</option>
+            <option value="">@SharedLocalizer["全部分類"]</option>
         </select>
     </div>
     <div class="col-12 col-md-3">
         <label class="form-label" asp-for="Filter.AccountId"></label>
         <select class="form-select" asp-for="Filter.AccountId" asp-items="Model.Options.Accounts">
-            <option value="">全部帳戶</option>
+            <option value="">@SharedLocalizer["全部帳戶"]</option>
         </select>
     </div>
     <div class="col-12 col-md-3">
@@ -54,16 +54,16 @@
     </div>
     <div class="col-12 col-md-2">
         <input asp-for="Filter.PageSize" type="hidden" />
-        <button type="submit" class="btn btn-outline-primary w-100">篩選</button>
+        <button type="submit" class="btn btn-outline-primary w-100">@SharedLocalizer["篩選"]</button>
     </div>
 </form>
 
-<div class="mb-2 text-muted">篩選結果 @Model.Transactions.TotalCount 筆</div>
+<div class="mb-2 text-muted">@SharedLocalizer["篩選結果 {0} 筆", Model.Transactions.TotalCount]</div>
 
 @if (Model.Transactions.Items.Count == 0)
 {
     <div class="alert alert-info" role="status">
-        沒有符合條件的交易。
+        @SharedLocalizer["沒有符合條件的交易。"]
     </div>
 }
 else
@@ -72,13 +72,13 @@ else
         <table class="table table-striped align-middle">
             <thead>
                 <tr>
-                    <th scope="col">日期</th>
-                    <th scope="col">類型</th>
-                    <th scope="col" class="text-end">金額</th>
-                    <th scope="col">分類</th>
-                    <th scope="col">帳戶</th>
-                    <th scope="col">備註</th>
-                    <th scope="col" class="text-end">操作</th>
+                    <th scope="col">@SharedLocalizer["日期"]</th>
+                    <th scope="col">@SharedLocalizer["類型"]</th>
+                    <th scope="col" class="text-end">@SharedLocalizer["金額"]</th>
+                    <th scope="col">@SharedLocalizer["分類"]</th>
+                    <th scope="col">@SharedLocalizer["帳戶"]</th>
+                    <th scope="col">@SharedLocalizer["備註"]</th>
+                    <th scope="col" class="text-end">@SharedLocalizer["操作"]</th>
                 </tr>
             </thead>
             <tbody>
@@ -92,8 +92,8 @@ else
                         <td>@transaction.AccountName</td>
                         <td>@transaction.Note</td>
                         <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary" asp-page="/Transactions/Edit" asp-route-id="@transaction.Id">編輯</a>
-                            <a class="btn btn-sm btn-outline-danger" asp-page="/Transactions/Delete" asp-route-id="@transaction.Id">刪除</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="/Transactions/Edit" asp-route-id="@transaction.Id">@SharedLocalizer["編輯"]</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-page="/Transactions/Delete" asp-route-id="@transaction.Id">@SharedLocalizer["刪除"]</a>
                         </td>
                     </tr>
                 }

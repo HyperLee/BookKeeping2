@@ -1,4 +1,5 @@
 using BookKeeping2.Data;
+using BookKeeping2.Localization;
 using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Accounts;
 using BookKeeping2.Services.Budgets;
@@ -6,8 +7,9 @@ using BookKeeping2.Services.Common;
 using BookKeeping2.Services.Time;
 using BookKeeping2.ViewModels.Budgets;
 using BookKeeping2.ViewModels.Transactions;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookKeeping2.Pages;
 
@@ -67,6 +69,11 @@ public class IndexModel : PageModel
     public IReadOnlyList<BudgetStatusViewModel> BudgetSummaries { get; private set; } = [];
 
     /// <summary>
+    /// Gets the resolved language used to mark the selected homepage language option.
+    /// </summary>
+    public string SelectedUiLanguage => UiLanguageOptions.NormalizeUiCulture(Request.Cookies[UiLanguageOptions.CookieName]);
+
+    /// <summary>
     /// Handles the dashboard request.
     /// </summary>
     /// <returns>A task representing the asynchronous operation.</returns>
@@ -110,5 +117,26 @@ public class IndexModel : PageModel
 
         AccountBalances = await accountService.GetBalanceSummariesAsync(includeArchived: false);
         BudgetSummaries = await budgetService.ListMonthlyAsync(monthStart);
+    }
+
+    /// <summary>
+    /// Updates the site interface language preference.
+    /// </summary>
+    /// <param name="uiLanguage">The selected UI language code.</param>
+    /// <returns>A redirect back to the homepage.</returns>
+    public IActionResult OnPostLanguage(string uiLanguage)
+    {
+        string selectedLanguage = UiLanguageOptions.NormalizeUiCulture(uiLanguage);
+        Response.Cookies.Append(
+            UiLanguageOptions.CookieName,
+            selectedLanguage,
+            new CookieOptions
+            {
+                Path = "/",
+                SameSite = SameSiteMode.Lax,
+                IsEssential = true
+            });
+
+        return RedirectToPage();
     }
 }

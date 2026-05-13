@@ -2,18 +2,18 @@
 @using System.Globalization
 @model BookKeeping2.Pages.Budgets.IndexModel
 @{
-    ViewData["Title"] = "預算管理";
+    ViewData["Title"] = SharedLocalizer["預算管理"].Value;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">預算管理</h1>
+    <h1 class="h3 mb-0">@SharedLocalizer["預算管理"]</h1>
     <form method="get" class="d-flex align-items-end gap-2">
         <div>
-            <label class="form-label mb-1" asp-for="Month">預算月份</label>
+            <label class="form-label mb-1" asp-for="Month">@SharedLocalizer["預算月份"]</label>
             <input class="form-control" asp-for="Month" type="month" value="@Model.Month" />
             <span class="text-danger small" asp-validation-for="Month"></span>
         </div>
-        <button type="submit" class="btn btn-outline-primary">查看</button>
+        <button type="submit" class="btn btn-outline-primary">@SharedLocalizer["查看"]</button>
     </form>
 </div>
 
@@ -21,18 +21,18 @@
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @statusMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@SharedLocalizer["關閉"]"></button>
     </div>
 }
 
 <section aria-labelledby="budget-form-heading" class="mb-4">
-    <h2 id="budget-form-heading" class="h5">設定分類預算</h2>
+    <h2 id="budget-form-heading" class="h5">@SharedLocalizer["設定分類預算"]</h2>
     <form method="post" class="row g-3 align-items-end">
         <input asp-for="Input.BudgetMonth" type="hidden" />
         <div class="col-12 col-md-5">
             <label class="form-label" asp-for="Input.CategoryId"></label>
             <select class="form-select" asp-for="Input.CategoryId">
-                <option value="">請選擇支出分類</option>
+                <option value="">@SharedLocalizer["請選擇支出分類"]</option>
                 @foreach (var category in Model.Options.Categories)
                 {
                     <option value="@category.Id">@category.Name</option>
@@ -46,17 +46,17 @@
             <span class="text-danger small" asp-validation-for="Input.Amount"></span>
         </div>
         <div class="col-12 col-md-3">
-            <button type="submit" class="btn btn-primary w-100">儲存預算</button>
+            <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["儲存預算"]</button>
         </div>
     </form>
 </section>
 
 <section aria-labelledby="budget-list-heading">
-    <h2 id="budget-list-heading" class="h5">本月預算進度</h2>
+    <h2 id="budget-list-heading" class="h5">@SharedLocalizer["本月預算進度"]</h2>
 
     @if (Model.Budgets.Count == 0)
     {
-        <div class="alert alert-info" role="status">本月尚未設定預算。</div>
+        <div class="alert alert-info" role="status">@SharedLocalizer["本月尚未設定預算。"]</div>
     }
     else
     {
@@ -64,12 +64,12 @@
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th scope="col">分類</th>
-                        <th scope="col" class="text-end">預算</th>
-                        <th scope="col" class="text-end">已使用</th>
-                        <th scope="col">使用率</th>
-                        <th scope="col">提醒</th>
-                        <th scope="col" class="text-end">操作</th>
+                        <th scope="col">@SharedLocalizer["分類"]</th>
+                        <th scope="col" class="text-end">@SharedLocalizer["預算"]</th>
+                        <th scope="col" class="text-end">@SharedLocalizer["已使用"]</th>
+                        <th scope="col">@SharedLocalizer["使用率"]</th>
+                        <th scope="col">@SharedLocalizer["提醒"]</th>
+                        <th scope="col" class="text-end">@SharedLocalizer["操作"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,7 +90,7 @@
                             <td>@budget.AlertText</td>
                             <td class="text-end">
                                 <form method="post" asp-page-handler="Delete" asp-route-id="@budget.BudgetId" asp-route-month="@Model.Month">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">刪除</button>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">@SharedLocalizer["刪除"]</button>
                                 </form>
                             </td>
                         </tr>

@@ -58,24 +58,24 @@
 
 > Confirm the test intent with the user or maintainer first. Then write these tests and confirm they fail before implementation.
 
-- [ ] T016 [P] [US1] Add failing homepage language control, selected option, home-only control, and English rendering tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T017 [P] [US1] Add failing keyboard language selection, one-second selected-language rendering, and post-navigation language rendering tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
-- [ ] T018 [P] [US1] Add failing contract assertions for anti-forgery language form markup and no global text replacement in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
+- [X] T016 [P] [US1] Add failing homepage language control, selected option, home-only control, and English rendering tests in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [X] T017 [P] [US1] Add failing keyboard language selection, one-second selected-language rendering, and post-navigation language rendering tests in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
+- [X] T018 [P] [US1] Add failing contract assertions for anti-forgery language form markup and no global text replacement in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T019 [US1] Add the non-financial language POST handler, selected language state, and redirect behavior in `BookKeeping2/Pages/Index.cshtml.cs`
-- [ ] T020 [US1] Add the accessible homepage language control beside the existing theme control in `BookKeeping2/Pages/Index.cshtml`
-- [ ] T021 [US1] Localize `<html lang>`, page title composition, navigation, footer, and shared layout text in `BookKeeping2/Pages/Shared/_Layout.cshtml`
-- [ ] T022 [P] [US1] Localize homepage headings, summary labels, links, empty states, and table headers in `BookKeeping2/Pages/Index.cshtml`
-- [ ] T023 [P] [US1] Localize pagination text and labels in `BookKeeping2/Pages/Shared/_Pagination.cshtml`
-- [ ] T024 [P] [US1] Localize account and category page fixed UI text in `BookKeeping2/Pages/Accounts/Index.cshtml` and `BookKeeping2/Pages/Categories/Index.cshtml`
-- [ ] T025 [P] [US1] Localize budget and report page fixed UI text in `BookKeeping2/Pages/Budgets/Index.cshtml` and `BookKeeping2/Pages/Reports/Index.cshtml`
-- [ ] T026 [P] [US1] Localize transaction list, create, edit, delete, and shared form fixed UI text in `BookKeeping2/Pages/Transactions/Index.cshtml`, `BookKeeping2/Pages/Transactions/Create.cshtml`, `BookKeeping2/Pages/Transactions/Edit.cshtml`, `BookKeeping2/Pages/Transactions/Delete.cshtml`, and `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`
-- [ ] T027 [P] [US1] Localize CSV, privacy, and error page fixed UI text in `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Export.cshtml`, `BookKeeping2/Pages/Privacy.cshtml`, and `BookKeeping2/Pages/Error.cshtml`
-- [ ] T028 [US1] Add homepage progressive enhancement for the language form without global text replacement in `BookKeeping2/wwwroot/js/site.js`
-- [ ] T029 [US1] Add English translations for all US1 layout, homepage, page heading, button, link, table, empty-state, and shared partial keys in `BookKeeping2/Resources/SharedResource.en.resx`
-- [ ] T030 [US1] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~LanguageToggleBrowserTests"` and make US1 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T019 [US1] Add the non-financial language POST handler, selected language state, and redirect behavior in `BookKeeping2/Pages/Index.cshtml.cs`
+- [X] T020 [US1] Add the accessible homepage language control beside the existing theme control in `BookKeeping2/Pages/Index.cshtml`
+- [X] T021 [US1] Localize `<html lang>`, page title composition, navigation, footer, and shared layout text in `BookKeeping2/Pages/Shared/_Layout.cshtml`
+- [X] T022 [P] [US1] Localize homepage headings, summary labels, links, empty states, and table headers in `BookKeeping2/Pages/Index.cshtml`
+- [X] T023 [P] [US1] Localize pagination text and labels in `BookKeeping2/Pages/Shared/_Pagination.cshtml`
+- [X] T024 [P] [US1] Localize account and category page fixed UI text in `BookKeeping2/Pages/Accounts/Index.cshtml` and `BookKeeping2/Pages/Categories/Index.cshtml`
+- [X] T025 [P] [US1] Localize budget and report page fixed UI text in `BookKeeping2/Pages/Budgets/Index.cshtml` and `BookKeeping2/Pages/Reports/Index.cshtml`
+- [X] T026 [P] [US1] Localize transaction list, create, edit, delete, and shared form fixed UI text in `BookKeeping2/Pages/Transactions/Index.cshtml`, `BookKeeping2/Pages/Transactions/Create.cshtml`, `BookKeeping2/Pages/Transactions/Edit.cshtml`, `BookKeeping2/Pages/Transactions/Delete.cshtml`, and `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`
+- [X] T027 [P] [US1] Localize CSV, privacy, and error page fixed UI text in `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Export.cshtml`, `BookKeeping2/Pages/Privacy.cshtml`, and `BookKeeping2/Pages/Error.cshtml`
+- [X] T028 [US1] Add homepage progressive enhancement for the language form without global text replacement in `BookKeeping2/wwwroot/js/site.js`
+- [X] T029 [US1] Add English translations for all US1 layout, homepage, page heading, button, link, table, empty-state, and shared partial keys in `BookKeeping2/Resources/SharedResource.en.resx`
+- [X] T030 [US1] Run `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~LanguageTogglePageTests|FullyQualifiedName~LanguageToggleBrowserTests"` and make US1 tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: User Story 1 is independently testable as the MVP.
 

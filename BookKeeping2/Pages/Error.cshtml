@@ -1,24 +1,24 @@
 ﻿@page
 @model ErrorModel
 @{
-    ViewData["Title"] = "發生錯誤";
+    ViewData["Title"] = SharedLocalizer["發生錯誤"].Value;
 }
 
-<h1 class="text-danger">發生錯誤</h1>
-<h2 class="text-danger">處理要求時發生問題。</h2>
+<h1 class="text-danger">@SharedLocalizer["發生錯誤"]</h1>
+<h2 class="text-danger">@SharedLocalizer["處理要求時發生問題。"]</h2>
 
 @if (Model.ShowRequestId)
 {
     <p>
-        <strong>要求編號：</strong> <code>@Model.RequestId</code>
+        <strong>@SharedLocalizer["要求編號："]</strong> <code>@Model.RequestId</code>
     </p>
 }
 
-<h3>開發模式</h3>
+<h3>@SharedLocalizer["開發模式"]</h3>
 <p>
-    切換至 <strong>Development</strong> 環境會顯示詳細錯誤資訊。
+    @SharedLocalizer["切換至"] <strong>Development</strong> @SharedLocalizer["環境會顯示詳細錯誤資訊。"]
 </p>
 <p>
-    <strong>部署環境不應啟用 Development。</strong>
-    詳細例外可能揭露敏感資訊；本機除錯時，請設定 <strong>ASPNETCORE_ENVIRONMENT</strong> 為 <strong>Development</strong> 後重新啟動應用程式。
+    <strong>@SharedLocalizer["部署環境不應啟用 Development。"]</strong>
+    @SharedLocalizer["詳細例外可能揭露敏感資訊；本機除錯時，請設定"] <strong>ASPNETCORE_ENVIRONMENT</strong> @SharedLocalizer["為"] <strong>Development</strong> @SharedLocalizer["後重新啟動應用程式。"]
 </p>

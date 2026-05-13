@@ -1,5 +1,6 @@
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using BookKeeping2.Tests.TestSupport;
 using Xunit;
 
 namespace BookKeeping2.Tests.Integration.StaticAssets;
@@ -8,6 +9,7 @@ public sealed partial class LanguageResourceCompletenessTests
 {
     private static readonly string RepositoryRoot = FindRepositoryRoot();
     private static readonly string EnglishResourcePath = Path.Combine(RepositoryRoot, "BookKeeping2", "Resources", "SharedResource.en.resx");
+    private static readonly string SiteScriptPath = Path.Combine(RepositoryRoot, "BookKeeping2", "wwwroot", "js", "site.js");
 
     private static readonly string[] FoundationalKeys =
     [
@@ -71,6 +73,34 @@ public sealed partial class LanguageResourceCompletenessTests
         }
     }
 
+    [Fact]
+    public async Task Homepage_language_form_uses_post_antiforgery_and_allow_listed_values()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+
+        string html = await client.GetStringAsync("/");
+
+        Assert.Contains("data-language-control", html, StringComparison.Ordinal);
+        Assert.Contains("method=\"post\"", html, StringComparison.Ordinal);
+        Assert.Contains("name=\"__RequestVerificationToken\"", html, StringComparison.Ordinal);
+        Assert.Matches(LanguageRadioRegex("zh-TW"), html);
+        Assert.Matches(LanguageRadioRegex("en"), html);
+    }
+
+    [Fact]
+    public void Runtime_script_does_not_perform_global_text_replacement_for_language_switching()
+    {
+        string script = File.ReadAllText(SiteScriptPath);
+
+        Assert.DoesNotContain("document.body.innerHTML", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("querySelectorAll('*')", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("innerText", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("textContent =", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("XMLHttpRequest", script, StringComparison.Ordinal);
+        Assert.DoesNotContain("fetch(", script, StringComparison.Ordinal);
+    }
+
     private static Dictionary<string, string> ReadEnglishResource()
     {
         XDocument document = XDocument.Load(EnglishResourcePath);
@@ -85,6 +115,13 @@ public sealed partial class LanguageResourceCompletenessTests
 
     [GeneratedRegex(@"\{[0-9]+\}")]
     private static partial Regex PlaceholderRegex();
+
+    private static Regex LanguageRadioRegex(string value)
+    {
+        return new Regex(
+            $"""<input(?=[^>]*\btype="radio")(?=[^>]*\bname="uiLanguage")(?=[^>]*\bvalue="{Regex.Escape(value)}")[^>]*>""",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+    }
 
     private static string FindRepositoryRoot()
     {

@@ -35,6 +35,7 @@ body {
 
 [data-bs-theme="dark"] .navbar,
 [data-bs-theme="dark"] .footer,
+[data-bs-theme="dark"] .language-control__fieldset,
 [data-bs-theme="dark"] .theme-mode-control,
 [data-bs-theme="dark"] .border {
   border-color: var(--bs-border-color) !important;
@@ -115,6 +116,7 @@ canvas {
   color: var(--bs-secondary-color);
 }
 
+.language-control__fieldset,
 .theme-mode-control {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +130,11 @@ canvas {
   background-color: var(--bs-tertiary-bg);
 }
 
+.language-control {
+  margin: 0;
+}
+
+.language-control__legend,
 .theme-mode-control__legend {
   float: none;
   width: auto;
@@ -138,6 +145,7 @@ canvas {
   font-weight: 600;
 }
 
+.language-control__options,
 .theme-mode-control__options {
   display: flex;
   flex-wrap: wrap;
@@ -145,21 +153,25 @@ canvas {
   gap: 0.25rem 0.75rem;
 }
 
+.language-control .form-check,
 .theme-mode-control .form-check {
   min-height: 1.5rem;
   margin: 0;
 }
 
+.language-control .form-check-label,
 .theme-mode-control .form-check-label {
   color: var(--bs-body-color);
   white-space: nowrap;
 }
 
+.language-control .form-check-input:checked,
 .theme-mode-control .form-check-input:checked {
   background-color: var(--bs-primary);
   border-color: var(--bs-primary);
 }
 
+.language-control .form-check-input:focus-visible,
 .theme-mode-control .form-check-input:focus-visible,
 a:focus-visible,
 button:focus-visible {
@@ -191,6 +203,9 @@ button:focus-visible {
     min-width: 6rem;
   }
 
+  .language-control,
+  .language-control__fieldset,
+  .language-control__options,
   .theme-mode-control,
   .theme-mode-control__options {
     width: 100%;

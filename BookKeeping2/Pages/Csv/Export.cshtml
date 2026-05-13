@@ -1,26 +1,26 @@
 @page
 @model BookKeeping2.Pages.Csv.ExportModel
 @{
-    ViewData["Title"] = "CSV 匯出";
+    ViewData["Title"] = SharedLocalizer["CSV 匯出"].Value;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">CSV 匯出</h1>
+    <h1 class="h3 mb-0">@SharedLocalizer["CSV 匯出"]</h1>
 </div>
 
 <form method="get" asp-page-handler="Download" class="row g-3 align-items-end">
     <div class="col-12 col-md-4">
-        <label class="form-label" asp-for="StartDate">起始日期</label>
+        <label class="form-label" asp-for="StartDate">@SharedLocalizer["起始日期"]</label>
         <input class="form-control" asp-for="StartDate" type="date" />
         <span class="text-danger small" asp-validation-for="StartDate"></span>
     </div>
     <div class="col-12 col-md-4">
-        <label class="form-label" asp-for="EndDate">結束日期</label>
+        <label class="form-label" asp-for="EndDate">@SharedLocalizer["結束日期"]</label>
         <input class="form-control" asp-for="EndDate" type="date" />
         <span class="text-danger small" asp-validation-for="EndDate"></span>
     </div>
     <div class="col-12 col-md-4">
-        <button type="submit" class="btn btn-primary w-100">下載 CSV</button>
+        <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["下載 CSV"]</button>
     </div>
 </form>
 

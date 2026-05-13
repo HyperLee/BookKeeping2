@@ -112,6 +112,20 @@
         });
     }
 
+    const languageControl = document.querySelector('[data-language-control]');
+    if (languageControl instanceof HTMLFormElement) {
+        languageControl.addEventListener('change', event => {
+            const target = event.target;
+            if (!(target instanceof HTMLInputElement) || target.name !== 'uiLanguage') {
+                return;
+            }
+
+            if (typeof languageControl.requestSubmit === 'function') {
+                languageControl.requestSubmit();
+            }
+        });
+    }
+
     const successAlerts = document.querySelectorAll('.alert-success.alert-dismissible');
     successAlerts.forEach(alert => {
         window.setTimeout(() => {

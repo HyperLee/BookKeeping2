@@ -2,16 +2,16 @@
 @using BookKeeping2.Models.Common
 @model BookKeeping2.Pages.Categories.IndexModel
 @{
-    ViewData["Title"] = "分類管理";
+    ViewData["Title"] = SharedLocalizer["分類管理"].Value;
 }
 
-<h1 class="h3 mb-3">分類管理</h1>
+<h1 class="h3 mb-3">@SharedLocalizer["分類管理"]</h1>
 
 @if (TempData["StatusMessage"] is string statusMessage)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @statusMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="關閉"></button>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="@SharedLocalizer["關閉"]"></button>
     </div>
 }
 
@@ -25,8 +25,8 @@
     <div class="col-md-3">
         <label asp-for="Input.Type" class="form-label"></label>
         <select asp-for="Input.Type" class="form-select">
-            <option value="@TransactionType.Expense">支出</option>
-            <option value="@TransactionType.Income">收入</option>
+            <option value="@TransactionType.Expense">@SharedLocalizer["支出"]</option>
+            <option value="@TransactionType.Income">@SharedLocalizer["收入"]</option>
         </select>
     </div>
     <div class="col-md-3">
@@ -38,7 +38,7 @@
         <input asp-for="Input.DisplayOrder" class="form-control" />
     </div>
     <div class="col-12">
-        <button type="submit" class="btn btn-primary">新增分類</button>
+        <button type="submit" class="btn btn-primary">@SharedLocalizer["新增分類"]</button>
     </div>
 </form>
 
@@ -46,9 +46,9 @@
     <table class="table table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col">名稱</th>
-                <th scope="col">類型</th>
-                <th scope="col">狀態</th>
+                <th scope="col">@SharedLocalizer["名稱"]</th>
+                <th scope="col">@SharedLocalizer["類型"]</th>
+                <th scope="col">@SharedLocalizer["狀態"]</th>
             </tr>
         </thead>
         <tbody>
@@ -57,7 +57,7 @@
                 <tr>
                     <td>@category.Name</td>
                     <td>@category.TypeText</td>
-                    <td>@(category.IsArchived ? "已封存" : category.IsDefault ? "預設" : "自訂")</td>
+                    <td>@(category.IsArchived ? SharedLocalizer["已封存"] : category.IsDefault ? SharedLocalizer["預設"] : SharedLocalizer["自訂"])</td>
                 </tr>
             }
         </tbody>

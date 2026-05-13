@@ -1,49 +1,66 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "首頁";
+    ViewData["Title"] = SharedLocalizer["首頁"].Value;
+    string selectedUiLanguage = Model.SelectedUiLanguage;
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">首頁</h1>
+    <h1 class="h3 mb-0">@SharedLocalizer["首頁"]</h1>
     <div class="d-flex flex-wrap align-items-center gap-3">
+        <form method="post" asp-page-handler="Language" class="language-control" data-language-control>
+            <fieldset class="language-control__fieldset">
+                <legend class="language-control__legend">@SharedLocalizer["介面語言"]</legend>
+                <div class="language-control__options">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="uiLanguage" id="ui-language-zh-tw" value="zh-TW" checked="@(selectedUiLanguage == UiLanguageOptions.DefaultUiCultureName)" />
+                        <label class="form-check-label" for="ui-language-zh-tw">繁體中文</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="uiLanguage" id="ui-language-en" value="en" checked="@(selectedUiLanguage == UiLanguageOptions.EnglishUiCultureName)" />
+                        <label class="form-check-label" for="ui-language-en">English</label>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-outline-primary">@SharedLocalizer["套用語言"]</button>
+                </div>
+            </fieldset>
+        </form>
         <fieldset class="theme-mode-control" data-theme-mode-control>
-            <legend class="theme-mode-control__legend">主題模式</legend>
+            <legend class="theme-mode-control__legend">@SharedLocalizer["主題模式"]</legend>
             <div class="theme-mode-control__options">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="themeMode" id="theme-mode-light" value="light" />
-                    <label class="form-check-label" for="theme-mode-light">亮色模式</label>
+                    <label class="form-check-label" for="theme-mode-light">@SharedLocalizer["亮色模式"]</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="themeMode" id="theme-mode-dark" value="dark" />
-                    <label class="form-check-label" for="theme-mode-dark">暗黑模式</label>
+                    <label class="form-check-label" for="theme-mode-dark">@SharedLocalizer["暗黑模式"]</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="themeMode" id="theme-mode-system" value="system" checked />
-                    <label class="form-check-label" for="theme-mode-system">跟隨系統</label>
+                    <label class="form-check-label" for="theme-mode-system">@SharedLocalizer["跟隨系統"]</label>
                 </div>
             </div>
         </fieldset>
-        <a class="btn btn-primary" asp-page="/Transactions/Create">新增交易</a>
+        <a class="btn btn-primary" asp-page="/Transactions/Create">@SharedLocalizer["新增交易"]</a>
     </div>
 </div>
 
 <div class="row g-3 mb-4">
     <div class="col-md-4">
         <div class="border rounded p-3 h-100">
-            <div class="text-muted">本月收入</div>
+            <div class="text-muted">@SharedLocalizer["本月收入"]</div>
             <div class="fs-4">@Model.MonthlyIncome.ToString("N0")</div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="border rounded p-3 h-100">
-            <div class="text-muted">本月支出</div>
+            <div class="text-muted">@SharedLocalizer["本月支出"]</div>
             <div class="fs-4">@Model.MonthlyExpense.ToString("N0")</div>
         </div>
     </div>
     <div class="col-md-4">
         <div class="border rounded p-3 h-100">
-            <div class="text-muted">本月結餘</div>
+            <div class="text-muted">@SharedLocalizer["本月結餘"]</div>
             <div class="fs-4">@Model.MonthlyBalance.ToString("N0")</div>
         </div>
     </div>
@@ -51,13 +68,13 @@
 
 <section aria-labelledby="account-balances-heading" class="mb-4">
     <div class="d-flex align-items-center justify-content-between mb-2">
-        <h2 id="account-balances-heading" class="h5 mb-0">帳戶餘額</h2>
-        <a asp-page="/Accounts/Index">管理帳戶</a>
+        <h2 id="account-balances-heading" class="h5 mb-0">@SharedLocalizer["帳戶餘額"]</h2>
+        <a asp-page="/Accounts/Index">@SharedLocalizer["管理帳戶"]</a>
     </div>
 
     @if (Model.AccountBalances.Count == 0)
     {
-        <div class="alert alert-info" role="status">尚未建立帳戶。</div>
+        <div class="alert alert-info" role="status">@SharedLocalizer["尚未建立帳戶。"]</div>
     }
     else
     {
@@ -77,13 +94,13 @@
 
 <section aria-labelledby="budget-summary-heading" class="mb-4">
     <div class="d-flex align-items-center justify-content-between mb-2">
-        <h2 id="budget-summary-heading" class="h5 mb-0">預算進度</h2>
-        <a asp-page="/Budgets/Index">管理預算</a>
+        <h2 id="budget-summary-heading" class="h5 mb-0">@SharedLocalizer["預算進度"]</h2>
+        <a asp-page="/Budgets/Index">@SharedLocalizer["管理預算"]</a>
     </div>
 
     @if (Model.BudgetSummaries.Count == 0)
     {
-        <div class="alert alert-info" role="status">本月尚未設定預算。</div>
+        <div class="alert alert-info" role="status">@SharedLocalizer["本月尚未設定預算。"]</div>
     }
     else
     {
@@ -110,13 +127,13 @@
 
 <section aria-labelledby="recent-transactions-heading">
     <div class="d-flex align-items-center justify-content-between mb-2">
-        <h2 id="recent-transactions-heading" class="h5 mb-0">最近交易</h2>
-        <a asp-page="/Transactions/Index">查看明細</a>
+        <h2 id="recent-transactions-heading" class="h5 mb-0">@SharedLocalizer["最近交易"]</h2>
+        <a asp-page="/Transactions/Index">@SharedLocalizer["查看明細"]</a>
     </div>
 
     @if (Model.RecentTransactions.Count == 0)
     {
-        <div class="alert alert-info" role="status">本月尚無紀錄</div>
+        <div class="alert alert-info" role="status">@SharedLocalizer["本月尚無紀錄"]</div>
     }
     else
     {
@@ -124,9 +141,9 @@
             <table class="table table-sm align-middle">
                 <thead>
                     <tr>
-                        <th scope="col">日期</th>
-                        <th scope="col">分類</th>
-                        <th scope="col" class="text-end">金額</th>
+                        <th scope="col">@SharedLocalizer["日期"]</th>
+                        <th scope="col">@SharedLocalizer["分類"]</th>
+                        <th scope="col" class="text-end">@SharedLocalizer["金額"]</th>
                     </tr>
                 </thead>
                 <tbody>

@@ -2,16 +2,16 @@
 
 @if (Model.TotalPages > 1)
 {
-    <nav aria-label="分頁">
+    <nav aria-label="@SharedLocalizer["分頁"]">
         <ul class="pagination">
             <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
-                <a class="page-link" href="?Filter.Page=@(Model.Page - 1)">上一頁</a>
+                <a class="page-link" href="?Filter.Page=@(Model.Page - 1)">@SharedLocalizer["上一頁"]</a>
             </li>
             <li class="page-item disabled">
-                <span class="page-link">第 @Model.Page / @Model.TotalPages 頁</span>
+                <span class="page-link">@SharedLocalizer["第 {0} / {1} 頁", Model.Page, Model.TotalPages]</span>
             </li>
             <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
-                <a class="page-link" href="?Filter.Page=@(Model.Page + 1)">下一頁</a>
+                <a class="page-link" href="?Filter.Page=@(Model.Page + 1)">@SharedLocalizer["下一頁"]</a>
             </li>
         </ul>
     </nav>

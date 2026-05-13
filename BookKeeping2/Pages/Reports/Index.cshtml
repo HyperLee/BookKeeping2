@@ -3,38 +3,38 @@
 @using System.Text.Json
 @model BookKeeping2.Pages.Reports.IndexModel
 @{
-    ViewData["Title"] = "月度報表";
+    ViewData["Title"] = SharedLocalizer["月度報表"].Value;
     string trendJson = JsonSerializer.Serialize(Model.Report.TrendPoints);
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
-    <h1 class="h3 mb-0">月度報表</h1>
+    <h1 class="h3 mb-0">@SharedLocalizer["月度報表"]</h1>
     <form method="get" class="d-flex align-items-end gap-2">
         <div>
-            <label class="form-label mb-1" asp-for="Month">月份</label>
+            <label class="form-label mb-1" asp-for="Month">@SharedLocalizer["月份"]</label>
             <input class="form-control" asp-for="Month" type="month" value="@Model.Month" />
             <span class="text-danger small" asp-validation-for="Month"></span>
         </div>
-        <button type="submit" class="btn btn-outline-primary">查看</button>
+        <button type="submit" class="btn btn-outline-primary">@SharedLocalizer["查看"]</button>
     </form>
 </div>
 
 <div class="row g-3 mb-4">
     <div class="col-12 col-md-4">
         <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">收入</div>
+            <div class="text-muted small">@SharedLocalizer["收入"]</div>
             <div class="fs-4 fw-semibold text-success">@Model.Report.TotalIncome.ToString("N0", CultureInfo.CurrentCulture)</div>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">支出</div>
+            <div class="text-muted small">@SharedLocalizer["支出"]</div>
             <div class="fs-4 fw-semibold text-danger">@Model.Report.TotalExpense.ToString("N0", CultureInfo.CurrentCulture)</div>
         </div>
     </div>
     <div class="col-12 col-md-4">
         <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">結餘</div>
+            <div class="text-muted small">@SharedLocalizer["結餘"]</div>
             <div class="fs-4 fw-semibold">@Model.Report.Balance.ToString("N0", CultureInfo.CurrentCulture)</div>
         </div>
     </div>
@@ -43,22 +43,22 @@
 @if (!Model.Report.HasData)
 {
     <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-2" role="status">
-        <span>本月尚無紀錄</span>
-        <a class="btn btn-sm btn-primary" asp-page="/Transactions/Create">新增交易</a>
+        <span>@SharedLocalizer["本月尚無紀錄"]</span>
+        <a class="btn btn-sm btn-primary" asp-page="/Transactions/Create">@SharedLocalizer["新增交易"]</a>
     </div>
 }
 else
 {
     <div class="row g-4">
         <div class="col-12 col-lg-7">
-            <h2 class="h5">每日趨勢</h2>
-            <canvas id="monthlyTrendChart" data-points='@trendJson' aria-label="月度收支趨勢圖" role="img"></canvas>
+            <h2 class="h5">@SharedLocalizer["每日趨勢"]</h2>
+            <canvas id="monthlyTrendChart" data-points='@trendJson' aria-label='@SharedLocalizer["月度收支趨勢圖"]' role="img"></canvas>
         </div>
         <div class="col-12 col-lg-5">
-            <h2 class="h5">支出分類佔比</h2>
+            <h2 class="h5">@SharedLocalizer["支出分類佔比"]</h2>
             @if (Model.Report.CategoryShares.Count == 0)
             {
-                <div class="alert alert-secondary" role="status">本月沒有支出資料。</div>
+                <div class="alert alert-secondary" role="status">@SharedLocalizer["本月沒有支出資料。"]</div>
             }
             else
             {
@@ -66,9 +66,9 @@ else
                     <table class="table table-sm align-middle">
                         <thead>
                             <tr>
-                                <th scope="col">分類</th>
-                                <th scope="col" class="text-end">金額</th>
-                                <th scope="col" class="text-end">佔比</th>
+                                <th scope="col">@SharedLocalizer["分類"]</th>
+                                <th scope="col" class="text-end">@SharedLocalizer["金額"]</th>
+                                <th scope="col" class="text-end">@SharedLocalizer["佔比"]</th>
                             </tr>
                         </thead>
                         <tbody>
