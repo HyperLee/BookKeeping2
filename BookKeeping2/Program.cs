@@ -1,4 +1,6 @@
+using System.Globalization;
 using BookKeeping2.Data;
+using BookKeeping2.Localization;
 using BookKeeping2.Services.Accounts;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Budgets;
@@ -9,6 +11,7 @@ using BookKeeping2.Services.Security;
 using BookKeeping2.Services.Time;
 using BookKeeping2.Services.Transactions;
 using BookKeeping2.Validation;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookKeeping2;
@@ -47,7 +50,30 @@ public class Program
         builder.Services.AddScoped<ITransactionService, TransactionService>();
         builder.Services.AddSingleton<AuditLogMaskingPolicy>();
         builder.Services.AddSingleton<TextInputSanitizer>();
-        builder.Services.AddRazorPages();
+        builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            var formattingCulture = new CultureInfo(UiLanguageOptions.DefaultCultureName);
+            CultureInfo[] supportedUiCultures =
+            [
+                new(UiLanguageOptions.DefaultUiCultureName),
+                new(UiLanguageOptions.EnglishUiCultureName)
+            ];
+
+            options.DefaultRequestCulture = new RequestCulture(
+                UiLanguageOptions.DefaultCultureName,
+                UiLanguageOptions.DefaultUiCultureName);
+            options.SupportedCultures = [formattingCulture];
+            options.SupportedUICultures = supportedUiCultures;
+            options.RequestCultureProviders = [new UiLanguageRequestCultureProvider()];
+        });
+        builder.Services
+            .AddRazorPages()
+            .AddViewLocalization()
+            .AddDataAnnotationsLocalization(options =>
+            {
+                options.DataAnnotationLocalizerProvider = (_, factory) => factory.Create(typeof(SharedResource));
+            });
 
         var app = builder.Build();
 
@@ -63,6 +89,8 @@ public class Program
 
         app.UseBookKeepingSecurityHeaders();
         app.UseHttpsRedirection();
+
+        app.UseRequestLocalization();
 
         app.UseRouting();
 

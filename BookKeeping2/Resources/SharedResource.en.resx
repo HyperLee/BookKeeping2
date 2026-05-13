@@ -12,4 +12,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="繁體中文" xml:space="preserve">
+    <value>Traditional Chinese</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="介面語言" xml:space="preserve">
+    <value>Interface Language</value>
+  </data>
+  <data name="Open BookKeeping" xml:space="preserve">
+    <value>Open BookKeeping</value>
+  </data>
+  <data name="首頁" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="交易" xml:space="preserve">
+    <value>Transactions</value>
+  </data>
+  <data name="分類" xml:space="preserve">
+    <value>Categories</value>
+  </data>
+  <data name="帳戶" xml:space="preserve">
+    <value>Accounts</value>
+  </data>
+  <data name="預算" xml:space="preserve">
+    <value>Budgets</value>
+  </data>
+  <data name="報表" xml:space="preserve">
+    <value>Reports</value>
+  </data>
+  <data name="CSV" xml:space="preserve">
+    <value>CSV</value>
+  </data>
+  <data name="隱私權" xml:space="preserve">
+    <value>Privacy</value>
+  </data>
+  <data name="新增" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="儲存" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="取消" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="名稱" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="金額" xml:space="preserve">
+    <value>Amount</value>
+  </data>
+  <data name="日期" xml:space="preserve">
+    <value>Date</value>
+  </data>
 </root>

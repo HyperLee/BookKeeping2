@@ -35,14 +35,14 @@
 
 **Critical**: 此階段完成前，不應開始任何使用者故事的實作。
 
-- [ ] T008 [P] Add failing allow-list, invalid value, default fallback, and fixed culture tests in `BookKeeping2.Tests/Unit/Localization/UiLanguageRequestCultureProviderTests.cs`
-- [ ] T009 [P] Add failing resource key, blank value, and placeholder coverage tests in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
-- [ ] T010 Implement `zh-TW` and `en` language constants, cookie name, cookie lifetime, and html lang mapping in `BookKeeping2/Localization/UiLanguageOptions.cs`
-- [ ] T011 Implement the custom Cookie-only request culture provider in `BookKeeping2/Localization/UiLanguageRequestCultureProvider.cs`
-- [ ] T012 Register localization services, DataAnnotations display localization, supported UI cultures, the custom provider, and `UseRequestLocalization` ordering in `BookKeeping2/Program.cs`
-- [ ] T013 Add `SharedResource` localizer using/import support for Razor Pages in `BookKeeping2/Pages/_ViewImports.cshtml`
-- [ ] T014 Populate foundational English resource keys for language names, layout text, DataAnnotations display text, and shared actions while keeping user-facing validation/error correction messages in Traditional Chinese in `BookKeeping2/Resources/SharedResource.en.resx`
-- [ ] T015 Run the foundational tests with `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~UiLanguageRequestCultureProviderTests|FullyQualifiedName~LanguageResourceCompletenessTests"` and make provider/resource tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T008 [P] Add failing allow-list, invalid value, default fallback, and fixed culture tests in `BookKeeping2.Tests/Unit/Localization/UiLanguageRequestCultureProviderTests.cs`
+- [X] T009 [P] Add failing resource key, blank value, and placeholder coverage tests in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
+- [X] T010 Implement `zh-TW` and `en` language constants, cookie name, cookie lifetime, and html lang mapping in `BookKeeping2/Localization/UiLanguageOptions.cs`
+- [X] T011 Implement the custom Cookie-only request culture provider in `BookKeeping2/Localization/UiLanguageRequestCultureProvider.cs`
+- [X] T012 Register localization services, DataAnnotations display localization, supported UI cultures, the custom provider, and `UseRequestLocalization` ordering in `BookKeeping2/Program.cs`
+- [X] T013 Add `SharedResource` localizer using/import support for Razor Pages in `BookKeeping2/Pages/_ViewImports.cshtml`
+- [X] T014 Populate foundational English resource keys for language names, layout text, DataAnnotations display text, and shared actions while keeping user-facing validation/error correction messages in Traditional Chinese in `BookKeeping2/Resources/SharedResource.en.resx`
+- [X] T015 Run the foundational tests with `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~UiLanguageRequestCultureProviderTests|FullyQualifiedName~LanguageResourceCompletenessTests"` and make provider/resource tests pass in `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 **Checkpoint**: Foundation ready. User story implementation can now proceed in priority order or in parallel with clear file ownership.
 
