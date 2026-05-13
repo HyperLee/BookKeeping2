@@ -19,13 +19,13 @@
 
 **Purpose**: 建立 localization 與測試檔案骨架，供後續紅綠重構流程使用。
 
-- [ ] T001 Create localization marker and option constants skeletons in `BookKeeping2/Localization/SharedResource.cs` and `BookKeeping2/Localization/UiLanguageOptions.cs`
-- [ ] T002 [P] Create the English resource file skeleton in `BookKeeping2/Resources/SharedResource.en.resx`
-- [ ] T003 [P] Create the language browser fixture skeleton in `BookKeeping2.Tests/TestSupport/LanguageToggleBrowserFixture.cs`
-- [ ] T004 [P] Create the provider test file skeleton in `BookKeeping2.Tests/Unit/Localization/UiLanguageRequestCultureProviderTests.cs`
-- [ ] T005 [P] Create the page integration test file skeleton in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
-- [ ] T006 [P] Create the resource completeness test file skeleton in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
-- [ ] T007 [P] Create the browser test file skeleton in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
+- [X] T001 Create localization marker and option constants skeletons in `BookKeeping2/Localization/SharedResource.cs` and `BookKeeping2/Localization/UiLanguageOptions.cs`
+- [X] T002 [P] Create the English resource file skeleton in `BookKeeping2/Resources/SharedResource.en.resx`
+- [X] T003 [P] Create the language browser fixture skeleton in `BookKeeping2.Tests/TestSupport/LanguageToggleBrowserFixture.cs`
+- [X] T004 [P] Create the provider test file skeleton in `BookKeeping2.Tests/Unit/Localization/UiLanguageRequestCultureProviderTests.cs`
+- [X] T005 [P] Create the page integration test file skeleton in `BookKeeping2.Tests/Integration/Pages/LanguageTogglePageTests.cs`
+- [X] T006 [P] Create the resource completeness test file skeleton in `BookKeeping2.Tests/Integration/StaticAssets/LanguageResourceCompletenessTests.cs`
+- [X] T007 [P] Create the browser test file skeleton in `BookKeeping2.Tests/Integration/Browser/LanguageToggleBrowserTests.cs`
 
 ---
 
