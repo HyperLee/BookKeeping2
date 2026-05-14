@@ -122,6 +122,12 @@ Phase 1 design artifacts:
 - [contracts/multi-currency-contract.md](./contracts/multi-currency-contract.md)
 - [quickstart.md](./quickstart.md)
 
+### Implementation Session Check
+
+- 2026-05-14: 確認目前分支為 `004-multi-currency-bookkeeping`，feature artifacts 與現有專案結構一致。
+- 2026-05-14: `.gitignore` 已涵蓋 .NET `bin/`、`obj/`、使用者檔、SQLite 本機資料庫、環境檔、日誌、coverage、IDE 與通用暫存檔；未偵測 Docker、ESLint、Prettier、npm publishing、Terraform 或 Helm 設定需要新增 ignore file。
+- 2026-05-14: 測試資料 helper 將以 `TwdCurrency`、`UsdCurrency`、`JpyCurrency`、`EurCurrency`、`GbpCurrency` 常數命名，後續再擴充 account、transaction 與 budget helper 參數以指定幣別。
+
 ### Post-Design Constitution Check
 
 - **I. 程式碼品質至上**: PASS。data model 使用既有 domain/service/view model 分層，沒有新增不必要套件或跨層抽象。

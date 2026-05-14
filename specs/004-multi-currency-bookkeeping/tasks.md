@@ -17,10 +17,10 @@
 
 **Purpose**: 確認 feature artifacts、現有測試基礎與共享測試資料形狀，避免後續故事重複建立 fixture。
 
-- [ ] T001 確認多幣別需求、各故事測試意圖、TDD 順序與排除範圍一致，取得使用者或維護者對測試意圖的確認，並記錄於 `specs/004-multi-currency-bookkeeping/spec.md`
-- [ ] T002 [P] 檢查多幣別技術決策與檔案配置是否仍符合目前專案結構，更新 `specs/004-multi-currency-bookkeeping/plan.md`
-- [ ] T003 [P] 檢查 CSV、報表、帳戶、預算與 UI 契約是否涵蓋所有故事測試案例，更新 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
-- [ ] T004 [P] 擴充多幣別測試資料建構器介面與 helper 命名規劃，準備修改 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
+- [X] T001 確認多幣別需求、各故事測試意圖、TDD 順序與排除範圍一致，取得使用者或維護者對測試意圖的確認，並記錄於 `specs/004-multi-currency-bookkeeping/spec.md`
+- [X] T002 [P] 檢查多幣別技術決策與檔案配置是否仍符合目前專案結構，更新 `specs/004-multi-currency-bookkeeping/plan.md`
+- [X] T003 [P] 檢查 CSV、報表、帳戶、預算與 UI 契約是否涵蓋所有故事測試案例，更新 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
+- [X] T004 [P] 擴充多幣別測試資料建構器介面與 helper 命名規劃，準備修改 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
 
 ---
 

@@ -268,3 +268,8 @@ Backward-incompatible CSV change:
 
 - New exports are seven-column only because the feature must preserve currency.
 - Import remains backward compatible with six-column files.
+
+## Implementation Verification Notes
+
+- 2026-05-14: Tasks T001-T004 reviewed this contract against the requested stories. CSV, report, account, budget, transaction UI and validation requirements are all represented by explicit tests in `tasks.md`.
+- 2026-05-14: Shared test data helpers will expose stable supported-currency constants before adding entity builders so test cases can name currency intent consistently.

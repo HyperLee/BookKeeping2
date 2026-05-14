@@ -14,6 +14,7 @@
 - Q: 幣別代碼輸入與匯入時，大小寫與前後空白應如何處理？ → A: trim 前後空白，大小寫不敏感；支援值正規化儲存為大寫代碼。
 - Q: 帳戶建立後，帳戶幣別是否可以修改？ → A: 不可修改；帳戶建立後幣別固定，需建立新帳戶。
 - Q: 新增帳戶時若未指定幣別，系統應如何處理？ → A: 拒絕儲存，要求使用者明確選擇支援幣別。
+- Q: Phase-by-phase implementation 是否可依 tasks.md 直接執行完整測試意圖？ → A: 使用者確認依 `specs/004-multi-currency-bookkeeping/tasks.md` 每個 phase 順序執行，測試先行並在每個 phase 結束標記任務、commit 與 push。
 
 ## 使用者情境與測試 *(mandatory)*
 
