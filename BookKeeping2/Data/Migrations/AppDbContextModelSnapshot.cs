@@ -20,7 +20,7 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
         {
             b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("INTEGER");
             b.Property<DateTimeOffset>("CreatedAtUtc").HasColumnType("TEXT");
-            b.Property<string>("Currency").IsRequired().HasMaxLength(3).HasColumnType("TEXT");
+            b.Property<string>("Currency").IsRequired().HasMaxLength(3).HasColumnType("TEXT").HasDefaultValue("TWD");
             b.Property<int>("DisplayOrder").HasColumnType("INTEGER");
             b.Property<string>("IconKey").IsRequired().HasMaxLength(50).HasColumnType("TEXT");
             b.Property<bool>("IsArchived").HasColumnType("INTEGER");
@@ -99,9 +99,10 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
             b.Property<DateOnly>("BudgetMonth").HasColumnType("TEXT");
             b.Property<long>("CategoryId").HasColumnType("INTEGER");
             b.Property<DateTimeOffset>("CreatedAtUtc").HasColumnType("TEXT");
+            b.Property<string>("Currency").IsRequired().HasMaxLength(3).HasColumnType("TEXT").HasDefaultValue("TWD");
             b.Property<DateTimeOffset>("UpdatedAtUtc").HasColumnType("TEXT");
             b.HasKey("Id");
-            b.HasIndex("CategoryId", "BudgetMonth").IsUnique();
+            b.HasIndex("CategoryId", "BudgetMonth", "Currency").IsUnique();
             b.ToTable("Budgets");
         });
 
@@ -125,6 +126,7 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
             b.Property<long>("AmountMinorUnits").HasColumnType("INTEGER");
             b.Property<long>("CategoryId").HasColumnType("INTEGER");
             b.Property<DateTimeOffset>("CreatedAtUtc").HasColumnType("TEXT");
+            b.Property<string>("Currency").IsRequired().HasMaxLength(3).HasColumnType("TEXT").HasDefaultValue("TWD");
             b.Property<DateTimeOffset?>("DeletedAtUtc").HasColumnType("TEXT");
             b.Property<string>("DeletionSummary").HasMaxLength(500).HasColumnType("TEXT");
             b.Property<bool>("IsDeleted").HasColumnType("INTEGER");
@@ -139,6 +141,9 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
             b.HasIndex("IsDeleted", "AccountId", "TransactionDate");
             b.HasIndex("IsDeleted", "AmountMinorUnits");
             b.HasIndex("IsDeleted", "CategoryId", "TransactionDate");
+            b.HasIndex("IsDeleted", "Currency", "AccountId", "TransactionDate");
+            b.HasIndex("IsDeleted", "Currency", "CategoryId", "TransactionDate");
+            b.HasIndex("IsDeleted", "Currency", "TransactionDate");
             b.HasIndex("IsDeleted", "TransactionDate");
             b.ToTable("Transactions");
         });

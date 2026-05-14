@@ -27,7 +27,7 @@ public sealed class Transaction
     public TransactionType Type { get; set; }
 
     /// <summary>
-    /// Gets or sets the TWD amount as a decimal value.
+    /// Gets or sets the transaction amount as a decimal value in <see cref="Currency" />.
     /// </summary>
     [NotMapped]
     public decimal Amount
@@ -37,9 +37,14 @@ public sealed class Transaction
     }
 
     /// <summary>
-    /// Gets or sets the TWD amount stored as minor units.
+    /// Gets or sets the transaction amount stored as minor units.
     /// </summary>
     public long AmountMinorUnits { get; set; }
+
+    /// <summary>
+    /// Gets or sets the uppercase supported currency code for this transaction.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
 
     /// <summary>
     /// Gets or sets the category identifier.

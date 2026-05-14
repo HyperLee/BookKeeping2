@@ -23,7 +23,17 @@ public static class FinancialValidationMessages
     /// <summary>
     /// Message for unsupported amount magnitude.
     /// </summary>
-    public const string AmountTooLarge = "金額不可超過 TWD 999,999,999.99。";
+    public const string AmountTooLarge = "金額不可超過 999,999,999.99。";
+
+    /// <summary>
+    /// Message for missing currency selections.
+    /// </summary>
+    public const string CurrencyRequired = "請選擇幣別。";
+
+    /// <summary>
+    /// Message for unsupported currency codes.
+    /// </summary>
+    public const string CurrencyUnsupported = "幣別不支援，請選擇 TWD、USD、JPY、EUR 或 GBP。";
 
     /// <summary>
     /// Message for future transaction dates.
@@ -39,4 +49,9 @@ public static class FinancialValidationMessages
     /// Message for invalid account selection.
     /// </summary>
     public const string AccountRequired = "請選擇有效帳戶。";
+
+    /// <summary>
+    /// Message for account and transaction currency mismatch.
+    /// </summary>
+    public const string AccountCurrencyMismatch = "帳戶幣別必須與交易幣別相同。";
 }

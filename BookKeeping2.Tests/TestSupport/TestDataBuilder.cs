@@ -1,3 +1,9 @@
+using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.Budgets;
+using BookKeeping2.Models.Categories;
+using BookKeeping2.Models.Common;
+using BookKeeping2.Models.Transactions;
+
 namespace BookKeeping2.Tests.TestSupport;
 
 /// <summary>
@@ -42,5 +48,90 @@ public static class TestDataBuilder
     public static FakeTaipeiDateService CreateDateService()
     {
         return new FakeTaipeiDateService(DefaultToday);
+    }
+
+    /// <summary>
+    /// Creates a test category.
+    /// </summary>
+    /// <param name="type">The category transaction type.</param>
+    /// <param name="name">The category name.</param>
+    /// <returns>A test category instance.</returns>
+    public static Category CreateCategory(TransactionType type, string name = "餐飲")
+    {
+        return new Category
+        {
+            Name = name,
+            NormalizedName = name.Trim().ToUpperInvariant(),
+            Type = type,
+            IconKey = "tag",
+            DisplayOrder = 1,
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        };
+    }
+
+    /// <summary>
+    /// Creates a test account with a specified currency.
+    /// </summary>
+    /// <param name="name">The account name.</param>
+    /// <param name="currency">The account currency code.</param>
+    /// <returns>A test account instance.</returns>
+    public static Account CreateAccount(string name = "現金", string currency = TwdCurrency)
+    {
+        return new Account
+        {
+            Name = name,
+            NormalizedName = name.Trim().ToUpperInvariant(),
+            Type = AccountType.Cash,
+            IconKey = "wallet",
+            Currency = currency,
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        };
+    }
+
+    /// <summary>
+    /// Creates a test transaction with a specified currency.
+    /// </summary>
+    /// <param name="category">The transaction category.</param>
+    /// <param name="account">The transaction account.</param>
+    /// <param name="currency">The transaction currency code.</param>
+    /// <returns>A test transaction instance.</returns>
+    public static Transaction CreateTransaction(Category category, Account account, string currency = TwdCurrency)
+    {
+        return new Transaction
+        {
+            TransactionDate = DefaultToday,
+            Type = category.Type,
+            Amount = 100m,
+            Currency = currency,
+            CategoryId = category.Id,
+            Category = category,
+            AccountId = account.Id,
+            Account = account,
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow,
+            LastChangeSummary = $"{currency} transaction"
+        };
+    }
+
+    /// <summary>
+    /// Creates a test budget with a specified currency.
+    /// </summary>
+    /// <param name="category">The expense category.</param>
+    /// <param name="currency">The budget currency code.</param>
+    /// <returns>A test budget instance.</returns>
+    public static Budget CreateBudget(Category category, string currency = TwdCurrency)
+    {
+        return new Budget
+        {
+            CategoryId = category.Id,
+            Category = category,
+            BudgetMonth = new DateOnly(DefaultToday.Year, DefaultToday.Month, 1),
+            Amount = 1000m,
+            Currency = currency,
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow
+        };
     }
 }

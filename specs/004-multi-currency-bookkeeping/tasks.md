@@ -32,20 +32,20 @@
 
 ### Tests First
 
-- [ ] T005 [P] 新增 `SupportedCurrencyTests`，覆蓋 trim、大小寫不敏感、上層大寫正規化、五種顯示名稱、空白與不支援值拒絕於 `BookKeeping2.Tests/Unit/Common/SupportedCurrencyTests.cs`
-- [ ] T006 [P] 新增 migration/model snapshot 測試，先驗證 `Transactions.Currency`、`Budgets.Currency`、`Accounts.Currency`、預設 `TWD`、交易複合索引與預算唯一索引於 `BookKeeping2.Tests/Integration/Persistence/MultiCurrencyPersistenceTests.cs`
-- [ ] T007 [P] 更新測試資料 builder 測試需求，讓 seeded transaction/account/budget 可指定幣別於 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
+- [X] T005 [P] 新增 `SupportedCurrencyTests`，覆蓋 trim、大小寫不敏感、上層大寫正規化、五種顯示名稱、空白與不支援值拒絕於 `BookKeeping2.Tests/Unit/Common/SupportedCurrencyTests.cs`
+- [X] T006 [P] 新增 migration/model snapshot 測試，先驗證 `Transactions.Currency`、`Budgets.Currency`、`Accounts.Currency`、預設 `TWD`、交易複合索引與預算唯一索引於 `BookKeeping2.Tests/Integration/Persistence/MultiCurrencyPersistenceTests.cs`
+- [X] T007 [P] 更新測試資料 builder 測試需求，讓 seeded transaction/account/budget 可指定幣別於 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
 
 ### Implementation
 
-- [ ] T008 實作固定五種幣別 allow-list、正規化、顯示名稱與選項排序於 `BookKeeping2/Models/Common/SupportedCurrency.cs`
-- [ ] T009 更新多幣別驗證與使用者訊息常數，確保繁體中文錯誤文案可重用於 `BookKeeping2/Validation/FinancialValidationMessages.cs`
-- [ ] T010 在交易模型新增 `Currency`、更新 XML docs 與金額說明不再寫死 TWD 於 `BookKeeping2/Models/Transactions/Transaction.cs`
-- [ ] T011 在預算模型新增 `Currency`、更新 XML docs 與金額說明不再寫死 TWD 於 `BookKeeping2/Models/Budgets/Budget.cs`
-- [ ] T012 更新帳戶模型 XML docs，說明 account currency 固定、開戶餘額屬於 account currency 於 `BookKeeping2/Models/Accounts/Account.cs`
-- [ ] T013 更新交易、帳戶與預算 EF Core configuration 的 required/max length/default/index/unique index 規則於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`, `BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`, `BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`
-- [ ] T014 新增 EF Core migration，backfill 既有交易、帳戶與預算為 `TWD` 且保持 minor units 不變於 `BookKeeping2/Data/Migrations/20260514000000_AddMultiCurrencyBookkeeping.cs`
-- [ ] T015 更新 EF Core model snapshot 與預設 seed data 幣別，確保 schema 與測試 fixture 一致於 `BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`, `BookKeeping2/Data/SeedData/DefaultSeedData.cs`, `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
+- [X] T008 實作固定五種幣別 allow-list、正規化、顯示名稱與選項排序於 `BookKeeping2/Models/Common/SupportedCurrency.cs`
+- [X] T009 更新多幣別驗證與使用者訊息常數，確保繁體中文錯誤文案可重用於 `BookKeeping2/Validation/FinancialValidationMessages.cs`
+- [X] T010 在交易模型新增 `Currency`、更新 XML docs 與金額說明不再寫死 TWD 於 `BookKeeping2/Models/Transactions/Transaction.cs`
+- [X] T011 在預算模型新增 `Currency`、更新 XML docs 與金額說明不再寫死 TWD 於 `BookKeeping2/Models/Budgets/Budget.cs`
+- [X] T012 更新帳戶模型 XML docs，說明 account currency 固定、開戶餘額屬於 account currency 於 `BookKeeping2/Models/Accounts/Account.cs`
+- [X] T013 更新交易、帳戶與預算 EF Core configuration 的 required/max length/default/index/unique index 規則於 `BookKeeping2/Data/EntityConfigurations/TransactionConfiguration.cs`, `BookKeeping2/Data/EntityConfigurations/AccountConfiguration.cs`, `BookKeeping2/Data/EntityConfigurations/BudgetConfiguration.cs`
+- [X] T014 新增 EF Core migration，backfill 既有交易、帳戶與預算為 `TWD` 且保持 minor units 不變於 `BookKeeping2/Data/Migrations/20260514000000_AddMultiCurrencyBookkeeping.cs`
+- [X] T015 更新 EF Core model snapshot 與預設 seed data 幣別，確保 schema 與測試 fixture 一致於 `BookKeeping2/Data/Migrations/AppDbContextModelSnapshot.cs`, `BookKeeping2/Data/SeedData/DefaultSeedData.cs`, `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 

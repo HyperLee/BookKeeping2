@@ -1,11 +1,12 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using BookKeeping2.Models.Common;
 using BookKeeping2.Models.Transactions;
 using BookKeeping2.Services.Common;
 
 namespace BookKeeping2.Models.Accounts;
 
 /// <summary>
-/// Represents a TWD account used by transactions.
+/// Represents an account with a fixed currency used by transactions.
 /// </summary>
 public sealed class Account
 {
@@ -35,7 +36,7 @@ public sealed class Account
     public string IconKey { get; set; } = "wallet";
 
     /// <summary>
-    /// Gets or sets the opening balance as a decimal TWD amount.
+    /// Gets or sets the opening balance as a decimal value in <see cref="Currency" />.
     /// </summary>
     [NotMapped]
     public decimal OpeningBalance
@@ -50,9 +51,9 @@ public sealed class Account
     public long OpeningBalanceMinorUnits { get; set; }
 
     /// <summary>
-    /// Gets or sets the fixed currency code.
+    /// Gets or sets the fixed uppercase supported currency code.
     /// </summary>
-    public string Currency { get; set; } = "TWD";
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
 
     /// <summary>
     /// Gets or sets the display order.

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using BookKeeping2.Models.Categories;
+using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Common;
 
 namespace BookKeeping2.Models.Budgets;
@@ -30,7 +31,7 @@ public sealed class Budget
     public DateOnly BudgetMonth { get; set; }
 
     /// <summary>
-    /// Gets or sets the budget amount as a decimal TWD amount.
+    /// Gets or sets the budget amount as a decimal value in <see cref="Currency" />.
     /// </summary>
     [NotMapped]
     public decimal Amount
@@ -43,6 +44,11 @@ public sealed class Budget
     /// Gets or sets the budget amount in minor units.
     /// </summary>
     public long AmountMinorUnits { get; set; }
+
+    /// <summary>
+    /// Gets or sets the uppercase supported currency code for this monthly budget.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
 
     /// <summary>
     /// Gets or sets the creation timestamp in UTC.

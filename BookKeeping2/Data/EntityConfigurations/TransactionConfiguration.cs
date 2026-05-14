@@ -1,4 +1,5 @@
 using BookKeeping2.Models.Transactions;
+using BookKeeping2.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,6 +20,10 @@ public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transact
         builder.Property(transaction => transaction.Note).HasMaxLength(500);
         builder.Property(transaction => transaction.DeletionSummary).HasMaxLength(500);
         builder.Property(transaction => transaction.LastChangeSummary).HasMaxLength(500).IsRequired();
+        builder.Property(transaction => transaction.Currency)
+            .HasMaxLength(3)
+            .HasDefaultValue(SupportedCurrency.LegacyDefaultCode)
+            .IsRequired();
 
         builder.HasOne(transaction => transaction.Category)
             .WithMany(category => category.Transactions)
@@ -31,8 +36,11 @@ public sealed class TransactionConfiguration : IEntityTypeConfiguration<Transact
             .OnDelete(DeleteBehavior.Restrict);
 
         builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.TransactionDate });
+        builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.Currency, transaction.TransactionDate });
         builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.CategoryId, transaction.TransactionDate });
+        builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.Currency, transaction.CategoryId, transaction.TransactionDate });
         builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.AccountId, transaction.TransactionDate });
+        builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.Currency, transaction.AccountId, transaction.TransactionDate });
         builder.HasIndex(transaction => new { transaction.IsDeleted, transaction.AmountMinorUnits });
     }
 }

@@ -1,4 +1,5 @@
 using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,7 +20,10 @@ public sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.Property(account => account.Name).HasMaxLength(100).IsRequired();
         builder.Property(account => account.NormalizedName).HasMaxLength(100).IsRequired();
         builder.Property(account => account.IconKey).HasMaxLength(50).IsRequired();
-        builder.Property(account => account.Currency).HasMaxLength(3).IsRequired();
+        builder.Property(account => account.Currency)
+            .HasMaxLength(3)
+            .HasDefaultValue(SupportedCurrency.LegacyDefaultCode)
+            .IsRequired();
 
         builder.HasIndex(account => account.NormalizedName).IsUnique();
         builder.HasIndex(account => new { account.IsArchived, account.DisplayOrder });
