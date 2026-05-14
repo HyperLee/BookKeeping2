@@ -5,6 +5,21 @@ namespace BookKeeping2.Services.Budgets;
 /// </summary>
 public sealed class BudgetResult
 {
+    /// <summary>
+    /// Error shown when no budget currency is selected.
+    /// </summary>
+    public const string CurrencyRequiredMessage = "請選擇幣別。";
+
+    /// <summary>
+    /// Error shown when the submitted budget currency is not supported.
+    /// </summary>
+    public const string UnsupportedCurrencyMessage = "幣別不支援，請選擇 TWD、USD、JPY、EUR 或 GBP。";
+
+    /// <summary>
+    /// Error shown when a budget already exists for the same month, category, and currency.
+    /// </summary>
+    public const string DuplicateCategoryMonthCurrencyMessage = "相同月份、分類與幣別的預算已存在。";
+
     private readonly Dictionary<string, List<string>> errors = [];
 
     /// <summary>

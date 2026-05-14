@@ -25,6 +25,7 @@ public sealed partial class BudgetsPageTests
             ["__RequestVerificationToken"] = token,
             ["Input.CategoryId"] = foodCategoryId.ToString(),
             ["Input.BudgetMonth"] = "2026-05-01",
+            ["Input.Currency"] = "USD",
             ["Input.Amount"] = "5000"
         }));
 
@@ -32,7 +33,37 @@ public sealed partial class BudgetsPageTests
         string updatedPage = WebUtility.HtmlDecode(await client.GetStringAsync("/Budgets?Month=2026-05"));
         Assert.Contains("預算管理", updatedPage);
         Assert.Contains("餐飲", updatedPage);
+        Assert.Contains("USD", updatedPage);
         Assert.Contains("5,000", updatedPage);
+    }
+
+    [Fact]
+    public async Task Budgets_page_rejects_duplicate_month_category_currency()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient(new() { AllowAutoRedirect = false });
+        long foodCategoryId = await GetFoodCategoryIdAsync(factory);
+
+        string budgetsPage = await client.GetStringAsync("/Budgets?Month=2026-05");
+        string token = ExtractRequestVerificationToken(budgetsPage);
+        var form = new Dictionary<string, string>
+        {
+            ["__RequestVerificationToken"] = token,
+            ["Input.CategoryId"] = foodCategoryId.ToString(),
+            ["Input.BudgetMonth"] = "2026-05-01",
+            ["Input.Currency"] = "USD",
+            ["Input.Amount"] = "5000"
+        };
+        Assert.Equal(HttpStatusCode.Redirect, (await client.PostAsync("/Budgets", new FormUrlEncodedContent(form))).StatusCode);
+
+        budgetsPage = await client.GetStringAsync("/Budgets?Month=2026-05");
+        token = ExtractRequestVerificationToken(budgetsPage);
+        form["__RequestVerificationToken"] = token;
+        HttpResponseMessage duplicate = await client.PostAsync("/Budgets", new FormUrlEncodedContent(form));
+        string body = WebUtility.HtmlDecode(await duplicate.Content.ReadAsStringAsync());
+
+        Assert.Equal(HttpStatusCode.OK, duplicate.StatusCode);
+        Assert.Contains("相同月份、分類與幣別的預算已存在", body);
     }
 
     private static async Task<long> GetFoodCategoryIdAsync(BookKeepingWebApplicationFactory factory)

@@ -9,6 +9,7 @@ using BookKeeping2.Models.Transactions;
 using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Budgets;
 using BookKeeping2.Tests.TestSupport;
+using BookKeeping2.ViewModels.Budgets;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -24,13 +25,13 @@ public sealed class BudgetServiceTests
         await context.Database.EnsureCreatedAsync();
         (Account account, Category food, Category transport, Category salary) = await SeedAsync(context);
         context.Budgets.AddRange(
-            CreateBudget(food.Id, new DateOnly(2026, 1, 1), 5_000m),
-            CreateBudget(transport.Id, new DateOnly(2026, 1, 1), 5_000m));
+            CreateBudget(food.Id, new DateOnly(2026, 1, 1), 5_000m, TestDataBuilder.TwdCurrency),
+            CreateBudget(transport.Id, new DateOnly(2026, 1, 1), 5_000m, TestDataBuilder.TwdCurrency));
         context.Transactions.AddRange(
-            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 1, 5), 4_000m),
-            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2025, 12, 31), 999m),
-            CreateTransaction(account.Id, transport.Id, TransactionType.Expense, new DateOnly(2026, 1, 8), 7_000m),
-            CreateTransaction(account.Id, salary.Id, TransactionType.Income, new DateOnly(2026, 1, 8), 10_000m));
+            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 1, 5), 4_000m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2025, 12, 31), 999m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(account.Id, transport.Id, TransactionType.Expense, new DateOnly(2026, 1, 8), 7_000m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(account.Id, salary.Id, TransactionType.Income, new DateOnly(2026, 1, 8), 10_000m, TestDataBuilder.TwdCurrency));
         await context.SaveChangesAsync();
         var service = new BudgetService(context, TestDataBuilder.CreateDateService(), new NullAuditService(), new AuditLogMaskingPolicy());
 
@@ -60,11 +61,11 @@ public sealed class BudgetServiceTests
         await context.Database.EnsureCreatedAsync();
         (Account account, Category food, _, _) = await SeedAsync(context);
         context.Budgets.AddRange(
-            CreateBudget(food.Id, new DateOnly(2026, 5, 1), 1_000m),
-            CreateBudget(food.Id, new DateOnly(2026, 6, 1), 1_000m));
+            CreateBudget(food.Id, new DateOnly(2026, 5, 1), 1_000m, TestDataBuilder.TwdCurrency),
+            CreateBudget(food.Id, new DateOnly(2026, 6, 1), 1_000m, TestDataBuilder.TwdCurrency));
         for (int i = 0; i < 100; i++)
         {
-            context.Transactions.Add(CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, (i % 28) + 1), 10m));
+            context.Transactions.Add(CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, (i % 28) + 1), 10m, TestDataBuilder.TwdCurrency));
         }
         await context.SaveChangesAsync();
         var service = new BudgetService(context, TestDataBuilder.CreateDateService(), new NullAuditService(), new AuditLogMaskingPolicy());
@@ -81,19 +82,66 @@ public sealed class BudgetServiceTests
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(1));
     }
 
-    private static Budget CreateBudget(long categoryId, DateOnly month, decimal amount)
+    [Fact]
+    public async Task SaveAsync_allows_same_month_category_with_different_currency_and_rejects_duplicate_same_currency()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        (_, Category food, _, _) = await SeedAsync(context);
+        var service = new BudgetService(context, TestDataBuilder.CreateDateService(), new NullAuditService(), new AuditLogMaskingPolicy());
+
+        BudgetResult twd = await service.SaveAsync(new BudgetInputModel { CategoryId = food.Id, BudgetMonth = new DateOnly(2026, 5, 1), Currency = TestDataBuilder.TwdCurrency, Amount = 5_000m });
+        BudgetResult usd = await service.SaveAsync(new BudgetInputModel { CategoryId = food.Id, BudgetMonth = new DateOnly(2026, 5, 1), Currency = TestDataBuilder.UsdCurrency, Amount = 300m });
+        BudgetResult duplicateUsd = await service.SaveAsync(new BudgetInputModel { CategoryId = food.Id, BudgetMonth = new DateOnly(2026, 5, 1), Currency = TestDataBuilder.UsdCurrency, Amount = 400m });
+
+        Assert.True(twd.Succeeded);
+        Assert.True(usd.Succeeded);
+        Assert.False(duplicateUsd.Succeeded);
+        Assert.Contains(nameof(BudgetInputModel.Currency), duplicateUsd.Errors.Keys);
+        Assert.Equal(2, await context.Budgets.CountAsync());
+    }
+
+    [Fact]
+    public async Task ListMonthlyAsync_calculates_progress_by_matching_currency_only()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        (Account account, Category food, _, _) = await SeedAsync(context);
+        context.Budgets.AddRange(
+            CreateBudget(food.Id, new DateOnly(2026, 5, 1), 5_000m, TestDataBuilder.TwdCurrency),
+            CreateBudget(food.Id, new DateOnly(2026, 5, 1), 300m, TestDataBuilder.UsdCurrency));
+        context.Transactions.AddRange(
+            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, 5), 1_000m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(account.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, 5), 100m, TestDataBuilder.UsdCurrency));
+        await context.SaveChangesAsync();
+        var service = new BudgetService(context, TestDataBuilder.CreateDateService(), new NullAuditService(), new AuditLogMaskingPolicy());
+
+        IReadOnlyList<BudgetStatusViewModel> budgets = await service.ListMonthlyAsync(new DateOnly(2026, 5, 1));
+
+        BudgetStatusViewModel twd = Assert.Single(budgets, budget => budget.Currency == TestDataBuilder.TwdCurrency);
+        BudgetStatusViewModel usd = Assert.Single(budgets, budget => budget.Currency == TestDataBuilder.UsdCurrency);
+        Assert.Equal(1_000m, twd.SpentAmount);
+        Assert.Equal(4_000m, twd.RemainingAmount);
+        Assert.Equal(100m, usd.SpentAmount);
+        Assert.Equal(200m, usd.RemainingAmount);
+    }
+
+    private static Budget CreateBudget(long categoryId, DateOnly month, decimal amount, string currency)
     {
         return new Budget
         {
             CategoryId = categoryId,
             BudgetMonth = month,
+            Currency = currency,
             Amount = amount,
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow
         };
     }
 
-    private static Transaction CreateTransaction(long accountId, long categoryId, TransactionType type, DateOnly date, decimal amount)
+    private static Transaction CreateTransaction(long accountId, long categoryId, TransactionType type, DateOnly date, decimal amount, string currency)
     {
         return new Transaction
         {
@@ -101,6 +149,7 @@ public sealed class BudgetServiceTests
             CategoryId = categoryId,
             Type = type,
             TransactionDate = date,
+            Currency = currency,
             Amount = amount,
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow,

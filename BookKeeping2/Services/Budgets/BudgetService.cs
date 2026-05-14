@@ -8,6 +8,7 @@ using BookKeeping2.Services.Audit;
 using BookKeeping2.Services.Common;
 using BookKeeping2.Services.Time;
 using BookKeeping2.ViewModels.Budgets;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookKeeping2.Services.Budgets;
@@ -61,24 +62,27 @@ public sealed class BudgetService : IBudgetService
         }
 
         long[] categoryIds = budgets.Select(budget => budget.CategoryId).Distinct().ToArray();
+        string[] currencies = budgets.Select(budget => budget.Currency).Distinct().ToArray();
         var spentTotals = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction => !transaction.IsDeleted
                 && transaction.Type == TransactionType.Expense
                 && categoryIds.Contains(transaction.CategoryId)
+                && currencies.Contains(transaction.Currency)
                 && transaction.TransactionDate >= monthStart
                 && transaction.TransactionDate <= monthEnd)
-            .GroupBy(transaction => transaction.CategoryId)
+            .GroupBy(transaction => new { transaction.CategoryId, transaction.Currency })
             .Select(group => new
             {
-                CategoryId = group.Key,
+                group.Key.CategoryId,
+                group.Key.Currency,
                 AmountMinorUnits = group.Sum(transaction => transaction.AmountMinorUnits)
             })
             .ToListAsync(cancellationToken);
 
         return budgets.Select(budget =>
         {
-            long spentMinorUnits = spentTotals.FirstOrDefault(total => total.CategoryId == budget.CategoryId)?.AmountMinorUnits ?? 0;
+            long spentMinorUnits = spentTotals.FirstOrDefault(total => total.CategoryId == budget.CategoryId && total.Currency == budget.Currency)?.AmountMinorUnits ?? 0;
             return ToStatus(budget, spentMinorUnits);
         }).ToList();
     }
@@ -107,6 +111,9 @@ public sealed class BudgetService : IBudgetService
                     Id = category.Id,
                     Name = SystemDisplayLocalizer.GetCategoryName(category.Name, category.IsDefault)
                 })
+                .ToList(),
+            Currencies = SupportedCurrency.Options
+                .Select(option => new SelectListItem($"{option.Code} - {option.DisplayName}", option.Code))
                 .ToList()
         };
     }
@@ -116,6 +123,7 @@ public sealed class BudgetService : IBudgetService
     {
         var result = new BudgetResult();
         DateOnly budgetMonth = NormalizeMonth(input.BudgetMonth);
+        string normalizedCurrency = SupportedCurrency.LegacyDefaultCode;
         long amountMinorUnits = 0;
         try
         {
@@ -124,6 +132,19 @@ public sealed class BudgetService : IBudgetService
         catch (Exception exception) when (exception is ArgumentOutOfRangeException or OverflowException)
         {
             result.AddError(nameof(BudgetInputModel.Amount), exception.Message);
+        }
+
+        if (!SupportedCurrency.TryNormalize(input.Currency, out string? currency))
+        {
+            result.AddError(
+                nameof(BudgetInputModel.Currency),
+                string.IsNullOrWhiteSpace(input.Currency)
+                    ? BudgetResult.CurrencyRequiredMessage
+                    : BudgetResult.UnsupportedCurrencyMessage);
+        }
+        else
+        {
+            normalizedCurrency = currency!;
         }
 
         Category? category = await dbContext.Categories
@@ -139,24 +160,27 @@ public sealed class BudgetService : IBudgetService
             return result;
         }
 
-        Budget? budget = await dbContext.Budgets
-            .FirstOrDefaultAsync(item => item.CategoryId == input.CategoryId && item.BudgetMonth == budgetMonth, cancellationToken);
-        DateTimeOffset nowUtc = dateService.UtcNow;
-        if (budget is null)
+        bool duplicate = await dbContext.Budgets
+            .AnyAsync(item => item.CategoryId == input.CategoryId && item.BudgetMonth == budgetMonth && item.Currency == normalizedCurrency, cancellationToken);
+        if (duplicate)
         {
-            budget = new Budget
-            {
-                CategoryId = input.CategoryId,
-                BudgetMonth = budgetMonth,
-                CreatedAtUtc = nowUtc
-            };
-            dbContext.Budgets.Add(budget);
+            result.AddError(nameof(BudgetInputModel.Currency), BudgetResult.DuplicateCategoryMonthCurrencyMessage);
+            return result;
         }
 
-        budget.AmountMinorUnits = amountMinorUnits;
-        budget.UpdatedAtUtc = nowUtc;
+        DateTimeOffset nowUtc = dateService.UtcNow;
+        var budget = new Budget
+        {
+            CategoryId = input.CategoryId,
+            BudgetMonth = budgetMonth,
+            Currency = normalizedCurrency,
+            AmountMinorUnits = amountMinorUnits,
+            CreatedAtUtc = nowUtc,
+            UpdatedAtUtc = nowUtc
+        };
+        dbContext.Budgets.Add(budget);
         await dbContext.SaveChangesAsync(cancellationToken);
-        await AuditWarningForCategoryMonthAsync(input.CategoryId, budgetMonth, cancellationToken);
+        await AuditWarningForCategoryMonthAsync(input.CategoryId, budgetMonth, normalizedCurrency, cancellationToken);
 
         return BudgetResult.Success(budget.Id);
     }
@@ -178,7 +202,7 @@ public sealed class BudgetService : IBudgetService
     }
 
     /// <inheritdoc />
-    public async Task AuditWarningForCategoryMonthAsync(long categoryId, DateOnly transactionDate, CancellationToken cancellationToken = default)
+    public async Task AuditWarningForCategoryMonthAsync(long categoryId, DateOnly transactionDate, string? currency = null, CancellationToken cancellationToken = default)
     {
         if (auditService is null)
         {
@@ -186,10 +210,15 @@ public sealed class BudgetService : IBudgetService
         }
 
         DateOnly monthStart = NormalizeMonth(transactionDate);
+        if (!SupportedCurrency.TryNormalize(currency, out string? normalizedCurrency))
+        {
+            normalizedCurrency = SupportedCurrency.LegacyDefaultCode;
+        }
+
         Budget? budget = await dbContext.Budgets
             .AsNoTracking()
             .Include(item => item.Category)
-            .FirstOrDefaultAsync(item => item.CategoryId == categoryId && item.BudgetMonth == monthStart, cancellationToken);
+            .FirstOrDefaultAsync(item => item.CategoryId == categoryId && item.BudgetMonth == monthStart && item.Currency == normalizedCurrency, cancellationToken);
         if (budget is null)
         {
             return;
@@ -201,6 +230,7 @@ public sealed class BudgetService : IBudgetService
             .Where(transaction => !transaction.IsDeleted
                 && transaction.Type == TransactionType.Expense
                 && transaction.CategoryId == categoryId
+                && transaction.Currency == normalizedCurrency
                 && transaction.TransactionDate >= monthStart
                 && transaction.TransactionDate <= monthEnd)
             .SumAsync(transaction => transaction.AmountMinorUnits, cancellationToken);
@@ -215,7 +245,7 @@ public sealed class BudgetService : IBudgetService
             AuditEventType.BudgetWarningTriggered,
             nameof(Budget),
             budget.Id.ToString(),
-            $"預算提醒，分類 {status.CategoryName}，狀態 {status.AlertText}，已使用 {maskingPolicy.MaskAmount(status.SpentAmount)}，預算 {maskingPolicy.MaskAmount(status.Amount)}",
+            $"預算提醒，分類 {status.CategoryName}，幣別 {status.Currency}，狀態 {status.AlertText}，已使用 {status.Currency} {maskingPolicy.MaskAmount(status.SpentAmount)}，預算 {status.Currency} {maskingPolicy.MaskAmount(status.Amount)}",
             severity: "Warning",
             cancellationToken: cancellationToken);
     }
@@ -238,6 +268,7 @@ public sealed class BudgetService : IBudgetService
             CategoryId = budget.CategoryId,
             CategoryName = budget.Category.Name,
             BudgetMonth = budget.BudgetMonth,
+            Currency = budget.Currency,
             Amount = amount,
             SpentAmount = spent,
             UsageRate = usageRate,

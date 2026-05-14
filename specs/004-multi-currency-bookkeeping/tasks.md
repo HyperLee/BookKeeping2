@@ -142,20 +142,20 @@
 
 ### Tests for User Story 4
 
-- [ ] T051 [P] [US4] 擴充預算服務測試，先覆蓋 month/category/currency unique、同分類不同幣別允許、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、spent/remaining/alert 只用同幣別交易於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
-- [ ] T052 [P] [US4] 擴充預算頁整合測試，先覆蓋幣別控制、重複預算錯誤、列表進度與多幣別顯示於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
-- [ ] T053 [P] [US4] 擴充多幣別預算瀏覽器測試，先覆蓋桌面與行動建立預算、進度顯示、焦點與無水平溢位於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
+- [X] T051 [P] [US4] 擴充預算服務測試，先覆蓋 month/category/currency unique、同分類不同幣別允許、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、spent/remaining/alert 只用同幣別交易於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
+- [X] T052 [P] [US4] 擴充預算頁整合測試，先覆蓋幣別控制、重複預算錯誤、列表進度與多幣別顯示於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
+- [X] T053 [P] [US4] 擴充多幣別預算瀏覽器測試，先覆蓋桌面與行動建立預算、進度顯示、焦點與無水平溢位於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
 ### Implementation for User Story 4
 
-- [ ] T054 [US4] 擴充 budget input/list/progress view models，加入 `Currency`、currency options 與 display text 於 `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`
-- [ ] T055 [US4] 更新 budget service 建立與更新 validation，依 month/category/currency 檢查唯一性並允許不同幣別共存於 `BookKeeping2/Services/Budgets/BudgetService.cs`
-- [ ] T056 [US4] 更新 budget service 進度計算，spent/remaining/overspent/alert 只納入同月同分類同幣別未刪除支出交易於 `BookKeeping2/Services/Budgets/BudgetService.cs`
-- [ ] T057 [US4] 更新 budget result/error code，新增幣別相關錯誤訊息與重複提示於 `BookKeeping2/Services/Budgets/BudgetResult.cs`
-- [ ] T058 [US4] 更新預算 PageModel binding、query month reload、invalid post reload options 與 model errors 於 `BookKeeping2/Pages/Budgets/Index.cshtml.cs`
-- [ ] T059 [US4] 更新預算 Razor markup，新增幣別 select、每筆預算金額與使用進度幣別標籤於 `BookKeeping2/Pages/Budgets/Index.cshtml`
-- [ ] T060 [US4] 更新首頁預算摘要，依幣別呈現預算警示且不把不同幣別混入單一提醒於 `BookKeeping2/Pages/Index.cshtml.cs`, `BookKeeping2/Pages/Index.cshtml`
-- [ ] T061 [US4] 更新預算與首頁摘要 responsive/focus CSS，確保幣別與金額相鄰且不遮擋於 `BookKeeping2/wwwroot/css/site.css`
+- [X] T054 [US4] 擴充 budget input/list/progress view models，加入 `Currency`、currency options 與 display text 於 `BookKeeping2/ViewModels/Budgets/BudgetViewModels.cs`
+- [X] T055 [US4] 更新 budget service 建立與更新 validation，依 month/category/currency 檢查唯一性並允許不同幣別共存於 `BookKeeping2/Services/Budgets/BudgetService.cs`
+- [X] T056 [US4] 更新 budget service 進度計算，spent/remaining/overspent/alert 只納入同月同分類同幣別未刪除支出交易於 `BookKeeping2/Services/Budgets/BudgetService.cs`
+- [X] T057 [US4] 更新 budget result/error code，新增幣別相關錯誤訊息與重複提示於 `BookKeeping2/Services/Budgets/BudgetResult.cs`
+- [X] T058 [US4] 更新預算 PageModel binding、query month reload、invalid post reload options 與 model errors 於 `BookKeeping2/Pages/Budgets/Index.cshtml.cs`
+- [X] T059 [US4] 更新預算 Razor markup，新增幣別 select、每筆預算金額與使用進度幣別標籤於 `BookKeeping2/Pages/Budgets/Index.cshtml`
+- [X] T060 [US4] 更新首頁預算摘要，依幣別呈現預算警示且不把不同幣別混入單一提醒於 `BookKeeping2/Pages/Index.cshtml.cs`, `BookKeeping2/Pages/Index.cshtml`
+- [X] T061 [US4] 更新預算與首頁摘要 responsive/focus CSS，確保幣別與金額相鄰且不遮擋於 `BookKeeping2/wwwroot/css/site.css`
 
 **Checkpoint**: User Story 4 should be fully functional and testable independently.
 

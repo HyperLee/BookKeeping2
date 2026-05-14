@@ -1,4 +1,5 @@
 using System.Globalization;
+using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Budgets;
 using BookKeeping2.Services.Time;
 using BookKeeping2.ViewModels.Budgets;
@@ -115,7 +116,11 @@ public sealed class IndexModel : PageModel
         Options = await budgetService.GetFormOptionsAsync();
         if (resetInput)
         {
-            Input = new BudgetInputModel { BudgetMonth = selectedMonth };
+            Input = new BudgetInputModel
+            {
+                BudgetMonth = selectedMonth,
+                Currency = SupportedCurrency.LegacyDefaultCode
+            };
         }
     }
 

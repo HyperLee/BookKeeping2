@@ -141,9 +141,9 @@ else
             {
                 decimal progressWidth = Math.Min(budget.UsagePercentage, 100m);
                 <div>
-                    <div class="d-flex flex-wrap justify-content-between gap-2 mb-1">
+                    <div class="d-flex flex-wrap justify-content-between gap-2 mb-1 budget-summary-line">
                         <span>@budget.CategoryName</span>
-                        <span>@budget.SpentAmount.ToString("N0") / @budget.Amount.ToString("N0")（@budget.UsagePercentage.ToString("N2")%）</span>
+                        <span class="currency-amount budget-summary-amount">@budget.SpentAmountText / @budget.AmountText（@budget.UsagePercentage.ToString("N2")%）</span>
                     </div>
                     <div class="progress" role="progressbar" aria-valuenow="@budget.UsagePercentage.ToString("N2")" aria-valuemin="0" aria-valuemax="100">
                         <div class="progress-bar @budget.ProgressBarClass" style="width: @progressWidth.ToString("N2")%">

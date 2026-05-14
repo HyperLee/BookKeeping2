@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using BookKeeping2.Localization;
+using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Budgets;
+using BookKeeping2.Validation;
 
 namespace BookKeeping2.ViewModels.Budgets;
 
@@ -23,9 +25,16 @@ public sealed class BudgetInputModel
     public DateOnly BudgetMonth { get; set; }
 
     /// <summary>
+    /// Gets or sets the supported budget currency code.
+    /// </summary>
+    [Required(ErrorMessage = FinancialValidationMessages.CurrencyRequired)]
+    [Display(Name = "幣別")]
+    public string? Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
     /// Gets or sets the budget amount.
     /// </summary>
-    [Range(typeof(decimal), "0.01", "999999999.99", ErrorMessage = "預算金額必須大於 0 且不可超過 TWD 999,999,999.99。")]
+    [Range(typeof(decimal), "0.01", "999999999.99", ErrorMessage = "預算金額必須大於 0 且不可超過 999,999,999.99。")]
     [Display(Name = "預算金額")]
     public decimal Amount { get; set; }
 }
@@ -56,14 +65,29 @@ public sealed class BudgetStatusViewModel
     public DateOnly BudgetMonth { get; set; }
 
     /// <summary>
+    /// Gets or sets the budget currency code.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
     /// Gets or sets the budget amount.
     /// </summary>
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// Gets the display-only budget amount text with currency.
+    /// </summary>
+    public string AmountText => $"{Currency} {Amount:N2}";
+
+    /// <summary>
     /// Gets or sets the spent amount in the same month and category.
     /// </summary>
     public decimal SpentAmount { get; set; }
+
+    /// <summary>
+    /// Gets the display-only spent amount text with currency.
+    /// </summary>
+    public string SpentAmountText => $"{Currency} {SpentAmount:N2}";
 
     /// <summary>
     /// Gets or sets the usage rate as a ratio.
@@ -79,6 +103,11 @@ public sealed class BudgetStatusViewModel
     /// Gets or sets the remaining amount when the budget has not been exceeded.
     /// </summary>
     public decimal RemainingAmount { get; set; }
+
+    /// <summary>
+    /// Gets the display-only remaining amount text with currency.
+    /// </summary>
+    public string RemainingAmountText => $"{Currency} {RemainingAmount:N2}";
 
     /// <summary>
     /// Gets or sets the overspent amount when the budget has been exceeded.
@@ -131,4 +160,9 @@ public sealed class BudgetFormOptionsViewModel
     /// Gets or sets the selectable expense categories.
     /// </summary>
     public IReadOnlyList<BudgetCategoryOptionViewModel> Categories { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets supported currency options.
+    /// </summary>
+    public IReadOnlyList<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem> Currencies { get; set; } = [];
 }

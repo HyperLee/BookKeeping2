@@ -29,7 +29,7 @@
     <h2 id="budget-form-heading" class="h5">@SharedLocalizer["設定分類預算"]</h2>
     <form method="post" class="row g-3 align-items-end">
         <input asp-for="Input.BudgetMonth" type="hidden" />
-        <div class="col-12 col-md-5">
+        <div class="col-12 col-md-4">
             <label class="form-label" asp-for="Input.CategoryId"></label>
             <select class="form-select" asp-for="Input.CategoryId">
                 <option value="">@SharedLocalizer["請選擇支出分類"]</option>
@@ -40,12 +40,19 @@
             </select>
             <span class="text-danger small" asp-validation-for="Input.CategoryId"></span>
         </div>
-        <div class="col-12 col-md-4">
+        <div class="col-12 col-md-3">
+            <label class="form-label" asp-for="Input.Currency"></label>
+            <select class="form-select" asp-for="Input.Currency" asp-items="Model.Options.Currencies">
+                <option value="">@SharedLocalizer["請選擇幣別"]</option>
+            </select>
+            <span class="text-danger small" asp-validation-for="Input.Currency"></span>
+        </div>
+        <div class="col-12 col-md-3">
             <label class="form-label" asp-for="Input.Amount"></label>
             <input class="form-control" asp-for="Input.Amount" inputmode="decimal" />
             <span class="text-danger small" asp-validation-for="Input.Amount"></span>
         </div>
-        <div class="col-12 col-md-3">
+        <div class="col-12 col-md-2">
             <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["儲存預算"]</button>
         </div>
     </form>
@@ -61,10 +68,11 @@
     else
     {
         <div class="table-responsive">
-            <table class="table align-middle">
+            <table class="table align-middle budget-table">
                 <thead>
                     <tr>
                         <th scope="col">@SharedLocalizer["分類"]</th>
+                        <th scope="col">@SharedLocalizer["幣別"]</th>
                         <th scope="col" class="text-end">@SharedLocalizer["預算"]</th>
                         <th scope="col" class="text-end">@SharedLocalizer["已使用"]</th>
                         <th scope="col">@SharedLocalizer["使用率"]</th>
@@ -78,8 +86,9 @@
                         decimal progressWidth = Math.Min(budget.UsagePercentage, 100m);
                         <tr>
                             <td>@budget.CategoryName</td>
-                            <td class="text-end">@budget.Amount.ToString("N0", CultureInfo.CurrentCulture)</td>
-                            <td class="text-end">@budget.SpentAmount.ToString("N0", CultureInfo.CurrentCulture)</td>
+                            <td><span class="badge text-bg-secondary">@budget.Currency</span></td>
+                            <td class="text-end"><span class="currency-amount">@budget.AmountText</span></td>
+                            <td class="text-end"><span class="currency-amount">@budget.SpentAmountText</span></td>
                             <td>
                                 <div class="progress" role="progressbar" aria-valuenow="@budget.UsagePercentage.ToString("N2", CultureInfo.InvariantCulture)" aria-valuemin="0" aria-valuemax="100">
                                     <div class="progress-bar @budget.ProgressBarClass" style="width: @progressWidth.ToString("N2", CultureInfo.InvariantCulture)%">

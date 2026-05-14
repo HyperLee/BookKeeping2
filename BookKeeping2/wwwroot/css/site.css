@@ -100,6 +100,20 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
+.budget-table .badge {
+  min-width: 3.5rem;
+}
+
+.budget-summary-line {
+  align-items: center;
+}
+
+.budget-summary-amount {
+  display: inline-block;
+  max-width: 100%;
+  text-align: end;
+}
+
 .transaction-actions {
   white-space: nowrap;
 }
@@ -213,6 +227,16 @@ button:focus-visible {
 
   .progress {
     min-width: 6rem;
+  }
+
+  .budget-summary-line {
+    align-items: flex-start;
+  }
+
+  .budget-summary-amount {
+    width: 100%;
+    text-align: start;
+    white-space: normal;
   }
 
   .language-control,

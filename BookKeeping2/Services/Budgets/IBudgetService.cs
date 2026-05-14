@@ -43,7 +43,8 @@ public interface IBudgetService
     /// </summary>
     /// <param name="categoryId">The expense category identifier.</param>
     /// <param name="transactionDate">The transaction date that may affect the budget month.</param>
+    /// <param name="currency">The transaction currency code.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>A task representing the asynchronous operation.</returns>
-    Task AuditWarningForCategoryMonthAsync(long categoryId, DateOnly transactionDate, CancellationToken cancellationToken = default);
+    Task AuditWarningForCategoryMonthAsync(long categoryId, DateOnly transactionDate, string? currency = null, CancellationToken cancellationToken = default);
 }

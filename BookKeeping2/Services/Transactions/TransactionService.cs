@@ -169,7 +169,7 @@ public sealed class TransactionService : ITransactionService
             cancellationToken: cancellationToken);
         if (input.Type == TransactionType.Expense && budgetService is not null)
         {
-            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, cancellationToken);
+            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, validation.Currency, cancellationToken);
         }
 
         await transactionScope.CommitAsync(cancellationToken);
@@ -215,7 +215,7 @@ public sealed class TransactionService : ITransactionService
             cancellationToken: cancellationToken);
         if (input.Type == TransactionType.Expense && budgetService is not null)
         {
-            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, cancellationToken);
+            await budgetService.AuditWarningForCategoryMonthAsync(input.CategoryId, input.TransactionDate, validation.Currency, cancellationToken);
         }
 
         await transactionScope.CommitAsync(cancellationToken);
