@@ -54,22 +54,70 @@ public sealed class ThemeModeBrowserFixture : IAsyncLifetime
     {
         Uri requestUri = new(route.Request.Url);
         string pathAndQuery = requestUri.PathAndQuery;
-        HttpResponseMessage response = await client.GetAsync(pathAndQuery);
+        using var request = new HttpRequestMessage(new HttpMethod(route.Request.Method), pathAndQuery);
+        CopyRequestHeaders(route.Request, request);
+        byte[]? postData = route.Request.PostDataBuffer;
+        if (postData is { Length: > 0 })
+        {
+            request.Content = new ByteArrayContent(postData);
+            CopyContentHeaders(route.Request, request.Content);
+        }
+
+        HttpResponseMessage response = await client.SendAsync(request);
         string contentType = response.Content.Headers.ContentType?.ToString() ?? "text/plain";
-        string body = IsTextContent(contentType) ? await response.Content.ReadAsStringAsync() : string.Empty;
+        byte[] body = await response.Content.ReadAsByteArrayAsync();
         await route.FulfillAsync(new()
         {
             Status = (int)response.StatusCode,
             ContentType = contentType,
-            Body = body
+            Headers = BuildResponseHeaders(response),
+            BodyBytes = body
         });
     }
 
-    private static bool IsTextContent(string contentType)
+    private static void CopyRequestHeaders(IRequest source, HttpRequestMessage target)
     {
-        return contentType.StartsWith("text/", StringComparison.OrdinalIgnoreCase)
-            || contentType.Contains("javascript", StringComparison.OrdinalIgnoreCase)
-            || contentType.Contains("json", StringComparison.OrdinalIgnoreCase);
+        foreach ((string key, string value) in source.Headers)
+        {
+            if (key.Equals("host", StringComparison.OrdinalIgnoreCase)
+                || key.Equals("content-length", StringComparison.OrdinalIgnoreCase)
+                || key.Equals("content-type", StringComparison.OrdinalIgnoreCase))
+            {
+                continue;
+            }
+
+            target.Headers.TryAddWithoutValidation(key, value);
+        }
+    }
+
+    private static void CopyContentHeaders(IRequest source, HttpContent target)
+    {
+        if (source.Headers.TryGetValue("content-type", out string? contentType))
+        {
+            target.Headers.TryAddWithoutValidation("Content-Type", contentType);
+        }
+    }
+
+    private static IReadOnlyList<KeyValuePair<string, string>> BuildResponseHeaders(HttpResponseMessage response)
+    {
+        var headers = new List<KeyValuePair<string, string>>();
+        foreach ((string? key, IEnumerable<string> values) in response.Headers)
+        {
+            foreach (string value in values)
+            {
+                headers.Add(new KeyValuePair<string, string>(key, value));
+            }
+        }
+
+        foreach ((string? key, IEnumerable<string> values) in response.Content.Headers)
+        {
+            foreach (string value in values)
+            {
+                headers.Add(new KeyValuePair<string, string>(key, value));
+            }
+        }
+
+        return headers;
     }
 
     private static string? ResolveBrowserExecutable()

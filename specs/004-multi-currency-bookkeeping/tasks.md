@@ -193,13 +193,13 @@
 
 **Purpose**: 完成跨故事驗證、文件、效能、UI responsive 與 build/test。
 
-- [ ] T074 [P] 更新 quickstart 實作檢核結果與手動驗證紀錄於 `specs/004-multi-currency-bookkeeping/quickstart.md`
-- [ ] T075 [P] 更新多幣別 contract 中已實作的相容性與限制備註於 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
-- [ ] T076 [P] 檢查所有新增或修改 public types/members XML documentation，修正 `BookKeeping2/Models/Common/SupportedCurrency.cs`
-- [ ] T077 執行 targeted unit tests 並修正失敗，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T078 執行 persistence/page/performance integration tests 並修正失敗，明確驗證 10,000 筆交易分幣別篩選 < 2 秒、10,000 筆紀錄分幣別查詢 < 3 秒、100 筆月報分幣別產生 < 2 秒、1,000 筆 CSV 匯出 < 5 秒、100 筆 CSV 匯入 < 10 秒，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T079 執行 Playwright browser tests；驗證建立新幣別帳戶、建立同幣別交易、在首頁摘要看到該幣別獨立統計的 3 分鐘主要流程，以及主要頁面 FCP < 1.5 秒、LCP < 2.5 秒；若 Chrome/Edge 不可用，記錄 exact blocker 於 `specs/004-multi-currency-bookkeeping/quickstart.md`
-- [ ] T080 執行 full build/test 驗證並確認無跨幣別總額 regression，使用 `BookKeeping2.slnx` 與 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T074 [P] 更新 quickstart 實作檢核結果與手動驗證紀錄於 `specs/004-multi-currency-bookkeeping/quickstart.md`
+- [X] T075 [P] 更新多幣別 contract 中已實作的相容性與限制備註於 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
+- [X] T076 [P] 檢查所有新增或修改 public types/members XML documentation，修正 `BookKeeping2/Models/Common/SupportedCurrency.cs`
+- [X] T077 執行 targeted unit tests 並修正失敗，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T078 執行 persistence/page/performance integration tests 並修正失敗，明確驗證 10,000 筆交易分幣別篩選 < 2 秒、10,000 筆紀錄分幣別查詢 < 3 秒、100 筆月報分幣別產生 < 2 秒、1,000 筆 CSV 匯出 < 5 秒、100 筆 CSV 匯入 < 10 秒，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [X] T079 執行 Playwright browser tests；驗證建立新幣別帳戶、建立同幣別交易、在首頁摘要看到該幣別獨立統計的 3 分鐘主要流程，以及主要頁面 FCP < 1.5 秒、LCP < 2.5 秒；若 Chrome/Edge 不可用，記錄 exact blocker 於 `specs/004-multi-currency-bookkeeping/quickstart.md`
+- [X] T080 執行 full build/test 驗證並確認無跨幣別總額 regression，使用 `BookKeeping2.slnx` 與 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ---
 

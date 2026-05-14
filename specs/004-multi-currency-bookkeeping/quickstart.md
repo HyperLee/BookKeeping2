@@ -141,3 +141,19 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifie
 ```
 
 If browser tests cannot run because Chrome or Edge is unavailable in the environment, record the exact blocker and still run the non-browser subset.
+
+## Implementation Verification Results
+
+2026-05-14 final verification on branch `004-multi-currency-bookkeeping`:
+
+- Targeted unit tests passed: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~BookKeeping2.Tests.Unit"` -> 69 passed, 0 failed.
+- Persistence/page/performance integration tests passed: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~BookKeeping2.Tests.Integration.Persistence|FullyQualifiedName~BookKeeping2.Tests.Integration.Pages|FullyQualifiedName~BookKeeping2.Tests.Integration.Performance"` -> 40 passed, 0 failed.
+- Playwright browser tests passed: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~BookKeeping2.Tests.Integration.Browser"` -> 22 passed, 0 failed. Chrome/Edge executable was available; no browser blocker was encountered.
+- Full solution build passed: `dotnet build BookKeeping2.slnx` -> 0 warnings, 0 errors.
+- Full automated test suite passed after final browser flow and documentation updates: `dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj` -> 140 passed, 0 failed.
+
+Manual/browser checklist status:
+
+- The primary browser flow is covered by `MultiCurrencyBrowserTests.Primary_multi_currency_flow_creates_account_transaction_and_home_summary_under_performance_targets`: create a USD account, create a USD expense with that account, verify the homepage shows an independent USD bucket and USD account balance, and assert homepage FCP < 1.5 seconds and LCP < 2.5 seconds.
+- CSV browser pages are covered at 390px and 1280px with visible seven-column currency contract text and no horizontal overflow.
+- Account, transaction and budget currency controls are covered at 390px and 1280px with no horizontal overflow.

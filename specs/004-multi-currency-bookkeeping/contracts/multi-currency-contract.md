@@ -273,3 +273,7 @@ Backward-incompatible CSV change:
 
 - 2026-05-14: Tasks T001-T004 reviewed this contract against the requested stories. CSV, report, account, budget, transaction UI and validation requirements are all represented by explicit tests in `tasks.md`.
 - 2026-05-14: Shared test data helpers will expose stable supported-currency constants before adding entity builders so test cases can name currency intent consistently.
+- 2026-05-14: Implementation completed through T073. The application persists uppercase `TWD`, `USD`, `JPY`, `EUR` and `GBP` codes on transactions, accounts and budgets; existing records and six-column CSV imports default to `TWD`; seven-column CSV imports require non-blank supported currency and enforce account currency match.
+- 2026-05-14: New exports are seven-column only (`日期,類型,幣別,金額,分類,帳戶,備註`). Import remains backward compatible with the legacy six-column header, but blank currency in the seven-column format is intentionally rejected rather than defaulted.
+- 2026-05-14: No exchange rate, conversion, cross-currency asset total, cross-currency income/expense total or hidden mixed-currency arithmetic was introduced. Reports, summaries, budgets and account balances remain grouped or scoped by original currency.
+- 2026-05-14: Browser test routing now forwards HTTP method, request body and response headers so Playwright can verify anti-forgery protected POST flows in addition to read-only page checks.
