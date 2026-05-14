@@ -4,7 +4,6 @@
 @model BookKeeping2.Pages.Reports.IndexModel
 @{
     ViewData["Title"] = SharedLocalizer["月度報表"].Value;
-    string trendJson = JsonSerializer.Serialize(Model.Report.TrendPoints);
 }
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
@@ -19,27 +18,6 @@
     </form>
 </div>
 
-<div class="row g-3 mb-4">
-    <div class="col-12 col-md-4">
-        <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">@SharedLocalizer["收入"]</div>
-            <div class="fs-4 fw-semibold text-success">@Model.Report.TotalIncome.ToString("N0", CultureInfo.CurrentCulture)</div>
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">@SharedLocalizer["支出"]</div>
-            <div class="fs-4 fw-semibold text-danger">@Model.Report.TotalExpense.ToString("N0", CultureInfo.CurrentCulture)</div>
-        </div>
-    </div>
-    <div class="col-12 col-md-4">
-        <div class="border rounded-2 p-3 h-100">
-            <div class="text-muted small">@SharedLocalizer["結餘"]</div>
-            <div class="fs-4 fw-semibold">@Model.Report.Balance.ToString("N0", CultureInfo.CurrentCulture)</div>
-        </div>
-    </div>
-</div>
-
 @if (!Model.Report.HasData)
 {
     <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-2" role="status">
@@ -49,42 +27,73 @@
 }
 else
 {
-    <div class="row g-4">
-        <div class="col-12 col-lg-7">
-            <h2 class="h5">@SharedLocalizer["每日趨勢"]</h2>
-            <canvas id="monthlyTrendChart" data-points='@trendJson' data-income-label='@SharedLocalizer["收入"]' data-expense-label='@SharedLocalizer["支出"]' aria-label='@SharedLocalizer["月度收支趨勢圖"]' role="img"></canvas>
-        </div>
-        <div class="col-12 col-lg-5">
-            <h2 class="h5">@SharedLocalizer["支出分類佔比"]</h2>
-            @if (Model.Report.CategoryShares.Count == 0)
-            {
-                <div class="alert alert-secondary" role="status">@SharedLocalizer["本月沒有支出資料。"]</div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-sm align-middle">
-                        <thead>
-                            <tr>
-                                <th scope="col">@SharedLocalizer["分類"]</th>
-                                <th scope="col" class="text-end">@SharedLocalizer["金額"]</th>
-                                <th scope="col" class="text-end">@SharedLocalizer["佔比"]</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var share in Model.Report.CategoryShares)
-                            {
-                                <tr>
-                                    <td>@share.CategoryName</td>
-                                    <td class="text-end">@share.Amount.ToString("N0", CultureInfo.CurrentCulture)</td>
-                                    <td class="text-end">@share.Percentage.ToString("N2", CultureInfo.CurrentCulture)%</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    <div class="vstack gap-4">
+        @foreach (var bucket in Model.Report.CurrencyBuckets)
+        {
+            string trendJson = JsonSerializer.Serialize(bucket.TrendPoints);
+            <section aria-labelledby="report-bucket-@bucket.Currency">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <h2 id="report-bucket-@bucket.Currency" class="h5 mb-0">@bucket.Currency @bucket.CurrencyDisplayName</h2>
                 </div>
-            }
-        </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded-2 p-3 h-100">
+                            <div class="text-muted small">@SharedLocalizer["收入"]</div>
+                            <div class="fs-4 fw-semibold text-success currency-amount">@bucket.Currency @bucket.TotalIncome.ToString("N2", CultureInfo.CurrentCulture)</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded-2 p-3 h-100">
+                            <div class="text-muted small">@SharedLocalizer["支出"]</div>
+                            <div class="fs-4 fw-semibold text-danger currency-amount">@bucket.Currency @bucket.TotalExpense.ToString("N2", CultureInfo.CurrentCulture)</div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <div class="border rounded-2 p-3 h-100">
+                            <div class="text-muted small">@SharedLocalizer["結餘"]</div>
+                            <div class="fs-4 fw-semibold currency-amount">@bucket.Currency @bucket.Balance.ToString("N2", CultureInfo.CurrentCulture)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row g-4">
+                    <div class="col-12 col-lg-7">
+                        <h3 class="h6">@SharedLocalizer["每日趨勢"]</h3>
+                        <canvas class="monthly-trend-chart" data-points='@trendJson' data-currency="@bucket.Currency" data-income-label='@SharedLocalizer["收入"]' data-expense-label='@SharedLocalizer["支出"]' aria-label='@($"{bucket.Currency} {SharedLocalizer["月度收支趨勢圖"]}")' role="img"></canvas>
+                    </div>
+                    <div class="col-12 col-lg-5">
+                        <h3 class="h6">@SharedLocalizer["支出分類佔比"]</h3>
+                        @if (bucket.CategoryShares.Count == 0)
+                        {
+                            <div class="alert alert-secondary" role="status">@SharedLocalizer["本月沒有支出資料。"]</div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">@SharedLocalizer["分類"]</th>
+                                            <th scope="col" class="text-end">@SharedLocalizer["金額"]</th>
+                                            <th scope="col" class="text-end">@SharedLocalizer["佔比"]</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var share in bucket.CategoryShares)
+                                        {
+                                            <tr>
+                                                <td>@share.CategoryName</td>
+                                                <td class="text-end currency-amount">@share.Currency @share.Amount.ToString("N2", CultureInfo.CurrentCulture)</td>
+                                                <td class="text-end">@share.Percentage.ToString("N2", CultureInfo.CurrentCulture)%</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+        }
     </div>
 }
 

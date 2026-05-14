@@ -28,6 +28,7 @@ public sealed class TransactionQueryPerformanceTests
                 CategoryId = food.Id,
                 Type = TransactionType.Expense,
                 TransactionDate = new DateOnly(2026, 1, (i % 28) + 1),
+                Currency = i % 2 == 0 ? TestDataBuilder.TwdCurrency : TestDataBuilder.UsdCurrency,
                 Amount = i == 9_999 ? 777m : 10m,
                 Note = i == 9_999 ? "唯一查詢目標" : $"一般資料 {i}",
                 CreatedAtUtc = DateTimeOffset.UtcNow,
@@ -39,7 +40,7 @@ public sealed class TransactionQueryPerformanceTests
         var service = new TransactionQueryService(context);
         Stopwatch stopwatch = Stopwatch.StartNew();
 
-        var result = await service.SearchAsync(new TransactionQuery { Keyword = "唯一查詢目標", Page = 1, PageSize = 20 });
+        var result = await service.SearchAsync(new TransactionQuery { Currency = TestDataBuilder.UsdCurrency, Keyword = "唯一查詢目標", Page = 1, PageSize = 20 });
 
         stopwatch.Stop();
         var item = Assert.Single(result.Items);

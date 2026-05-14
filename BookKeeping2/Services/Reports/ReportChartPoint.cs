@@ -6,6 +6,11 @@ namespace BookKeeping2.Services.Reports;
 public sealed class ReportChartPoint
 {
     /// <summary>
+    /// Gets or sets the chart point currency code.
+    /// </summary>
+    public string Currency { get; set; } = string.Empty;
+
+    /// <summary>
     /// Gets or sets the display label.
     /// </summary>
     public string Label { get; set; } = string.Empty;

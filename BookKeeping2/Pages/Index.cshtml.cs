@@ -41,17 +41,22 @@ public class IndexModel : PageModel
     /// <summary>
     /// Gets the current month income total.
     /// </summary>
-    public decimal MonthlyIncome { get; private set; }
+    public decimal MonthlyIncome => MonthlySummaries.Count == 1 ? MonthlySummaries[0].Income : 0m;
 
     /// <summary>
     /// Gets the current month expense total.
     /// </summary>
-    public decimal MonthlyExpense { get; private set; }
+    public decimal MonthlyExpense => MonthlySummaries.Count == 1 ? MonthlySummaries[0].Expense : 0m;
 
     /// <summary>
     /// Gets the current month balance.
     /// </summary>
     public decimal MonthlyBalance => MonthlyIncome - MonthlyExpense;
+
+    /// <summary>
+    /// Gets current month same-currency summary buckets.
+    /// </summary>
+    public IReadOnlyList<DashboardCurrencySummary> MonthlySummaries { get; private set; } = [];
 
     /// <summary>
     /// Gets recent visible transactions.
@@ -92,12 +97,28 @@ public class IndexModel : PageModel
                 && transaction.TransactionDate <= monthEnd)
             .ToListAsync();
 
-        MonthlyIncome = MoneyMinorUnitConverter.FromMinorUnits(monthTransactions
-            .Where(transaction => transaction.Type == TransactionType.Income)
-            .Sum(transaction => transaction.AmountMinorUnits));
-        MonthlyExpense = MoneyMinorUnitConverter.FromMinorUnits(monthTransactions
-            .Where(transaction => transaction.Type == TransactionType.Expense)
-            .Sum(transaction => transaction.AmountMinorUnits));
+        Dictionary<string, int> currencyOrder = SupportedCurrency.Options.ToDictionary(option => option.Code, option => option.SortOrder);
+        MonthlySummaries = monthTransactions
+            .GroupBy(transaction => transaction.Currency)
+            .OrderBy(group => currencyOrder.GetValueOrDefault(group.Key, int.MaxValue))
+            .ThenBy(group => group.Key)
+            .Select(group =>
+            {
+                long income = group
+                    .Where(transaction => transaction.Type == TransactionType.Income)
+                    .Sum(transaction => transaction.AmountMinorUnits);
+                long expense = group
+                    .Where(transaction => transaction.Type == TransactionType.Expense)
+                    .Sum(transaction => transaction.AmountMinorUnits);
+
+                return new DashboardCurrencySummary
+                {
+                    Currency = group.Key,
+                    Income = MoneyMinorUnitConverter.FromMinorUnits(income),
+                    Expense = MoneyMinorUnitConverter.FromMinorUnits(expense)
+                };
+            })
+            .ToList();
 
         RecentTransactions = monthTransactions
             .OrderByDescending(transaction => transaction.TransactionDate)
@@ -109,6 +130,7 @@ public class IndexModel : PageModel
                 TransactionDate = transaction.TransactionDate,
                 Type = transaction.Type,
                 Amount = transaction.Amount,
+                Currency = transaction.Currency,
                 CategoryName = transaction.Category.Name,
                 AccountName = transaction.Account.Name,
                 Note = transaction.Note
@@ -142,4 +164,50 @@ public class IndexModel : PageModel
 
         return RedirectToPage();
     }
+}
+
+/// <summary>
+/// Represents one same-currency dashboard summary bucket.
+/// </summary>
+public sealed class DashboardCurrencySummary
+{
+    /// <summary>
+    /// Gets or sets the summary currency code.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
+    /// Gets the currency display name.
+    /// </summary>
+    public string CurrencyDisplayName => SupportedCurrency.GetDisplayName(Currency);
+
+    /// <summary>
+    /// Gets or sets same-currency monthly income.
+    /// </summary>
+    public decimal Income { get; set; }
+
+    /// <summary>
+    /// Gets or sets same-currency monthly expense.
+    /// </summary>
+    public decimal Expense { get; set; }
+
+    /// <summary>
+    /// Gets same-currency monthly balance.
+    /// </summary>
+    public decimal Balance => Income - Expense;
+
+    /// <summary>
+    /// Gets formatted income text with currency.
+    /// </summary>
+    public string IncomeText => $"{Currency} {Income:N2}";
+
+    /// <summary>
+    /// Gets formatted expense text with currency.
+    /// </summary>
+    public string ExpenseText => $"{Currency} {Expense:N2}";
+
+    /// <summary>
+    /// Gets formatted balance text with currency.
+    /// </summary>
+    public string BalanceText => $"{Currency} {Balance:N2}";
 }

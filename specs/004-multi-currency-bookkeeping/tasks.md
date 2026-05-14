@@ -88,20 +88,20 @@
 
 ### Tests for User Story 2
 
-- [ ] T029 [P] [US2] 擴充報表服務測試，先覆蓋 monthly totals、category shares、trend points 依幣別分組且不跨幣別合計於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
-- [ ] T030 [P] [US2] 擴充首頁預算/摘要整合測試，先覆蓋多幣別摘要 bucket、單幣別月份與空白月份顯示於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
-- [ ] T031 [P] [US2] 擴充報表頁整合測試，先覆蓋月報、分類統計與趨勢 chart payload 不含跨幣別總額於 `BookKeeping2.Tests/Integration/Pages/ReportsPageTests.cs`
-- [ ] T032 [P] [US2] 擴充交易查詢效能測試，先覆蓋 10,000 筆交易 currency filter 與 grouping 目標於 `BookKeeping2.Tests/Integration/Performance/TransactionQueryPerformanceTests.cs`
+- [X] T029 [P] [US2] 擴充報表服務測試，先覆蓋 monthly totals、category shares、trend points 依幣別分組且不跨幣別合計於 `BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs`
+- [X] T030 [P] [US2] 擴充首頁預算/摘要整合測試，先覆蓋多幣別摘要 bucket、單幣別月份與空白月份顯示於 `BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs`
+- [X] T031 [P] [US2] 擴充報表頁整合測試，先覆蓋月報、分類統計與趨勢 chart payload 不含跨幣別總額於 `BookKeeping2.Tests/Integration/Pages/ReportsPageTests.cs`
+- [X] T032 [P] [US2] 擴充交易查詢效能測試，先覆蓋 10,000 筆交易 currency filter 與 grouping 目標於 `BookKeeping2.Tests/Integration/Performance/TransactionQueryPerformanceTests.cs`
 
 ### Implementation for User Story 2
 
-- [ ] T033 [US2] 重構報表 view model 為 currency bucket、category share 與 trend point 結構於 `BookKeeping2/ViewModels/Reports/MonthlyReportViewModel.cs`
-- [ ] T034 [US2] 更新報表 chart point 結構，讓 dataset/tooltip/legend 可識別幣別於 `BookKeeping2/Services/Reports/ReportChartPoint.cs`
-- [ ] T035 [US2] 更新 report service 查詢與 projection，所有 income/expense/balance/category share/trend 均依 `Currency` 分組於 `BookKeeping2/Services/Reports/ReportService.cs`
-- [ ] T036 [US2] 更新首頁 PageModel 摘要查詢，輸出分幣別收入、支出、結餘與預算狀態於 `BookKeeping2/Pages/Index.cshtml.cs`
-- [ ] T037 [US2] 更新首頁 Razor markup，移除跨幣別總額呈現並以繁體中文分幣別區塊顯示於 `BookKeeping2/Pages/Index.cshtml`
-- [ ] T038 [US2] 更新報表 PageModel 與 Razor markup，月報、分類統計與空白狀態依幣別呈現於 `BookKeeping2/Pages/Reports/Index.cshtml.cs`, `BookKeeping2/Pages/Reports/Index.cshtml`
-- [ ] T039 [US2] 更新 Chart.js 初始化，legend、dataset labels、tooltip 與 accessibility text 包含幣別且不混合資料於 `BookKeeping2/wwwroot/js/reports.js`
+- [X] T033 [US2] 重構報表 view model 為 currency bucket、category share 與 trend point 結構於 `BookKeeping2/ViewModels/Reports/MonthlyReportViewModel.cs`
+- [X] T034 [US2] 更新報表 chart point 結構，讓 dataset/tooltip/legend 可識別幣別於 `BookKeeping2/Services/Reports/ReportChartPoint.cs`
+- [X] T035 [US2] 更新 report service 查詢與 projection，所有 income/expense/balance/category share/trend 均依 `Currency` 分組於 `BookKeeping2/Services/Reports/ReportService.cs`
+- [X] T036 [US2] 更新首頁 PageModel 摘要查詢，輸出分幣別收入、支出、結餘與預算狀態於 `BookKeeping2/Pages/Index.cshtml.cs`
+- [X] T037 [US2] 更新首頁 Razor markup，移除跨幣別總額呈現並以繁體中文分幣別區塊顯示於 `BookKeeping2/Pages/Index.cshtml`
+- [X] T038 [US2] 更新報表 PageModel 與 Razor markup，月報、分類統計與空白狀態依幣別呈現於 `BookKeeping2/Pages/Reports/Index.cshtml.cs`, `BookKeeping2/Pages/Reports/Index.cshtml`
+- [X] T039 [US2] 更新 Chart.js 初始化，legend、dataset labels、tooltip 與 accessibility text 包含幣別且不混合資料於 `BookKeeping2/wwwroot/js/reports.js`
 
 **Checkpoint**: User Story 2 should be fully functional and testable independently with seeded multi-currency data.
 

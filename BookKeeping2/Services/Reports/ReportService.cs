@@ -37,57 +37,76 @@ public sealed class ReportService : IReportService
                 && transaction.TransactionDate <= monthEnd)
             .ToListAsync(cancellationToken);
 
-        long incomeMinorUnits = transactions
-            .Where(transaction => transaction.Type == TransactionType.Income)
-            .Sum(transaction => transaction.AmountMinorUnits);
-        long expenseMinorUnits = transactions
-            .Where(transaction => transaction.Type == TransactionType.Expense)
-            .Sum(transaction => transaction.AmountMinorUnits);
-
-        IReadOnlyList<CategoryShareViewModel> categoryShares = transactions
-            .Where(transaction => transaction.Type == TransactionType.Expense)
-            .GroupBy(transaction => transaction.Category.Name)
+        Dictionary<string, int> currencyOrder = SupportedCurrency.Options.ToDictionary(option => option.Code, option => option.SortOrder);
+        IReadOnlyList<MonthlyCurrencyReportViewModel> currencyBuckets = transactions
+            .GroupBy(transaction => transaction.Currency)
+            .OrderBy(group => currencyOrder.GetValueOrDefault(group.Key, int.MaxValue))
+            .ThenBy(group => group.Key)
             .Select(group =>
             {
-                long amountMinorUnits = group.Sum(transaction => transaction.AmountMinorUnits);
-                decimal amount = MoneyMinorUnitConverter.FromMinorUnits(amountMinorUnits);
-                decimal percentage = expenseMinorUnits == 0
-                    ? 0m
-                    : Math.Round(amountMinorUnits * 100m / expenseMinorUnits, 2, MidpointRounding.AwayFromZero);
-
-                return new CategoryShareViewModel
-                {
-                    CategoryName = group.Key,
-                    Amount = amount,
-                    Percentage = percentage
-                };
-            })
-            .OrderByDescending(share => share.Amount)
-            .ThenBy(share => share.CategoryName)
-            .ToList();
-
-        IReadOnlyList<ReportChartPoint> trendPoints = transactions
-            .GroupBy(transaction => transaction.TransactionDate)
-            .OrderBy(group => group.Key)
-            .Select(group => new ReportChartPoint
-            {
-                Label = group.Key.ToString("MM-dd"),
-                Income = MoneyMinorUnitConverter.FromMinorUnits(group
+                string currency = group.Key;
+                long incomeMinorUnits = group
                     .Where(transaction => transaction.Type == TransactionType.Income)
-                    .Sum(transaction => transaction.AmountMinorUnits)),
-                Expense = MoneyMinorUnitConverter.FromMinorUnits(group
+                    .Sum(transaction => transaction.AmountMinorUnits);
+                long expenseMinorUnits = group
                     .Where(transaction => transaction.Type == TransactionType.Expense)
-                    .Sum(transaction => transaction.AmountMinorUnits))
+                    .Sum(transaction => transaction.AmountMinorUnits);
+
+                IReadOnlyList<CategoryShareViewModel> categoryShares = group
+                    .Where(transaction => transaction.Type == TransactionType.Expense)
+                    .GroupBy(transaction => transaction.Category.Name)
+                    .Select(categoryGroup =>
+                    {
+                        long amountMinorUnits = categoryGroup.Sum(transaction => transaction.AmountMinorUnits);
+                        decimal amount = MoneyMinorUnitConverter.FromMinorUnits(amountMinorUnits);
+                        decimal percentage = expenseMinorUnits == 0
+                            ? 0m
+                            : Math.Round(amountMinorUnits * 100m / expenseMinorUnits, 2, MidpointRounding.AwayFromZero);
+
+                        return new CategoryShareViewModel
+                        {
+                            Currency = currency,
+                            CategoryName = categoryGroup.Key,
+                            Amount = amount,
+                            Percentage = percentage
+                        };
+                    })
+                    .OrderByDescending(share => share.Amount)
+                    .ThenBy(share => share.CategoryName)
+                    .ToList();
+
+                IReadOnlyList<ReportChartPoint> trendPoints = group
+                    .GroupBy(transaction => transaction.TransactionDate)
+                    .OrderBy(dateGroup => dateGroup.Key)
+                    .Select(dateGroup => new ReportChartPoint
+                    {
+                        Currency = currency,
+                        Label = dateGroup.Key.ToString("MM-dd"),
+                        Income = MoneyMinorUnitConverter.FromMinorUnits(dateGroup
+                            .Where(transaction => transaction.Type == TransactionType.Income)
+                            .Sum(transaction => transaction.AmountMinorUnits)),
+                        Expense = MoneyMinorUnitConverter.FromMinorUnits(dateGroup
+                            .Where(transaction => transaction.Type == TransactionType.Expense)
+                            .Sum(transaction => transaction.AmountMinorUnits))
+                    })
+                    .ToList();
+
+                return new MonthlyCurrencyReportViewModel
+                {
+                    Month = monthStart,
+                    Currency = currency,
+                    TotalIncome = MoneyMinorUnitConverter.FromMinorUnits(incomeMinorUnits),
+                    TotalExpense = MoneyMinorUnitConverter.FromMinorUnits(expenseMinorUnits),
+                    CategoryShares = categoryShares,
+                    TrendPoints = trendPoints
+                };
             })
             .ToList();
 
         return new MonthlyReportViewModel
         {
             Month = monthStart,
-            TotalIncome = MoneyMinorUnitConverter.FromMinorUnits(incomeMinorUnits),
-            TotalExpense = MoneyMinorUnitConverter.FromMinorUnits(expenseMinorUnits),
-            CategoryShares = categoryShares,
-            TrendPoints = trendPoints
+            CurrencyBuckets = currencyBuckets
         };
     }
 }

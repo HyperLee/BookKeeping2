@@ -30,6 +30,22 @@ public sealed class HomeBudgetSummaryTests
         Assert.Contains("接近預算上限", page);
     }
 
+    [Fact]
+    public async Task Home_page_shows_month_summary_buckets_by_currency_without_cross_currency_total()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+        await SeedMultiCurrencySummaryAsync(factory);
+
+        string page = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+
+        Assert.Contains("TWD", page);
+        Assert.Contains("USD", page);
+        Assert.Contains("TWD 1,000.00", page);
+        Assert.Contains("USD 500.00", page);
+        Assert.DoesNotContain("1,500", page);
+    }
+
     private static async Task SeedBudgetAndSpendingAsync(BookKeepingWebApplicationFactory factory)
     {
         using IServiceScope scope = factory.Services.CreateScope();
@@ -68,5 +84,40 @@ public sealed class HomeBudgetSummaryTests
             LastChangeSummary = "測試"
         });
         await context.SaveChangesAsync();
+    }
+
+    private static async Task SeedMultiCurrencySummaryAsync(BookKeepingWebApplicationFactory factory)
+    {
+        using IServiceScope scope = factory.Services.CreateScope();
+        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        Category salary = await context.Categories.FirstAsync(category => category.Type == TransactionType.Income && category.Name == "薪資");
+        Category food = await context.Categories.FirstAsync(category => category.Type == TransactionType.Expense && category.Name == "餐飲");
+        var twdAccount = new Account { Name = "現金", NormalizedName = "現金", Type = AccountType.Cash, IconKey = "wallet", Currency = TestDataBuilder.TwdCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        var usdAccount = new Account { Name = "美元現金", NormalizedName = "美元現金", Type = AccountType.Cash, IconKey = "wallet", Currency = TestDataBuilder.UsdCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.AddRange(twdAccount, usdAccount);
+        await context.SaveChangesAsync();
+
+        context.Transactions.AddRange(
+            CreateTransaction(twdAccount.Id, salary.Id, TransactionType.Income, 1_000m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(usdAccount.Id, salary.Id, TransactionType.Income, 500m, TestDataBuilder.UsdCurrency),
+            CreateTransaction(twdAccount.Id, food.Id, TransactionType.Expense, 100m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(usdAccount.Id, food.Id, TransactionType.Expense, 50m, TestDataBuilder.UsdCurrency));
+        await context.SaveChangesAsync();
+    }
+
+    private static Transaction CreateTransaction(long accountId, long categoryId, TransactionType type, decimal amount, string currency)
+    {
+        return new Transaction
+        {
+            AccountId = accountId,
+            CategoryId = categoryId,
+            Type = type,
+            TransactionDate = new DateOnly(2026, 5, 5),
+            Currency = currency,
+            Amount = amount,
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow,
+            LastChangeSummary = "測試"
+        };
     }
 }
