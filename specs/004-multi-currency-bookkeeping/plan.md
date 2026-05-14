@@ -88,7 +88,8 @@ BookKeeping2/
 │   └── Index.cshtml(.cs)
 └── wwwroot/
     ├── css/site.css                   # responsive/focus fixes for currency labels if needed
-    └── js/site.js                     # optional account filtering enhancement only
+    ├── js/site.js                     # shared site behavior remains theme/global only
+    └── js/transactions.js             # transaction form account filtering enhancement only
 
 BookKeeping2.Tests/
 ├── Unit/

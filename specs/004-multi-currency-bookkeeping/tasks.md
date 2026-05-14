@@ -2,7 +2,7 @@
 
 **Input**: Design documents from `/specs/004-multi-currency-bookkeeping/`
 **Prerequisites**: `plan.md`, `spec.md`, `research.md`, `data-model.md`, `contracts/multi-currency-contract.md`, `quickstart.md`
-**Tests**: 本功能規格、plan 與 quickstart 明確要求測試優先；每個故事的測試任務必須先寫並確認失敗，再實作。
+**Tests**: 本功能規格、plan 與 quickstart 明確要求測試優先；每個故事的測試意圖必須先取得使用者或維護者確認，再撰寫測試、確認測試失敗，最後實作。
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing.
 
 ## Format: `[ID] [P?] [Story] Description`
@@ -17,7 +17,7 @@
 
 **Purpose**: 確認 feature artifacts、現有測試基礎與共享測試資料形狀，避免後續故事重複建立 fixture。
 
-- [ ] T001 確認多幣別需求、TDD 順序與排除範圍一致，記錄於 `specs/004-multi-currency-bookkeeping/spec.md`
+- [ ] T001 確認多幣別需求、各故事測試意圖、TDD 順序與排除範圍一致，取得使用者或維護者對測試意圖的確認，並記錄於 `specs/004-multi-currency-bookkeeping/spec.md`
 - [ ] T002 [P] 檢查多幣別技術決策與檔案配置是否仍符合目前專案結構，更新 `specs/004-multi-currency-bookkeeping/plan.md`
 - [ ] T003 [P] 檢查 CSV、報表、帳戶、預算與 UI 契約是否涵蓋所有故事測試案例，更新 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
 - [ ] T004 [P] 擴充多幣別測試資料建構器介面與 helper 命名規劃，準備修改 `BookKeeping2.Tests/TestSupport/TestDataBuilder.cs`
@@ -59,9 +59,9 @@
 
 ### Tests for User Story 1
 
-- [ ] T016 [P] [US1] 擴充交易服務驗證測試，先覆蓋必填/不支援幣別、帳戶幣別不一致、同日期分類金額不同幣別可共存、duplicate detection 包含幣別與 audit summary 包含幣別於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
+- [ ] T016 [P] [US1] 擴充交易服務驗證測試，先覆蓋必填/不支援幣別、帳戶幣別不一致、同日期分類金額不同幣別可共存、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、duplicate detection 包含幣別、audit summary 包含幣別與名稱/備註/分類/帳戶文字不被翻譯或改寫於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
 - [ ] T017 [P] [US1] 擴充交易查詢測試，先覆蓋幣別 filter 與既有日期/分類/帳戶/金額/關鍵字/pagination 並存於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
-- [ ] T018 [P] [US1] 擴充交易頁面整合測試，先覆蓋 create/edit/list/detail/delete confirmation 顯示幣別、invalid POST 拒絕與 anti-forgery 保留於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
+- [ ] T018 [P] [US1] 擴充交易頁面整合測試，先覆蓋 create/edit/list/delete confirmation 與既有交易詳細資料載入流程顯示幣別、invalid POST 拒絕、anti-forgery 保留，以及未依瀏覽器語言、所在地、日期或其他環境訊號推定幣別於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
 - [ ] T019 [P] [US1] 新增多幣別交易表單瀏覽器測試，先覆蓋桌面與行動 viewport 的幣別控制、帳戶選項、焦點與無重疊於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
 ### Implementation for User Story 1
@@ -142,7 +142,7 @@
 
 ### Tests for User Story 4
 
-- [ ] T051 [P] [US4] 擴充預算服務測試，先覆蓋 month/category/currency unique、同分類不同幣別允許、spent/remaining/alert 只用同幣別交易於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
+- [ ] T051 [P] [US4] 擴充預算服務測試，先覆蓋 month/category/currency unique、同分類不同幣別允許、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、spent/remaining/alert 只用同幣別交易於 `BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs`
 - [ ] T052 [P] [US4] 擴充預算頁整合測試，先覆蓋幣別控制、重複預算錯誤、列表進度與多幣別顯示於 `BookKeeping2.Tests/Integration/Pages/BudgetsPageTests.cs`
 - [ ] T053 [P] [US4] 擴充多幣別預算瀏覽器測試，先覆蓋桌面與行動建立預算、進度顯示、焦點與無水平溢位於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
@@ -170,7 +170,7 @@
 ### Tests for User Story 5
 
 - [ ] T062 [P] [US5] 擴充 CSV parser 測試，先覆蓋七欄 header、六欄 legacy header、malformed header、七欄空白幣別與正規化於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
-- [ ] T063 [P] [US5] 擴充 CSV import service 測試，先覆蓋支援幣別成功、legacy rows 預設 `TWD`、unsupported currency、帳戶幣別不一致與 row-level errors 於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
+- [ ] T063 [P] [US5] 擴充 CSV import service 測試，先覆蓋支援幣別成功、legacy rows 預設 `TWD`、unsupported currency、帳戶幣別不一致、金額規則錯誤、匯入文字原文保留與 row-level errors 於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
 - [ ] T064 [P] [US5] 擴充 CSV export service 測試，先覆蓋七欄 header、原始 amount/currency、soft-delete 排除與 formula protection 保留於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
 - [ ] T065 [P] [US5] 擴充 CSV 匯入匯出頁整合測試，先覆蓋成功/失敗摘要、繁體中文錯誤訊息與下載內容於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`, `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
 - [ ] T066 [P] [US5] 擴充 CSV 瀏覽器測試，先覆蓋匯入/匯出頁桌面與行動布局、幣別欄位說明與可操作性於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
@@ -197,8 +197,8 @@
 - [ ] T075 [P] 更新多幣別 contract 中已實作的相容性與限制備註於 `specs/004-multi-currency-bookkeeping/contracts/multi-currency-contract.md`
 - [ ] T076 [P] 檢查所有新增或修改 public types/members XML documentation，修正 `BookKeeping2/Models/Common/SupportedCurrency.cs`
 - [ ] T077 執行 targeted unit tests 並修正失敗，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T078 執行 persistence/page/performance integration tests 並修正失敗，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
-- [ ] T079 執行 Playwright browser tests；若 Chrome/Edge 不可用，記錄 exact blocker 於 `specs/004-multi-currency-bookkeeping/quickstart.md`
+- [ ] T078 執行 persistence/page/performance integration tests 並修正失敗，明確驗證 10,000 筆交易分幣別篩選 < 2 秒、10,000 筆紀錄分幣別查詢 < 3 秒、100 筆月報分幣別產生 < 2 秒、1,000 筆 CSV 匯出 < 5 秒、100 筆 CSV 匯入 < 10 秒，使用測試專案 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
+- [ ] T079 執行 Playwright browser tests；驗證建立新幣別帳戶、建立同幣別交易、在首頁摘要看到該幣別獨立統計的 3 分鐘主要流程，以及主要頁面 FCP < 1.5 秒、LCP < 2.5 秒；若 Chrome/Edge 不可用，記錄 exact blocker 於 `specs/004-multi-currency-bookkeeping/quickstart.md`
 - [ ] T080 執行 full build/test 驗證並確認無跨幣別總額 regression，使用 `BookKeeping2.slnx` 與 `BookKeeping2.Tests/BookKeeping2.Tests.csproj`
 
 ---
@@ -222,7 +222,7 @@
 
 ### Within Each User Story
 
-- Tests must be written first and confirmed failing before implementation.
+- Test intent must be approved by the user or maintainer before writing tests; tests must then be written first and confirmed failing before implementation.
 - View models/entities before services.
 - Services before PageModels and Razor markup.
 - Core behavior before browser/responsive polish.
