@@ -100,6 +100,32 @@ main {
   font-variant-numeric: tabular-nums;
 }
 
+.dashboard-currency-summaries {
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard-currency-summary {
+  min-width: 0;
+}
+
+.dashboard-currency-summary__metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.75rem 1rem;
+}
+
+.dashboard-currency-summary__metric {
+  min-width: 0;
+}
+
+.dashboard-currency-summary__amount {
+  display: block;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+}
+
 .budget-table .badge {
   min-width: 3.5rem;
 }

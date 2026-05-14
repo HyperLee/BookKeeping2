@@ -70,30 +70,28 @@
 }
 else
 {
-    <div class="row g-3 mb-4">
+    <div class="dashboard-currency-summaries mb-4">
         @foreach (var summary in Model.MonthlySummaries)
         {
-            <div class="col-12 col-xl-4">
-                <div class="border rounded p-3 h-100">
-                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
-                        <h2 class="h6 mb-0">@summary.Currency @summary.CurrencyDisplayName</h2>
+            <section class="dashboard-currency-summary border rounded p-3" data-dashboard-currency-summary aria-labelledby="monthly-summary-@summary.Currency">
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
+                    <h2 id="monthly-summary-@summary.Currency" class="h6 mb-0">@summary.Currency @summary.CurrencyDisplayName</h2>
+                </div>
+                <div class="dashboard-currency-summary__metrics">
+                    <div class="dashboard-currency-summary__metric">
+                        <div class="text-muted small">@SharedLocalizer["本月收入"]</div>
+                        <div class="fs-5 currency-amount dashboard-currency-summary__amount">@summary.IncomeText</div>
                     </div>
-                    <div class="row g-2">
-                        <div class="col-12 col-sm-4">
-                            <div class="text-muted small">@SharedLocalizer["本月收入"]</div>
-                            <div class="fs-5 currency-amount">@summary.IncomeText</div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class="text-muted small">@SharedLocalizer["本月支出"]</div>
-                            <div class="fs-5 currency-amount">@summary.ExpenseText</div>
-                        </div>
-                        <div class="col-12 col-sm-4">
-                            <div class="text-muted small">@SharedLocalizer["本月結餘"]</div>
-                            <div class="fs-5 currency-amount">@summary.BalanceText</div>
-                        </div>
+                    <div class="dashboard-currency-summary__metric">
+                        <div class="text-muted small">@SharedLocalizer["本月支出"]</div>
+                        <div class="fs-5 currency-amount dashboard-currency-summary__amount">@summary.ExpenseText</div>
+                    </div>
+                    <div class="dashboard-currency-summary__metric">
+                        <div class="text-muted small">@SharedLocalizer["本月結餘"]</div>
+                        <div class="fs-5 currency-amount dashboard-currency-summary__amount">@summary.BalanceText</div>
                     </div>
                 </div>
-            </div>
+            </section>
         }
     </div>
 }
