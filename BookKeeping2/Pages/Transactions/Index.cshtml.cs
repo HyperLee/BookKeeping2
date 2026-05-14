@@ -1,3 +1,4 @@
+using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Transactions;
 using BookKeeping2.ViewModels.Transactions;
 using Microsoft.AspNetCore.Mvc;
@@ -57,7 +58,7 @@ public sealed class IndexModel : PageModel
         ModelState.Remove("Filter.Page");
         ModelState.Remove("Filter.PageSize");
         ValidateFilter();
-        Options = await formOptionsService.GetOptionsAsync();
+        Options = await formOptionsService.GetOptionsAsync(currency: Filter.Currency);
         if (!ModelState.IsValid)
         {
             return;
@@ -69,6 +70,7 @@ public sealed class IndexModel : PageModel
             EndDate = Filter.EndDate,
             CategoryId = Filter.CategoryId,
             AccountId = Filter.AccountId,
+            Currency = Filter.Currency,
             MinAmount = Filter.MinAmount,
             MaxAmount = Filter.MaxAmount,
             Keyword = Filter.Keyword,
@@ -89,6 +91,11 @@ public sealed class IndexModel : PageModel
         {
             ModelState.AddModelError("Filter.MaxAmount", "最大金額不可小於最小金額。");
         }
+
+        if (!string.IsNullOrWhiteSpace(Filter.Currency) && !SupportedCurrency.TryNormalize(Filter.Currency, out _))
+        {
+            ModelState.AddModelError("Filter.Currency", "請選擇有效幣別。");
+        }
     }
 
     private void NormalizeFilter()
@@ -106,6 +113,15 @@ public sealed class IndexModel : PageModel
         if (Filter.AccountId <= 0)
         {
             Filter.AccountId = null;
+        }
+
+        if (SupportedCurrency.TryNormalize(Filter.Currency, out string? currency))
+        {
+            Filter.Currency = currency;
+        }
+        else if (string.IsNullOrWhiteSpace(Filter.Currency))
+        {
+            Filter.Currency = null;
         }
 
         if (Filter.Page < 1)

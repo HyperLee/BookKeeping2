@@ -32,6 +32,12 @@ public sealed class TransactionFilterInputModel
     public long? AccountId { get; set; }
 
     /// <summary>
+    /// Gets or sets the optional supported currency code.
+    /// </summary>
+    [Display(Name = "幣別")]
+    public string? Currency { get; set; }
+
+    /// <summary>
     /// Gets or sets the optional minimum amount.
     /// </summary>
     [Range(typeof(decimal), "0", "999999999.99", ErrorMessage = "最小金額不可小於 0。")]

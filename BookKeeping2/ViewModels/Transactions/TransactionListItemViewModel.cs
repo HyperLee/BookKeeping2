@@ -34,6 +34,21 @@ public sealed class TransactionListItemViewModel
     public decimal Amount { get; set; }
 
     /// <summary>
+    /// Gets or sets the transaction currency code.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
+    /// Gets the display-only currency name.
+    /// </summary>
+    public string CurrencyDisplayName => SupportedCurrency.GetDisplayName(Currency);
+
+    /// <summary>
+    /// Gets the display-only amount text with adjacent currency code.
+    /// </summary>
+    public string AmountText => $"{Currency} {Amount:N2}";
+
+    /// <summary>
     /// Gets or sets the category name.
     /// </summary>
     public string CategoryName { get; set; } = string.Empty;

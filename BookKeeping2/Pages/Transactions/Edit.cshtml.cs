@@ -38,7 +38,7 @@ public sealed class EditModel : TransactionFormPageModel
         }
 
         Input = input;
-        Options = await transactionService.GetFormOptionsAsync(Input.Type);
+        Options = await transactionService.GetFormOptionsAsync(Input.Type, Input.Currency);
         return Page();
     }
 
@@ -49,7 +49,7 @@ public sealed class EditModel : TransactionFormPageModel
     /// <returns>The post result.</returns>
     public async Task<IActionResult> OnPostAsync(long id)
     {
-        Options = await transactionService.GetFormOptionsAsync(Input.Type);
+        Options = await transactionService.GetFormOptionsAsync(Input.Type, Input.Currency);
         if (!ModelState.IsValid)
         {
             return Page();

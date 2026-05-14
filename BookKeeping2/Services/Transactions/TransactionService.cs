@@ -97,6 +97,7 @@ public sealed class TransactionService : ITransactionService
         {
             TransactionDate = transaction.TransactionDate,
             Type = transaction.Type,
+            Currency = transaction.Currency,
             Amount = transaction.Amount,
             CategoryId = transaction.CategoryId,
             AccountId = transaction.AccountId,
@@ -105,9 +106,12 @@ public sealed class TransactionService : ITransactionService
     }
 
     /// <inheritdoc />
-    public async Task<TransactionFormOptionsViewModel> GetFormOptionsAsync(TransactionType? type = null, CancellationToken cancellationToken = default)
+    public async Task<TransactionFormOptionsViewModel> GetFormOptionsAsync(
+        TransactionType? type = null,
+        string? currency = null,
+        CancellationToken cancellationToken = default)
     {
-        return await formOptionsService.GetOptionsAsync(type, cancellationToken);
+        return await formOptionsService.GetOptionsAsync(type, currency, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -125,6 +129,7 @@ public sealed class TransactionService : ITransactionService
             !transaction.IsDeleted
             && transaction.TransactionDate == input.TransactionDate
             && transaction.Type == input.Type
+            && transaction.Currency == validation.Currency
             && transaction.AmountMinorUnits == validation.AmountMinorUnits
             && transaction.CategoryId == input.CategoryId
             && transaction.AccountId == input.AccountId
@@ -144,13 +149,14 @@ public sealed class TransactionService : ITransactionService
         {
             TransactionDate = input.TransactionDate,
             Type = input.Type,
+            Currency = validation.Currency,
             AmountMinorUnits = validation.AmountMinorUnits,
             CategoryId = input.CategoryId,
             AccountId = input.AccountId,
             Note = note,
             CreatedAtUtc = nowUtc,
             UpdatedAtUtc = nowUtc,
-            LastChangeSummary = CreateChangeSummary("新增", input.Amount, note)
+            LastChangeSummary = CreateChangeSummary("新增", validation.Currency, input.Amount, note)
         };
 
         dbContext.Transactions.Add(transaction);
@@ -192,12 +198,13 @@ public sealed class TransactionService : ITransactionService
         string? note = sanitizer.SanitizePlainText(input.Note);
         transaction.TransactionDate = input.TransactionDate;
         transaction.Type = input.Type;
+        transaction.Currency = validation.Currency;
         transaction.AmountMinorUnits = validation.AmountMinorUnits;
         transaction.CategoryId = input.CategoryId;
         transaction.AccountId = input.AccountId;
         transaction.Note = note;
         transaction.UpdatedAtUtc = dateService.UtcNow;
-        transaction.LastChangeSummary = CreateChangeSummary("更新", input.Amount, note);
+        transaction.LastChangeSummary = CreateChangeSummary("更新", validation.Currency, input.Amount, note);
 
         await dbContext.SaveChangesAsync(cancellationToken);
         await auditService.RecordAsync(
@@ -231,7 +238,7 @@ public sealed class TransactionService : ITransactionService
         transaction.IsDeleted = true;
         transaction.DeletedAtUtc = dateService.UtcNow;
         transaction.UpdatedAtUtc = dateService.UtcNow;
-        transaction.DeletionSummary = CreateChangeSummary("刪除", transaction.Amount, transaction.Note);
+        transaction.DeletionSummary = CreateChangeSummary("刪除", transaction.Currency, transaction.Amount, transaction.Note);
 
         await dbContext.SaveChangesAsync(cancellationToken);
         await auditService.RecordAsync(
@@ -250,6 +257,7 @@ public sealed class TransactionService : ITransactionService
     {
         TransactionResult result = TransactionResult.Success();
         long amountMinorUnits = 0;
+        string normalizedCurrency = SupportedCurrency.LegacyDefaultCode;
         try
         {
             amountMinorUnits = MoneyMinorUnitConverter.ToMinorUnits(input.Amount);
@@ -261,6 +269,19 @@ public sealed class TransactionService : ITransactionService
         catch (OverflowException exception)
         {
             result.AddError(nameof(TransactionInputModel.Amount), exception.Message);
+        }
+
+        if (!SupportedCurrency.TryNormalize(input.Currency, out string? currency))
+        {
+            result.AddError(
+                nameof(TransactionInputModel.Currency),
+                string.IsNullOrWhiteSpace(input.Currency)
+                    ? FinancialValidationMessages.CurrencyRequired
+                    : FinancialValidationMessages.CurrencyUnsupported);
+        }
+        else
+        {
+            normalizedCurrency = currency!;
         }
 
         if (input.TransactionDate > dateService.Today)
@@ -275,19 +296,25 @@ public sealed class TransactionService : ITransactionService
             result.AddError(nameof(TransactionInputModel.CategoryId), FinancialValidationMessages.CategoryRequired);
         }
 
-        bool accountExists = await dbContext.Accounts.AsNoTracking()
-            .AnyAsync(account => account.Id == input.AccountId && !account.IsArchived, cancellationToken);
-        if (!accountExists)
+        var account = await dbContext.Accounts.AsNoTracking()
+            .Where(account => account.Id == input.AccountId && !account.IsArchived)
+            .Select(account => new { account.Currency })
+            .FirstOrDefaultAsync(cancellationToken);
+        if (account is null)
         {
             result.AddError(nameof(TransactionInputModel.AccountId), FinancialValidationMessages.AccountRequired);
         }
+        else if (result.Succeeded && account.Currency != normalizedCurrency)
+        {
+            result.AddError(nameof(TransactionInputModel.AccountId), FinancialValidationMessages.AccountCurrencyMismatch);
+        }
 
-        return new ValidationState(result.Errors.Count == 0 ? TransactionResult.Success() : result, amountMinorUnits);
+        return new ValidationState(result.Errors.Count == 0 ? TransactionResult.Success() : result, amountMinorUnits, normalizedCurrency);
     }
 
-    private string CreateChangeSummary(string action, decimal amount, string? note)
+    private string CreateChangeSummary(string action, string currency, decimal amount, string? note)
     {
-        return $"{action}交易，金額 {maskingPolicy.MaskAmount(amount)}，備註 {maskingPolicy.MaskText(note)}";
+        return $"{action}交易，金額 {currency} {maskingPolicy.MaskAmount(amount)}，備註 {maskingPolicy.MaskText(note)}";
     }
 
     private static TransactionListItemViewModel ToListItem(Transaction transaction)
@@ -298,11 +325,12 @@ public sealed class TransactionService : ITransactionService
             TransactionDate = transaction.TransactionDate,
             Type = transaction.Type,
             Amount = transaction.Amount,
+            Currency = transaction.Currency,
             CategoryName = transaction.Category.Name,
             AccountName = transaction.Account.Name,
             Note = transaction.Note
         };
     }
 
-    private sealed record ValidationState(TransactionResult Result, long AmountMinorUnits);
+    private sealed record ValidationState(TransactionResult Result, long AmountMinorUnits, string Currency);
 }

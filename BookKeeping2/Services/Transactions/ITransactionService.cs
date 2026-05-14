@@ -32,12 +32,16 @@ public interface ITransactionService
     Task<TransactionInputModel?> GetForEditAsync(long id, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Gets form options for the selected type.
+    /// Gets form options for the selected type and currency.
     /// </summary>
     /// <param name="type">The selected transaction type.</param>
+    /// <param name="currency">The selected currency code.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>Form options.</returns>
-    Task<TransactionFormOptionsViewModel> GetFormOptionsAsync(TransactionType? type = null, CancellationToken cancellationToken = default);
+    Task<TransactionFormOptionsViewModel> GetFormOptionsAsync(
+        TransactionType? type = null,
+        string? currency = null,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Creates a transaction.

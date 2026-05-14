@@ -36,7 +36,8 @@ public sealed class CreateModel : TransactionFormPageModel
     {
         Input.TransactionDate = dateService.Today;
         Input.Type = TransactionType.Expense;
-        Options = await transactionService.GetFormOptionsAsync(Input.Type);
+        Input.Currency = SupportedCurrency.LegacyDefaultCode;
+        Options = await transactionService.GetFormOptionsAsync(Input.Type, Input.Currency);
     }
 
     /// <summary>
@@ -45,7 +46,7 @@ public sealed class CreateModel : TransactionFormPageModel
     /// <returns>The post result.</returns>
     public async Task<IActionResult> OnPostAsync()
     {
-        Options = await transactionService.GetFormOptionsAsync(Input.Type);
+        Options = await transactionService.GetFormOptionsAsync(Input.Type, Input.Currency);
         if (!ModelState.IsValid)
         {
             return Page();

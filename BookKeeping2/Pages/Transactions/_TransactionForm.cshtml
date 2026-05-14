@@ -1,13 +1,13 @@
 @using BookKeeping2.Models.Common
 @model BookKeeping2.Pages.Transactions.TransactionFormPageModel
 
-<div class="row g-3 mb-3">
-    <div class="col-md-4">
+<div class="row g-3 mb-3" data-transaction-form>
+    <div class="col-md-3">
         <label asp-for="Input.TransactionDate" class="form-label"></label>
         <input asp-for="Input.TransactionDate" class="form-control" type="date" />
         <span asp-validation-for="Input.TransactionDate" class="text-danger"></span>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label asp-for="Input.Type" class="form-label"></label>
         <select asp-for="Input.Type" class="form-select">
             <option value="@TransactionType.Expense">@SharedLocalizer["支出"]</option>
@@ -15,7 +15,14 @@
         </select>
         <span asp-validation-for="Input.Type" class="text-danger"></span>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+        <label asp-for="Input.Currency" class="form-label"></label>
+        <select asp-for="Input.Currency" asp-items="Model.Options.Currencies" class="form-select" data-currency-select>
+            <option value="">@SharedLocalizer["請選擇幣別"]</option>
+        </select>
+        <span asp-validation-for="Input.Currency" class="text-danger"></span>
+    </div>
+    <div class="col-md-3">
         <label asp-for="Input.Amount" class="form-label"></label>
         <input asp-for="Input.Amount" class="form-control" inputmode="decimal" />
         <span asp-validation-for="Input.Amount" class="text-danger"></span>
@@ -29,8 +36,14 @@
     </div>
     <div class="col-md-6">
         <label asp-for="Input.AccountId" class="form-label"></label>
-        <select asp-for="Input.AccountId" asp-items="Model.Options.Accounts" class="form-select">
+        <select asp-for="Input.AccountId" class="form-select" data-account-select>
             <option value="">@SharedLocalizer["請選擇帳戶"]</option>
+            @foreach (var account in Model.Options.Accounts)
+            {
+                <option value="@account.Id" data-currency="@account.Currency" selected="@(account.Id == Model.Input.AccountId ? "selected" : null)">
+                    @account.DisplayText
+                </option>
+            }
         </select>
         <span asp-validation-for="Input.AccountId" class="text-danger"></span>
     </div>

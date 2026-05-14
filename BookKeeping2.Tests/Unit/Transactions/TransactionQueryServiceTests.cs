@@ -20,11 +20,12 @@ public sealed class TransactionQueryServiceTests
         await context.Database.EnsureCreatedAsync();
         (Account cash, Account bank, Category food, Category transport) = await SeedAsync(context);
         context.Transactions.AddRange(
-            Create(cash.Id, food.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當"),
-            Create(cash.Id, food.Id, new DateOnly(2026, 2, 11), 500m, "晚餐"),
-            Create(bank.Id, food.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當"),
-            Create(cash.Id, transport.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當"),
-            Create(cash.Id, food.Id, new DateOnly(2026, 1, 31), 150m, "午餐便當"));
+            Create(cash.Id, food.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當", TestDataBuilder.TwdCurrency),
+            Create(cash.Id, food.Id, new DateOnly(2026, 2, 11), 500m, "晚餐", TestDataBuilder.TwdCurrency),
+            Create(bank.Id, food.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當", TestDataBuilder.TwdCurrency),
+            Create(cash.Id, transport.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當", TestDataBuilder.TwdCurrency),
+            Create(cash.Id, food.Id, new DateOnly(2026, 1, 31), 150m, "午餐便當", TestDataBuilder.TwdCurrency),
+            Create(cash.Id, food.Id, new DateOnly(2026, 2, 10), 150m, "午餐便當", TestDataBuilder.UsdCurrency));
         await context.SaveChangesAsync();
         var service = new TransactionQueryService(context);
 
@@ -34,6 +35,7 @@ public sealed class TransactionQueryServiceTests
             EndDate = new DateOnly(2026, 2, 28),
             CategoryId = food.Id,
             AccountId = cash.Id,
+            Currency = TestDataBuilder.TwdCurrency,
             MinAmount = 100m,
             MaxAmount = 200m,
             Keyword = "便當",
@@ -43,10 +45,11 @@ public sealed class TransactionQueryServiceTests
 
         var item = Assert.Single(result.Items);
         Assert.Equal("午餐便當", item.Note);
+        Assert.Equal(TestDataBuilder.TwdCurrency, item.Currency);
         Assert.Equal(1, result.TotalCount);
     }
 
-    private static Transaction Create(long accountId, long categoryId, DateOnly date, decimal amount, string note)
+    private static Transaction Create(long accountId, long categoryId, DateOnly date, decimal amount, string note, string currency)
     {
         return new Transaction
         {
@@ -54,6 +57,7 @@ public sealed class TransactionQueryServiceTests
             CategoryId = categoryId,
             Type = TransactionType.Expense,
             TransactionDate = date,
+            Currency = currency,
             Amount = amount,
             Note = note,
             CreatedAtUtc = DateTimeOffset.UtcNow,

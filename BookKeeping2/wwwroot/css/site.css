@@ -95,6 +95,15 @@ main {
   vertical-align: middle;
 }
 
+.currency-amount {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.transaction-actions {
+  white-space: nowrap;
+}
+
 .progress {
   min-width: 8rem;
 }

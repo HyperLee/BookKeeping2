@@ -24,7 +24,15 @@ public sealed class TransactionInputModel
     public TransactionType Type { get; set; } = TransactionType.Expense;
 
     /// <summary>
-    /// Gets or sets the TWD amount.
+    /// Gets or sets the supported currency code.
+    /// </summary>
+    [Required(ErrorMessage = FinancialValidationMessages.CurrencyRequired)]
+    [StringLength(3, ErrorMessage = FinancialValidationMessages.CurrencyUnsupported)]
+    [Display(Name = "幣別")]
+    public string? Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
+    /// Gets or sets the transaction amount.
     /// </summary>
     [Required(ErrorMessage = FinancialValidationMessages.AmountRequired)]
     [Range(typeof(decimal), "0.01", "999999999.99", ErrorMessage = FinancialValidationMessages.AmountTooLarge)]

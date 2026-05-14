@@ -35,9 +35,22 @@
     </div>
     <div class="col-12 col-md-3">
         <label class="form-label" asp-for="Filter.AccountId"></label>
-        <select class="form-select" asp-for="Filter.AccountId" asp-items="Model.Options.Accounts">
+        <select class="form-select" asp-for="Filter.AccountId">
             <option value="">@SharedLocalizer["全部帳戶"]</option>
+            @foreach (var account in Model.Options.Accounts)
+            {
+                <option value="@account.Id" selected="@(account.Id == Model.Filter?.AccountId ? "selected" : null)">
+                    @account.DisplayText
+                </option>
+            }
         </select>
+    </div>
+    <div class="col-12 col-md-3">
+        <label class="form-label" asp-for="Filter.Currency"></label>
+        <select class="form-select" asp-for="Filter.Currency" asp-items="Model.Options.Currencies">
+            <option value="">@SharedLocalizer["全部幣別"]</option>
+        </select>
+        <span class="text-danger small" asp-validation-for="Filter.Currency"></span>
     </div>
     <div class="col-12 col-md-3">
         <label class="form-label" asp-for="Filter.MinAmount"></label>
@@ -87,11 +100,11 @@ else
                     <tr>
                         <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
                         <td>@transaction.TypeText</td>
-                        <td class="text-end">@transaction.Amount.ToString("N0")</td>
+                        <td class="text-end"><span class="currency-amount">@transaction.AmountText</span></td>
                         <td>@transaction.CategoryName</td>
                         <td>@transaction.AccountName</td>
                         <td>@transaction.Note</td>
-                        <td class="text-end">
+                        <td class="text-end transaction-actions">
                             <a class="btn btn-sm btn-outline-secondary" asp-page="/Transactions/Edit" asp-route-id="@transaction.Id">@SharedLocalizer["編輯"]</a>
                             <a class="btn btn-sm btn-outline-danger" asp-page="/Transactions/Delete" asp-route-id="@transaction.Id">@SharedLocalizer["刪除"]</a>
                         </td>

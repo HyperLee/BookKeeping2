@@ -54,6 +54,11 @@ public sealed class TransactionQueryService : ITransactionQueryService
             transactions = transactions.Where(transaction => transaction.AccountId == query.AccountId.Value);
         }
 
+        if (SupportedCurrency.TryNormalize(query.Currency, out string? currency))
+        {
+            transactions = transactions.Where(transaction => transaction.Currency == currency);
+        }
+
         if (query.MinAmount.HasValue)
         {
             long minMinorUnits = MoneyMinorUnitConverter.ToMinorUnits(query.MinAmount.Value, requirePositive: false);
@@ -100,6 +105,7 @@ public sealed class TransactionQueryService : ITransactionQueryService
             TransactionDate = transaction.TransactionDate,
             Type = transaction.Type,
             Amount = transaction.Amount,
+            Currency = transaction.Currency,
             CategoryName = transaction.Category.Name,
             AccountName = transaction.Account.Name,
             Note = transaction.Note

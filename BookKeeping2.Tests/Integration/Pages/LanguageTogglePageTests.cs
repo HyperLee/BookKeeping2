@@ -198,7 +198,7 @@ public sealed partial class LanguageTogglePageTests
         Assert.Contains("Date", html, StringComparison.Ordinal);
         Assert.Contains("Amount", html, StringComparison.Ordinal);
         Assert.Contains("Category", html, StringComparison.Ordinal);
-        Assert.Contains("金額不可超過 TWD 999,999,999.99。", html, StringComparison.Ordinal);
+        Assert.Contains("金額不可超過 999,999,999.99。", html, StringComparison.Ordinal);
         Assert.Contains("請選擇有效分類。", html, StringComparison.Ordinal);
     }
 

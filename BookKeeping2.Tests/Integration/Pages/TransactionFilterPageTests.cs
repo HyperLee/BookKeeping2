@@ -29,6 +29,22 @@ public sealed class TransactionFilterPageTests
         Assert.DoesNotContain("捷運", page);
     }
 
+    [Fact]
+    public async Task Transactions_page_filters_by_currency_and_keeps_existing_filters()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+        (long categoryId, long accountId) = await SeedAsync(factory);
+
+        string page = WebUtility.HtmlDecode(await client.GetStringAsync(
+            $"/Transactions?Filter.Currency=TWD&Filter.CategoryId={categoryId}&Filter.Keyword=便當"));
+
+        Assert.Contains("篩選結果 1 筆", page);
+        Assert.Contains("TWD", page);
+        Assert.Contains("午餐便當", page);
+        Assert.DoesNotContain("USD 午餐便當", page);
+    }
+
     private static async Task<(long CategoryId, long AccountId)> SeedAsync(BookKeepingWebApplicationFactory factory)
     {
         using IServiceScope scope = factory.Services.CreateScope();
@@ -36,17 +52,19 @@ public sealed class TransactionFilterPageTests
         Category food = await context.Categories.FirstAsync(category => category.Type == TransactionType.Expense && category.Name == "餐飲");
         Category transport = await context.Categories.FirstAsync(category => category.Type == TransactionType.Expense && category.Name == "交通");
         var account = new Account { Name = "現金", NormalizedName = "現金", Type = AccountType.Cash, IconKey = "wallet", Currency = "TWD", CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
-        context.Accounts.Add(account);
+        var usdAccount = new Account { Name = "美元現金", NormalizedName = "美元現金", Type = AccountType.Cash, IconKey = "wallet", Currency = "USD", CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.AddRange(account, usdAccount);
         await context.SaveChangesAsync();
         context.Transactions.AddRange(
-            Create(account.Id, food.Id, 150m, "午餐便當"),
-            Create(account.Id, food.Id, 500m, "晚餐聚會"),
-            Create(account.Id, transport.Id, 120m, "捷運"));
+            Create(account.Id, food.Id, 150m, "午餐便當", TestDataBuilder.TwdCurrency),
+            Create(account.Id, food.Id, 500m, "晚餐聚會", TestDataBuilder.TwdCurrency),
+            Create(account.Id, transport.Id, 120m, "捷運", TestDataBuilder.TwdCurrency),
+            Create(usdAccount.Id, food.Id, 150m, "USD 午餐便當", TestDataBuilder.UsdCurrency));
         await context.SaveChangesAsync();
         return (food.Id, account.Id);
     }
 
-    private static Transaction Create(long accountId, long categoryId, decimal amount, string note)
+    private static Transaction Create(long accountId, long categoryId, decimal amount, string note, string currency)
     {
         return new Transaction
         {
@@ -54,6 +72,7 @@ public sealed class TransactionFilterPageTests
             CategoryId = categoryId,
             Type = TransactionType.Expense,
             TransactionDate = new DateOnly(2026, 2, 10),
+            Currency = currency,
             Amount = amount,
             Note = note,
             CreatedAtUtc = DateTimeOffset.UtcNow,

@@ -59,22 +59,22 @@
 
 ### Tests for User Story 1
 
-- [ ] T016 [P] [US1] 擴充交易服務驗證測試，先覆蓋必填/不支援幣別、帳戶幣別不一致、同日期分類金額不同幣別可共存、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、duplicate detection 包含幣別、audit summary 包含幣別與名稱/備註/分類/帳戶文字不被翻譯或改寫於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
-- [ ] T017 [P] [US1] 擴充交易查詢測試，先覆蓋幣別 filter 與既有日期/分類/帳戶/金額/關鍵字/pagination 並存於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
-- [ ] T018 [P] [US1] 擴充交易頁面整合測試，先覆蓋 create/edit/list/delete confirmation 與既有交易詳細資料載入流程顯示幣別、invalid POST 拒絕、anti-forgery 保留，以及未依瀏覽器語言、所在地、日期或其他環境訊號推定幣別於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
-- [ ] T019 [P] [US1] 新增多幣別交易表單瀏覽器測試，先覆蓋桌面與行動 viewport 的幣別控制、帳戶選項、焦點與無重疊於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
+- [X] T016 [P] [US1] 擴充交易服務驗證測試，先覆蓋必填/不支援幣別、帳戶幣別不一致、同日期分類金額不同幣別可共存、金額大於 `0`/上限 `999,999,999.99`/最多 2 位小數且包含 `JPY`、duplicate detection 包含幣別、audit summary 包含幣別與名稱/備註/分類/帳戶文字不被翻譯或改寫於 `BookKeeping2.Tests/Unit/Transactions/TransactionServiceValidationTests.cs`
+- [X] T017 [P] [US1] 擴充交易查詢測試，先覆蓋幣別 filter 與既有日期/分類/帳戶/金額/關鍵字/pagination 並存於 `BookKeeping2.Tests/Unit/Transactions/TransactionQueryServiceTests.cs`
+- [X] T018 [P] [US1] 擴充交易頁面整合測試，先覆蓋 create/edit/list/delete confirmation 與既有交易詳細資料載入流程顯示幣別、invalid POST 拒絕、anti-forgery 保留，以及未依瀏覽器語言、所在地、日期或其他環境訊號推定幣別於 `BookKeeping2.Tests/Integration/Pages/TransactionPagesTests.cs`
+- [X] T019 [P] [US1] 新增多幣別交易表單瀏覽器測試，先覆蓋桌面與行動 viewport 的幣別控制、帳戶選項、焦點與無重疊於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
 ### Implementation for User Story 1
 
-- [ ] T020 [US1] 擴充交易 input/filter/options/list view models，加入 `Currency`、幣別選項、列表顯示文字與 filter 狀態於 `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionListItemViewModel.cs`, `BookKeeping2/ViewModels/Transactions/PagedTransactionListViewModel.cs`
-- [ ] T021 [US1] 更新交易 form options，提供支援幣別清單並依幣別呈現/篩選 account options 於 `BookKeeping2/Services/Transactions/TransactionFormOptionsService.cs`
-- [ ] T022 [US1] 更新交易 create/edit validation、currency normalization、同幣別帳戶驗證、duplicate detection 與 audit summary 於 `BookKeeping2/Services/Transactions/TransactionService.cs`
-- [ ] T023 [US1] 更新交易查詢 service，加入 optional currency filter、投影 currency、保留 soft-delete 排除與 pagination 於 `BookKeeping2/Services/Transactions/TransactionQueryService.cs`
-- [ ] T024 [US1] 更新交易 query object，加入 currency filter 並保持既有 filter 相容於 `BookKeeping2/Services/Transactions/TransactionQuery.cs`
-- [ ] T025 [US1] 更新交易共用表單與 create/edit/delete/list Razor markup，加入 required currency control、幣別驗證訊息與每筆金額相鄰幣別於 `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`, `BookKeeping2/Pages/Transactions/Create.cshtml`, `BookKeeping2/Pages/Transactions/Edit.cshtml`, `BookKeeping2/Pages/Transactions/Delete.cshtml`, `BookKeeping2/Pages/Transactions/Index.cshtml`
-- [ ] T026 [US1] 更新交易 PageModel binding、invalid post reload options、filter persistence 與 edit currency/account mismatch handling 於 `BookKeeping2/Pages/Transactions/TransactionFormPageModel.cs`, `BookKeeping2/Pages/Transactions/Create.cshtml.cs`, `BookKeeping2/Pages/Transactions/Edit.cshtml.cs`, `BookKeeping2/Pages/Transactions/Index.cshtml.cs`, `BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
-- [ ] T027 [US1] 更新交易頁面 client-side enhancement，讓幣別切換時帳戶選項提示一致且不取代 server-side validation 於 `BookKeeping2/wwwroot/js/transactions.js`
-- [ ] T028 [US1] 更新交易表格與表單 responsive/focus CSS，確保金額與幣別相鄰且手機無水平溢位於 `BookKeeping2/wwwroot/css/site.css`
+- [X] T020 [US1] 擴充交易 input/filter/options/list view models，加入 `Currency`、幣別選項、列表顯示文字與 filter 狀態於 `BookKeeping2/ViewModels/Transactions/TransactionInputModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFilterInputModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`, `BookKeeping2/ViewModels/Transactions/TransactionListItemViewModel.cs`, `BookKeeping2/ViewModels/Transactions/PagedTransactionListViewModel.cs`
+- [X] T021 [US1] 更新交易 form options，提供支援幣別清單並依幣別呈現/篩選 account options 於 `BookKeeping2/Services/Transactions/TransactionFormOptionsService.cs`
+- [X] T022 [US1] 更新交易 create/edit validation、currency normalization、同幣別帳戶驗證、duplicate detection 與 audit summary 於 `BookKeeping2/Services/Transactions/TransactionService.cs`
+- [X] T023 [US1] 更新交易查詢 service，加入 optional currency filter、投影 currency、保留 soft-delete 排除與 pagination 於 `BookKeeping2/Services/Transactions/TransactionQueryService.cs`
+- [X] T024 [US1] 更新交易 query object，加入 currency filter 並保持既有 filter 相容於 `BookKeeping2/Services/Transactions/TransactionQuery.cs`
+- [X] T025 [US1] 更新交易共用表單與 create/edit/delete/list Razor markup，加入 required currency control、幣別驗證訊息與每筆金額相鄰幣別於 `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`, `BookKeeping2/Pages/Transactions/Create.cshtml`, `BookKeeping2/Pages/Transactions/Edit.cshtml`, `BookKeeping2/Pages/Transactions/Delete.cshtml`, `BookKeeping2/Pages/Transactions/Index.cshtml`
+- [X] T026 [US1] 更新交易 PageModel binding、invalid post reload options、filter persistence 與 edit currency/account mismatch handling 於 `BookKeeping2/Pages/Transactions/TransactionFormPageModel.cs`, `BookKeeping2/Pages/Transactions/Create.cshtml.cs`, `BookKeeping2/Pages/Transactions/Edit.cshtml.cs`, `BookKeeping2/Pages/Transactions/Index.cshtml.cs`, `BookKeeping2/Pages/Transactions/Delete.cshtml.cs`
+- [X] T027 [US1] 更新交易頁面 client-side enhancement，讓幣別切換時帳戶選項提示一致且不取代 server-side validation 於 `BookKeeping2/wwwroot/js/transactions.js`
+- [X] T028 [US1] 更新交易表格與表單 responsive/focus CSS，確保金額與幣別相鄰且手機無水平溢位於 `BookKeeping2/wwwroot/css/site.css`
 
 **Checkpoint**: User Story 1 should be fully functional and testable independently.
 

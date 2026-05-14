@@ -16,7 +16,7 @@
     <dt class="col-sm-3">@SharedLocalizer["類型"]</dt>
     <dd class="col-sm-9">@Model.Transaction.TypeText</dd>
     <dt class="col-sm-3">@SharedLocalizer["金額"]</dt>
-    <dd class="col-sm-9">@Model.Transaction.Amount.ToString("N0")</dd>
+    <dd class="col-sm-9"><span class="currency-amount">@Model.Transaction.AmountText</span></dd>
     <dt class="col-sm-3">@SharedLocalizer["分類"]</dt>
     <dd class="col-sm-9">@Model.Transaction.CategoryName</dd>
     <dt class="col-sm-3">@SharedLocalizer["帳戶"]</dt>

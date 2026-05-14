@@ -26,6 +26,11 @@ public sealed class TransactionQuery
     public long? AccountId { get; set; }
 
     /// <summary>
+    /// Gets or sets the optional supported currency code.
+    /// </summary>
+    public string? Currency { get; set; }
+
+    /// <summary>
     /// Gets or sets the optional minimum amount.
     /// </summary>
     public decimal? MinAmount { get; set; }

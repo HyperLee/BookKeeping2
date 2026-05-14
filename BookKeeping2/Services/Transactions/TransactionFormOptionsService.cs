@@ -24,13 +24,18 @@ public sealed class TransactionFormOptionsService
     }
 
     /// <summary>
-    /// Gets category and account options.
+    /// Gets category, account and currency options.
     /// </summary>
     /// <param name="type">The selected transaction type.</param>
+    /// <param name="currency">The selected currency code.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>Form options.</returns>
-    public async Task<TransactionFormOptionsViewModel> GetOptionsAsync(TransactionType? type = null, CancellationToken cancellationToken = default)
+    public async Task<TransactionFormOptionsViewModel> GetOptionsAsync(
+        TransactionType? type = null,
+        string? currency = null,
+        CancellationToken cancellationToken = default)
     {
+        _ = currency;
         var categories = dbContext.Categories.AsNoTracking().Where(category => !category.IsArchived);
         if (type is not null)
         {
@@ -51,6 +56,9 @@ public sealed class TransactionFormOptionsService
 
         return new TransactionFormOptionsViewModel
         {
+            Currencies = SupportedCurrency.Options
+                .Select(option => new SelectListItem($"{option.Code} - {option.DisplayName}", option.Code))
+                .ToList(),
             Categories = categoryRows
                 .Select(category => new SelectListItem(SystemDisplayLocalizer.GetCategoryName(category.Name, category.IsDefault), category.Id.ToString()))
                 .ToList(),
@@ -59,7 +67,12 @@ public sealed class TransactionFormOptionsService
                 .Where(account => !account.IsArchived)
                 .OrderBy(account => account.DisplayOrder)
                 .ThenBy(account => account.Name)
-                .Select(account => new SelectListItem(account.Name, account.Id.ToString()))
+                .Select(account => new TransactionAccountOptionViewModel
+                {
+                    Id = account.Id,
+                    Name = account.Name,
+                    Currency = account.Currency
+                })
                 .ToListAsync(cancellationToken)
         };
     }
