@@ -99,12 +99,13 @@ public sealed class CsvImportService : ICsvImportService
                 TransactionDate = validated.TransactionDate,
                 Type = validated.Type,
                 AmountMinorUnits = validated.AmountMinorUnits,
+                Currency = validated.Currency,
                 Category = category,
                 AccountId = validated.Account.Id,
                 Note = sanitizer.SanitizePlainText(row.Note),
                 CreatedAtUtc = dateService.UtcNow,
                 UpdatedAtUtc = dateService.UtcNow,
-                LastChangeSummary = "CSV 匯入"
+                LastChangeSummary = $"CSV 匯入 {validated.Currency}"
             });
         }
 
@@ -156,6 +157,14 @@ public sealed class CsvImportService : ICsvImportService
             return null;
         }
 
+        if (!SupportedCurrency.TryNormalize(row.Currency, out string? normalizedCurrency))
+        {
+            result.AddError(row.RowNumber, "幣別", "幣別不支援，請使用 TWD、USD、JPY、EUR 或 GBP", Preview(row.Currency));
+            return null;
+        }
+
+        string currencyCode = normalizedCurrency!;
+
         if (!decimal.TryParse(row.Amount.Trim(), NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out decimal amount))
         {
             result.AddError(row.RowNumber, "金額", "金額格式無效", Preview(row.Amount));
@@ -188,10 +197,17 @@ public sealed class CsvImportService : ICsvImportService
             return null;
         }
 
+        if (!string.Equals(account.Currency, currencyCode, StringComparison.Ordinal))
+        {
+            result.AddError(row.RowNumber, "帳戶", "帳戶幣別與交易幣別不一致", Preview(row.Account));
+            return null;
+        }
+
         return new ValidatedImportRow(
             transactionDate,
             type,
             amountMinorUnits,
+            currencyCode,
             categoryName,
             DefaultSeedData.NormalizeName(categoryName),
             account);
@@ -252,6 +268,7 @@ public sealed class CsvImportService : ICsvImportService
         DateOnly TransactionDate,
         TransactionType Type,
         long AmountMinorUnits,
+        string Currency,
         string CategoryName,
         string NormalizedCategoryName,
         Account Account);

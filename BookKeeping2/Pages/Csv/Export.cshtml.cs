@@ -39,6 +39,11 @@ public sealed class ExportModel : PageModel
     public DateOnly? EndDate { get; set; }
 
     /// <summary>
+    /// Gets the CSV header contract used by downloads.
+    /// </summary>
+    public string CurrencyCsvHeader => CsvExportService.HeaderText;
+
+    /// <summary>
     /// Displays the export form.
     /// </summary>
     public void OnGet()

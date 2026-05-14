@@ -114,6 +114,13 @@ main {
   text-align: end;
 }
 
+.csv-contract-code {
+  display: inline-block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .transaction-actions {
   white-space: nowrap;
 }

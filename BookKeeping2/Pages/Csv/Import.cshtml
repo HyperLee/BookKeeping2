@@ -9,6 +9,16 @@
     <h1 class="h3 mb-0">@SharedLocalizer["CSV 匯入"]</h1>
 </div>
 
+<section class="mb-4" aria-labelledby="csv-import-format-heading">
+    <h2 id="csv-import-format-heading" class="h5">@SharedLocalizer["匯入格式"]</h2>
+    <p class="mb-2">
+        @SharedLocalizer["新版七欄格式："]<code class="csv-contract-code">@Model.CurrencyCsvHeader</code>
+    </p>
+    <p class="text-muted mb-0">
+        @SharedLocalizer["既有六欄格式仍可匯入並預設為 TWD："]<code class="csv-contract-code">@Model.LegacyCsvHeader</code>。@SharedLocalizer["七欄格式的幣別不可空白，且必須符合帳戶幣別。"]
+    </p>
+</section>
+
 <form method="post" enctype="multipart/form-data" class="row g-3 align-items-end mb-4">
     <div class="col-12 col-md-8">
         <label class="form-label" asp-for="Upload">@SharedLocalizer["CSV 檔案"]</label>

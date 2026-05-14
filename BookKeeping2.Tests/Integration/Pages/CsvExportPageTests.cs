@@ -34,8 +34,8 @@ public sealed class CsvExportPageTests
         Assert.Equal("utf-8", response.Content.Headers.ContentType?.CharSet);
         Assert.Contains("no-store", response.Headers.CacheControl?.ToString());
         Assert.Contains("transactions-", response.Content.Headers.ContentDisposition?.FileNameStar ?? response.Content.Headers.ContentDisposition?.FileName);
-        Assert.Contains("日期,類型,金額,分類,帳戶,備註", csv);
-        Assert.Contains("2026-02-10,支出,150,餐飲,現金,午餐", csv);
+        Assert.Contains("日期,類型,幣別,金額,分類,帳戶,備註", csv);
+        Assert.Contains("2026-02-10,支出,TWD,150,餐飲,現金,午餐", csv);
 
         using IServiceScope scope = factory.Services.CreateScope();
         AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -57,8 +57,8 @@ public sealed class CsvExportPageTests
         string csv = Encoding.UTF8.GetString(await response.Content.ReadAsByteArrayAsync());
 
         Assert.True(response.IsSuccessStatusCode, csv);
-        Assert.Contains("日期,類型,金額,分類,帳戶,備註", csv, StringComparison.Ordinal);
-        Assert.Contains("2026-02-10,支出,150,餐飲,現金,午餐", csv, StringComparison.Ordinal);
+        Assert.Contains("日期,類型,幣別,金額,分類,帳戶,備註", csv, StringComparison.Ordinal);
+        Assert.Contains("2026-02-10,支出,TWD,150,餐飲,現金,午餐", csv, StringComparison.Ordinal);
         Assert.DoesNotContain("Date,Type,Amount,Category,Account,Note", csv, StringComparison.Ordinal);
         Assert.DoesNotContain("Expense", csv, StringComparison.Ordinal);
     }

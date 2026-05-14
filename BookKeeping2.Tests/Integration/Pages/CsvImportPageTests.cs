@@ -24,9 +24,9 @@ public sealed partial class CsvImportPageTests
         string token = ExtractRequestVerificationToken(page);
         using var form = new MultipartFormDataContent();
         form.Add(new StringContent(token), "__RequestVerificationToken");
-        string csv = "日期,類型,金額,分類,帳戶,備註\r\n"
-            + "2026-02-01,支出,150,餐飲,現金,午餐\r\n"
-            + "2026-02-02,支出,100,餐飲,不存在,錯誤";
+        string csv = "日期,類型,幣別,金額,分類,帳戶,備註\r\n"
+            + "2026-02-01,支出,TWD,150,餐飲,現金,午餐\r\n"
+            + "2026-02-02,支出,USD,100,餐飲,現金,錯誤";
         form.Add(new ByteArrayContent(Encoding.UTF8.GetBytes(csv)), "Upload", "transactions.csv");
 
         HttpResponseMessage response = await client.PostAsync("/Csv/Import", form);
@@ -37,6 +37,7 @@ public sealed partial class CsvImportPageTests
         Assert.Contains("成功 1 筆", body);
         Assert.Contains("失敗 1 筆", body);
         Assert.Contains("第 3 行匯入失敗", body);
+        Assert.Contains("帳戶幣別與交易幣別不一致", body);
 
         using IServiceScope scope = factory.Services.CreateScope();
         AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();

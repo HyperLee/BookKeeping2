@@ -26,6 +26,11 @@ public sealed class CsvImportResult
     public int FailedRows { get; set; }
 
     /// <summary>
+    /// Gets or sets whether at least one parsed row used the legacy six-column TWD format.
+    /// </summary>
+    public bool ContainsLegacyRows { get; set; }
+
+    /// <summary>
     /// Gets parsed rows that still need domain validation.
     /// </summary>
     public IList<CsvImportRow> Rows { get; } = [];

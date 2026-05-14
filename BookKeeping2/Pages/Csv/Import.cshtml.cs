@@ -32,6 +32,16 @@ public sealed class ImportModel : PageModel
     public CsvImportResult? Result { get; private set; }
 
     /// <summary>
+    /// Gets the current seven-column CSV header contract.
+    /// </summary>
+    public string CurrencyCsvHeader => CsvImportParser.SevenColumnHeaderText;
+
+    /// <summary>
+    /// Gets the legacy six-column CSV header accepted as TWD.
+    /// </summary>
+    public string LegacyCsvHeader => CsvImportParser.LegacyHeaderText;
+
+    /// <summary>
     /// Displays the upload form.
     /// </summary>
     public void OnGet()

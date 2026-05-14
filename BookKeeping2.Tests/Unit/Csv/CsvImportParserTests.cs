@@ -30,4 +30,20 @@ public sealed class CsvImportParserTests
         Assert.Contains(tooLarge.Errors, error => error.Reason.Contains("檔案大小", StringComparison.Ordinal));
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(10));
     }
+
+    [Fact]
+    public void Parse_accepts_seven_column_currency_header_normalizes_currency_and_rejects_blank_currency()
+    {
+        var parser = new CsvImportParser();
+        string csv = "日期,類型,幣別,金額,分類,帳戶,備註\r\n"
+            + "2026-02-01,支出, usd ,100,餐飲,美元現金,午餐\r\n"
+            + "2026-02-02,支出, ,100,餐飲,美元現金,空白幣別";
+
+        CsvImportResult result = parser.Parse(new CsvImportCommand("seven-column.csv", Encoding.UTF8.GetBytes(csv)));
+
+        CsvImportRow row = Assert.Single(result.Rows);
+        Assert.Equal("USD", row.Currency);
+        Assert.False(row.IsLegacyFormat);
+        Assert.Contains(result.Errors, error => error.RowNumber == 3 && error.FieldName == "幣別" && error.Reason.Contains("幣別不可空白", StringComparison.Ordinal));
+    }
 }

@@ -8,6 +8,13 @@
     <h1 class="h3 mb-0">@SharedLocalizer["CSV 匯出"]</h1>
 </div>
 
+<section class="mb-4" aria-labelledby="csv-export-format-heading">
+    <h2 id="csv-export-format-heading" class="h5">@SharedLocalizer["匯出格式"]</h2>
+    <p class="text-muted mb-0">
+        @SharedLocalizer["下載檔案固定使用七欄格式並保留原始幣別："]<code class="csv-contract-code">@Model.CurrencyCsvHeader</code>
+    </p>
+</section>
+
 <form method="get" asp-page-handler="Download" class="row g-3 align-items-end">
     <div class="col-12 col-md-4">
         <label class="form-label" asp-for="StartDate">@SharedLocalizer["起始日期"]</label>

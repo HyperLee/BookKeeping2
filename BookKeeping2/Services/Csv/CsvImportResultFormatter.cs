@@ -21,6 +21,11 @@ public static class CsvImportResultFormatter
             summary += $"，自動新增分類：{string.Join("、", result.CreatedCategories)}";
         }
 
+        if (result.ContainsLegacyRows)
+        {
+            summary += "，含 legacy 六欄 TWD 相容資料";
+        }
+
         return summary;
     }
 
@@ -40,6 +45,11 @@ public static class CsvImportResultFormatter
         if (result.CreatedCategories.Count > 0)
         {
             summary += $", automatically created categories: {string.Join(", ", result.CreatedCategories)}";
+        }
+
+        if (result.ContainsLegacyRows)
+        {
+            summary += ", includes legacy six-column TWD rows";
         }
 
         return summary;

@@ -45,6 +45,41 @@ public sealed class CsvImportServiceTests
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(10));
     }
 
+    [Fact]
+    public async Task ImportAsync_handles_supported_currency_legacy_default_and_currency_row_errors()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        await SeedAsync(context);
+        var service = CreateService(context);
+        string sevenColumnCsv = "日期,類型,幣別,金額,分類,帳戶,備註\r\n"
+            + "2026-02-01,支出,eur,123.45,餐飲,歐元現金,歐元午餐\r\n"
+            + "2026-02-02,支出,AUD,100,餐飲,歐元現金,不支援幣別\r\n"
+            + "2026-02-03,支出, ,100,餐飲,歐元現金,空白幣別\r\n"
+            + "2026-02-04,支出,USD,100,餐飲,現金,帳戶幣別不一致";
+        string legacyCsv = "日期,類型,金額,分類,帳戶,備註\r\n"
+            + "2026-02-05,支出,77,餐飲,現金,legacy";
+
+        CsvImportResult sevenColumnResult = await service.ImportAsync(new CsvImportCommand("currency.csv", Encoding.UTF8.GetBytes(sevenColumnCsv)));
+        CsvImportResult legacyResult = await service.ImportAsync(new CsvImportCommand("legacy.csv", Encoding.UTF8.GetBytes(legacyCsv)));
+
+        Assert.Equal(1, sevenColumnResult.SucceededRows);
+        Assert.Equal(3, sevenColumnResult.FailedRows);
+        Assert.Contains(sevenColumnResult.Errors, error => error.FieldName == "幣別" && error.Reason.Contains("幣別不支援", StringComparison.Ordinal));
+        Assert.Contains(sevenColumnResult.Errors, error => error.FieldName == "幣別" && error.Reason.Contains("幣別不可空白", StringComparison.Ordinal));
+        Assert.Contains(sevenColumnResult.Errors, error => error.FieldName == "帳戶" && error.Reason.Contains("帳戶幣別與交易幣別不一致", StringComparison.Ordinal));
+        Assert.Equal(1, legacyResult.SucceededRows);
+        Assert.Equal(0, legacyResult.FailedRows);
+
+        var imported = await context.Transactions
+            .OrderBy(transaction => transaction.TransactionDate)
+            .Select(transaction => new { transaction.Currency, transaction.Amount, transaction.Note })
+            .ToListAsync();
+        Assert.Contains(imported, transaction => transaction.Currency == TestDataBuilder.EurCurrency && transaction.Amount == 123.45m && transaction.Note == "歐元午餐");
+        Assert.Contains(imported, transaction => transaction.Currency == TestDataBuilder.TwdCurrency && transaction.Amount == 77m && transaction.Note == "legacy");
+    }
+
     private static CsvImportService CreateService(AppDbContext context)
     {
         FakeTaipeiDateService dateService = TestDataBuilder.CreateDateService();
@@ -55,8 +90,9 @@ public sealed class CsvImportServiceTests
     private static async Task SeedAsync(AppDbContext context)
     {
         var account = new Account { Name = "現金", NormalizedName = "現金", Type = AccountType.Cash, IconKey = "wallet", Currency = "TWD", CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        var eurAccount = new Account { Name = "歐元現金", NormalizedName = "歐元現金", Type = AccountType.Cash, IconKey = "wallet", Currency = TestDataBuilder.EurCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
         var food = new Category { Name = "餐飲", NormalizedName = "餐飲", Type = TransactionType.Expense, IconKey = "tag", CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
-        context.AddRange(account, food);
+        context.AddRange(account, eurAccount, food);
         await context.SaveChangesAsync();
     }
 }

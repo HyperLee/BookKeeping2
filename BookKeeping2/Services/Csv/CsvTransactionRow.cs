@@ -1,7 +1,7 @@
 namespace BookKeeping2.Services.Csv;
 
 /// <summary>
-/// Represents a transaction row in the fixed six-column CSV contract.
+/// Represents a transaction row in the fixed seven-column CSV contract.
 /// </summary>
 public sealed class CsvTransactionRow
 {
@@ -14,6 +14,11 @@ public sealed class CsvTransactionRow
     /// Gets or sets the Traditional Chinese transaction type.
     /// </summary>
     public string Type { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets the supported transaction currency code.
+    /// </summary>
+    public string Currency { get; set; } = string.Empty;
 
     /// <summary>
     /// Gets or sets the invariant decimal amount text.

@@ -16,7 +16,12 @@ namespace BookKeeping2.Services.Csv;
 /// </summary>
 public sealed class CsvExportService : ICsvExportService
 {
-    private static readonly string[] Headers = ["日期", "類型", "金額", "分類", "帳戶", "備註"];
+    /// <summary>
+    /// Header text for the seven-column CSV export format.
+    /// </summary>
+    public const string HeaderText = "日期,類型,幣別,金額,分類,帳戶,備註";
+
+    private static readonly string[] Headers = HeaderText.Split(',');
     private readonly AppDbContext dbContext;
     private readonly ITaipeiDateService dateService;
 
@@ -79,6 +84,7 @@ public sealed class CsvExportService : ICsvExportService
             cancellationToken.ThrowIfCancellationRequested();
             csvWriter.WriteField(row.Date);
             csvWriter.WriteField(row.Type);
+            csvWriter.WriteField(row.Currency);
             csvWriter.WriteField(row.Amount);
             csvWriter.WriteField(row.Category);
             csvWriter.WriteField(row.Account);
@@ -96,6 +102,7 @@ public sealed class CsvExportService : ICsvExportService
         {
             Date = transaction.TransactionDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
             Type = transaction.Type == TransactionType.Income ? "收入" : "支出",
+            Currency = transaction.Currency,
             Amount = MoneyMinorUnitConverter.FromMinorUnits(transaction.AmountMinorUnits).ToString("0.##", CultureInfo.InvariantCulture),
             Category = ProtectFormulaText(transaction.Category.Name),
             Account = ProtectFormulaText(transaction.Account.Name),

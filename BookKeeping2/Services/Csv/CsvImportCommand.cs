@@ -28,6 +28,16 @@ public sealed class CsvImportRow
     public string Type { get; set; } = string.Empty;
 
     /// <summary>
+    /// Gets or sets the normalized supported currency code.
+    /// </summary>
+    public string Currency { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Gets or sets whether the row came from the legacy six-column CSV format.
+    /// </summary>
+    public bool IsLegacyFormat { get; set; }
+
+    /// <summary>
     /// Gets or sets the raw amount text.
     /// </summary>
     public string Amount { get; set; } = string.Empty;

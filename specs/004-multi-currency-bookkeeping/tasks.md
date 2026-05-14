@@ -169,21 +169,21 @@
 
 ### Tests for User Story 5
 
-- [ ] T062 [P] [US5] 擴充 CSV parser 測試，先覆蓋七欄 header、六欄 legacy header、malformed header、七欄空白幣別與正規化於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
-- [ ] T063 [P] [US5] 擴充 CSV import service 測試，先覆蓋支援幣別成功、legacy rows 預設 `TWD`、unsupported currency、帳戶幣別不一致、金額規則錯誤、匯入文字原文保留與 row-level errors 於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
-- [ ] T064 [P] [US5] 擴充 CSV export service 測試，先覆蓋七欄 header、原始 amount/currency、soft-delete 排除與 formula protection 保留於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
-- [ ] T065 [P] [US5] 擴充 CSV 匯入匯出頁整合測試，先覆蓋成功/失敗摘要、繁體中文錯誤訊息與下載內容於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`, `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
-- [ ] T066 [P] [US5] 擴充 CSV 瀏覽器測試，先覆蓋匯入/匯出頁桌面與行動布局、幣別欄位說明與可操作性於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
+- [X] T062 [P] [US5] 擴充 CSV parser 測試，先覆蓋七欄 header、六欄 legacy header、malformed header、七欄空白幣別與正規化於 `BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs`
+- [X] T063 [P] [US5] 擴充 CSV import service 測試，先覆蓋支援幣別成功、legacy rows 預設 `TWD`、unsupported currency、帳戶幣別不一致、金額規則錯誤、匯入文字原文保留與 row-level errors 於 `BookKeeping2.Tests/Unit/Csv/CsvImportServiceTests.cs`
+- [X] T064 [P] [US5] 擴充 CSV export service 測試，先覆蓋七欄 header、原始 amount/currency、soft-delete 排除與 formula protection 保留於 `BookKeeping2.Tests/Unit/Csv/CsvExportServiceTests.cs`
+- [X] T065 [P] [US5] 擴充 CSV 匯入匯出頁整合測試，先覆蓋成功/失敗摘要、繁體中文錯誤訊息與下載內容於 `BookKeeping2.Tests/Integration/Pages/CsvImportPageTests.cs`, `BookKeeping2.Tests/Integration/Pages/CsvExportPageTests.cs`
+- [X] T066 [P] [US5] 擴充 CSV 瀏覽器測試，先覆蓋匯入/匯出頁桌面與行動布局、幣別欄位說明與可操作性於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
 ### Implementation for User Story 5
 
-- [ ] T067 [US5] 更新 CSV row/command/result shapes，加入 `Currency`、legacy row indicator 與 safe row error context 於 `BookKeeping2/Services/Csv/CsvTransactionRow.cs`, `BookKeeping2/Services/Csv/CsvImportCommand.cs`, `BookKeeping2/Services/Csv/CsvImportResult.cs`
-- [ ] T068 [US5] 更新 CSV parser，接受七欄與六欄 header、七欄幣別必填、六欄預設 `TWD`、幣別 trim/case-insensitive normalization 於 `BookKeeping2/Services/Csv/CsvImportParser.cs`
-- [ ] T069 [US5] 更新 CSV import service，驗證交易幣別與帳戶幣別一致、逐列錯誤原因、成功/失敗筆數與 atomic persistence 於 `BookKeeping2/Services/Csv/CsvImportService.cs`
-- [ ] T070 [US5] 更新 CSV export service，輸出七欄 header、原始幣別與未換算金額，保留 formula injection protection 與 soft-delete 排除於 `BookKeeping2/Services/Csv/CsvExportService.cs`
-- [ ] T071 [US5] 更新 CSV import/export PageModel，讓結果摘要與下載 metadata 包含幣別 contract 且不記錄原始敏感 CSV 於 `BookKeeping2/Pages/Csv/Import.cshtml.cs`, `BookKeeping2/Pages/Csv/Export.cshtml.cs`
-- [ ] T072 [US5] 更新 CSV import/export Razor markup，顯示七欄格式、legacy 六欄相容說明與繁體中文 row-level error 於 `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Export.cshtml`
-- [ ] T073 [US5] 更新 CSV result formatter，讓不支援幣別、空白幣別與帳戶幣別不一致的錯誤訊息安全且可理解於 `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
+- [X] T067 [US5] 更新 CSV row/command/result shapes，加入 `Currency`、legacy row indicator 與 safe row error context 於 `BookKeeping2/Services/Csv/CsvTransactionRow.cs`, `BookKeeping2/Services/Csv/CsvImportCommand.cs`, `BookKeeping2/Services/Csv/CsvImportResult.cs`
+- [X] T068 [US5] 更新 CSV parser，接受七欄與六欄 header、七欄幣別必填、六欄預設 `TWD`、幣別 trim/case-insensitive normalization 於 `BookKeeping2/Services/Csv/CsvImportParser.cs`
+- [X] T069 [US5] 更新 CSV import service，驗證交易幣別與帳戶幣別一致、逐列錯誤原因、成功/失敗筆數與 atomic persistence 於 `BookKeeping2/Services/Csv/CsvImportService.cs`
+- [X] T070 [US5] 更新 CSV export service，輸出七欄 header、原始幣別與未換算金額，保留 formula injection protection 與 soft-delete 排除於 `BookKeeping2/Services/Csv/CsvExportService.cs`
+- [X] T071 [US5] 更新 CSV import/export PageModel，讓結果摘要與下載 metadata 包含幣別 contract 且不記錄原始敏感 CSV 於 `BookKeeping2/Pages/Csv/Import.cshtml.cs`, `BookKeeping2/Pages/Csv/Export.cshtml.cs`
+- [X] T072 [US5] 更新 CSV import/export Razor markup，顯示七欄格式、legacy 六欄相容說明與繁體中文 row-level error 於 `BookKeeping2/Pages/Csv/Import.cshtml`, `BookKeeping2/Pages/Csv/Export.cshtml`
+- [X] T073 [US5] 更新 CSV result formatter，讓不支援幣別、空白幣別與帳戶幣別不一致的錯誤訊息安全且可理解於 `BookKeeping2/Services/Csv/CsvImportResultFormatter.cs`
 
 **Checkpoint**: User Story 5 should be fully functional and testable independently.
 

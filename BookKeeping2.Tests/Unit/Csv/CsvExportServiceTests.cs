@@ -36,12 +36,33 @@ public sealed class CsvExportServiceTests
         });
         string csv = Encoding.UTF8.GetString(result.Content);
 
-        Assert.StartsWith("日期,類型,金額,分類,帳戶,備註\r\n", csv, StringComparison.Ordinal);
-        Assert.Contains("2026-02-01,支出,150,餐飲,現金,二月一日", csv);
-        Assert.Contains("2026-02-28,支出,200.5,餐飲,現金,二月月底", csv);
+        Assert.StartsWith("日期,類型,幣別,金額,分類,帳戶,備註\r\n", csv, StringComparison.Ordinal);
+        Assert.Contains("2026-02-01,支出,TWD,150,餐飲,現金,二月一日", csv);
+        Assert.Contains("2026-02-28,支出,TWD,200.5,餐飲,現金,二月月底", csv);
         Assert.DoesNotContain("一月", csv);
         Assert.DoesNotContain("已刪除", csv);
         Assert.Equal(2, result.RowCount);
+    }
+
+    [Fact]
+    public async Task ExportAsync_writes_original_currency_and_amount_without_conversion()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        (_, Category food) = await SeedAsync(context);
+        var usdAccount = new Account { Name = "美元現金", NormalizedName = "美元現金", Type = AccountType.Cash, IconKey = "wallet", Currency = TestDataBuilder.UsdCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.Add(usdAccount);
+        await context.SaveChangesAsync();
+        context.Transactions.Add(Create(usdAccount.Id, food.Id, new DateOnly(2026, 2, 10), 123.45m, "美元", currency: TestDataBuilder.UsdCurrency));
+        await context.SaveChangesAsync();
+        var service = new CsvExportService(context, TestDataBuilder.CreateDateService());
+
+        CsvExportResult result = await service.ExportAsync(new CsvExportOptions());
+        string csv = Encoding.UTF8.GetString(result.Content);
+
+        Assert.Contains("2026-02-10,支出,USD,123.45,餐飲,美元現金,美元", csv);
+        Assert.Equal(1, result.RowCount);
     }
 
     [Fact]
@@ -66,7 +87,7 @@ public sealed class CsvExportServiceTests
         Assert.True(stopwatch.Elapsed < TimeSpan.FromSeconds(5));
     }
 
-    private static Transaction Create(long accountId, long categoryId, DateOnly date, decimal amount, string note, bool isDeleted = false)
+    private static Transaction Create(long accountId, long categoryId, DateOnly date, decimal amount, string note, bool isDeleted = false, string currency = TestDataBuilder.TwdCurrency)
     {
         return new Transaction
         {
@@ -75,6 +96,7 @@ public sealed class CsvExportServiceTests
             Type = TransactionType.Expense,
             TransactionDate = date,
             Amount = amount,
+            Currency = currency,
             Note = note,
             IsDeleted = isDeleted,
             CreatedAtUtc = DateTimeOffset.UtcNow,

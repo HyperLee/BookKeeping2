@@ -75,4 +75,25 @@ public sealed class MultiCurrencyBrowserTests : IClassFixture<ThemeModeBrowserFi
 
         await page.CloseAsync();
     }
+
+    [Theory]
+    [InlineData("/Csv/Import", 390)]
+    [InlineData("/Csv/Import", 1280)]
+    [InlineData("/Csv/Export", 390)]
+    [InlineData("/Csv/Export", 1280)]
+    public async Task Csv_pages_show_currency_contract_without_horizontal_overflow(string path, int width)
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        IPage page = await fixture.NewPageAsync(factory);
+
+        await page.SetViewportSizeAsync(width, 900);
+        await page.GotoAsync(path);
+
+        await Assertions.Expect(page.GetByText("日期,類型,幣別,金額,分類,帳戶,備註")).ToBeVisibleAsync();
+        double scrollWidth = await page.EvaluateAsync<double>("document.documentElement.scrollWidth");
+        double clientWidth = await page.EvaluateAsync<double>("document.documentElement.clientWidth");
+        Assert.True(scrollWidth <= clientWidth + 1, $"CSV page {path} should not overflow horizontally at {width}px.");
+
+        await page.CloseAsync();
+    }
 }
