@@ -115,20 +115,20 @@
 
 ### Tests for User Story 3
 
-- [ ] T040 [P] [US3] 擴充帳戶服務測試，先覆蓋建立帳戶必填幣別、全域名稱唯一、拒絕修改幣別與同幣別餘額計算於 `BookKeeping2.Tests/Unit/Accounts/AccountServiceTests.cs`
-- [ ] T041 [P] [US3] 擴充帳戶頁整合測試，先覆蓋新增帳戶幣別控制、空白幣別拒絕、列表顯示幣別與不顯示合併餘額於 `BookKeeping2.Tests/Integration/Pages/CategoryAndAccountPagesTests.cs`
-- [ ] T042 [P] [US3] 擴充多幣別帳戶瀏覽器測試，先覆蓋桌面與行動建立帳戶、鍵盤操作、visible focus 與金額幣別不重疊於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
+- [X] T040 [P] [US3] 擴充帳戶服務測試，先覆蓋建立帳戶必填幣別、全域名稱唯一、拒絕修改幣別與同幣別餘額計算於 `BookKeeping2.Tests/Unit/Accounts/AccountServiceTests.cs`
+- [X] T041 [P] [US3] 擴充帳戶頁整合測試，先覆蓋新增帳戶幣別控制、空白幣別拒絕、列表顯示幣別與不顯示合併餘額於 `BookKeeping2.Tests/Integration/Pages/CategoryAndAccountPagesTests.cs`
+- [X] T042 [P] [US3] 擴充多幣別帳戶瀏覽器測試，先覆蓋桌面與行動建立帳戶、鍵盤操作、visible focus 與金額幣別不重疊於 `BookKeeping2.Tests/Integration/Browser/MultiCurrencyBrowserTests.cs`
 
 ### Implementation for User Story 3
 
-- [ ] T043 [US3] 擴充 account input/list/balance view models，加入 required `Currency`、display text 與分幣別餘額欄位於 `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`
-- [ ] T044 [US3] 更新 account service 建立流程，要求明確幣別、正規化儲存、保持全域名稱唯一並拒絕 unsupported/blank currency 於 `BookKeeping2/Services/Accounts/AccountService.cs`
-- [ ] T045 [US3] 更新 account service 編輯流程，禁止修改既有帳戶 `Currency` 並保留可編輯欄位既有行為於 `BookKeeping2/Services/Accounts/AccountService.cs`
-- [ ] T046 [US3] 更新帳戶餘額 projection，opening balance 加上同帳戶同幣別未刪除交易，並移除跨幣別 total shape 於 `BookKeeping2/Services/Accounts/AccountBalanceSummary.cs`, `BookKeeping2/Services/Accounts/AccountService.cs`
-- [ ] T047 [US3] 更新帳戶 PageModel binding、validation summary 與 invalid post reload 行為於 `BookKeeping2/Pages/Accounts/Index.cshtml.cs`
-- [ ] T048 [US3] 更新帳戶 Razor markup，新增幣別 select、帳戶列表幣別 badge/label 與繁體中文錯誤訊息於 `BookKeeping2/Pages/Accounts/Index.cshtml`
-- [ ] T049 [US3] 更新交易 form account option 顯示，讓帳戶名稱旁可辨識帳戶幣別於 `BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`, `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`
-- [ ] T050 [US3] 更新帳戶與交易相關 responsive/focus CSS，確保幣別 badge、餘額與控制項手機不溢位於 `BookKeeping2/wwwroot/css/site.css`
+- [X] T043 [US3] 擴充 account input/list/balance view models，加入 required `Currency`、display text 與分幣別餘額欄位於 `BookKeeping2/ViewModels/Accounts/AccountViewModels.cs`
+- [X] T044 [US3] 更新 account service 建立流程，要求明確幣別、正規化儲存、保持全域名稱唯一並拒絕 unsupported/blank currency 於 `BookKeeping2/Services/Accounts/AccountService.cs`
+- [X] T045 [US3] 更新 account service 編輯流程，禁止修改既有帳戶 `Currency` 並保留可編輯欄位既有行為於 `BookKeeping2/Services/Accounts/AccountService.cs`
+- [X] T046 [US3] 更新帳戶餘額 projection，opening balance 加上同帳戶同幣別未刪除交易，並移除跨幣別 total shape 於 `BookKeeping2/Services/Accounts/AccountBalanceSummary.cs`, `BookKeeping2/Services/Accounts/AccountService.cs`
+- [X] T047 [US3] 更新帳戶 PageModel binding、validation summary 與 invalid post reload 行為於 `BookKeeping2/Pages/Accounts/Index.cshtml.cs`
+- [X] T048 [US3] 更新帳戶 Razor markup，新增幣別 select、帳戶列表幣別 badge/label 與繁體中文錯誤訊息於 `BookKeeping2/Pages/Accounts/Index.cshtml`
+- [X] T049 [US3] 更新交易 form account option 顯示，讓帳戶名稱旁可辨識帳戶幣別於 `BookKeeping2/ViewModels/Transactions/TransactionFormOptionsViewModel.cs`, `BookKeeping2/Pages/Transactions/_TransactionForm.cshtml`
+- [X] T050 [US3] 更新帳戶與交易相關 responsive/focus CSS，確保幣別 badge、餘額與控制項手機不溢位於 `BookKeeping2/wwwroot/css/site.css`
 
 **Checkpoint**: User Story 3 should be fully functional and testable independently.
 

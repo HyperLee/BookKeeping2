@@ -24,7 +24,14 @@ public sealed class AccountService : IAccountService
     }
 
     /// <inheritdoc />
-    public async Task<AccountResult> CreateAsync(string name, AccountType type, decimal openingBalance, string iconKey = "wallet", int displayOrder = 0, CancellationToken cancellationToken = default)
+    public async Task<AccountResult> CreateAsync(
+        string name,
+        AccountType type,
+        decimal openingBalance,
+        string? currency,
+        string iconKey = "wallet",
+        int displayOrder = 0,
+        CancellationToken cancellationToken = default)
     {
         var result = new AccountResult();
         string trimmed = name.Trim();
@@ -39,6 +46,14 @@ public sealed class AccountService : IAccountService
         if (duplicate)
         {
             result.AddError(nameof(Account.Name), "已有相同名稱的帳戶。");
+            return result;
+        }
+
+        if (!SupportedCurrency.TryNormalize(currency, out string? normalizedCurrency))
+        {
+            result.AddError(
+                nameof(Account.Currency),
+                string.IsNullOrWhiteSpace(currency) ? "請選擇幣別。" : "幣別不支援，請選擇 TWD、USD、JPY、EUR 或 GBP。");
             return result;
         }
 
@@ -62,10 +77,83 @@ public sealed class AccountService : IAccountService
             OpeningBalanceMinorUnits = openingBalanceMinorUnits,
             IconKey = string.IsNullOrWhiteSpace(iconKey) ? "wallet" : iconKey.Trim(),
             DisplayOrder = displayOrder,
-            Currency = "TWD",
+            Currency = normalizedCurrency!,
             CreatedAtUtc = nowUtc,
             UpdatedAtUtc = nowUtc
         });
+        await dbContext.SaveChangesAsync(cancellationToken);
+        return result;
+    }
+
+    /// <inheritdoc />
+    public async Task<AccountResult> UpdateAsync(
+        long id,
+        string name,
+        AccountType type,
+        decimal openingBalance,
+        string? currency,
+        string iconKey = "wallet",
+        int displayOrder = 0,
+        CancellationToken cancellationToken = default)
+    {
+        var result = new AccountResult();
+        Account? account = await dbContext.Accounts.FirstOrDefaultAsync(account => account.Id == id, cancellationToken);
+        if (account is null)
+        {
+            result.AddError(string.Empty, "找不到帳戶。");
+            return result;
+        }
+
+        if (!SupportedCurrency.TryNormalize(currency, out string? normalizedCurrency))
+        {
+            result.AddError(
+                nameof(Account.Currency),
+                string.IsNullOrWhiteSpace(currency) ? "請選擇幣別。" : "幣別不支援，請選擇 TWD、USD、JPY、EUR 或 GBP。");
+            return result;
+        }
+
+        if (!string.Equals(account.Currency, normalizedCurrency, StringComparison.Ordinal))
+        {
+            result.AddError(nameof(Account.Currency), "帳戶建立後不可修改幣別。");
+            return result;
+        }
+
+        string trimmed = name.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed))
+        {
+            result.AddError(nameof(Account.Name), "請輸入帳戶名稱。");
+            return result;
+        }
+
+        string normalizedName = DefaultSeedData.NormalizeName(trimmed);
+        bool duplicate = await dbContext.Accounts.AnyAsync(
+            candidate => candidate.Id != id && candidate.NormalizedName == normalizedName,
+            cancellationToken);
+        if (duplicate)
+        {
+            result.AddError(nameof(Account.Name), "已有相同名稱的帳戶。");
+            return result;
+        }
+
+        long openingBalanceMinorUnits;
+        try
+        {
+            openingBalanceMinorUnits = MoneyMinorUnitConverter.ToMinorUnits(openingBalance, requirePositive: false);
+        }
+        catch (Exception exception) when (exception is ArgumentOutOfRangeException or OverflowException)
+        {
+            result.AddError(nameof(Account.OpeningBalance), exception.Message);
+            return result;
+        }
+
+        account.Name = trimmed;
+        account.NormalizedName = normalizedName;
+        account.Type = type;
+        account.OpeningBalanceMinorUnits = openingBalanceMinorUnits;
+        account.IconKey = string.IsNullOrWhiteSpace(iconKey) ? "wallet" : iconKey.Trim();
+        account.DisplayOrder = displayOrder;
+        account.UpdatedAtUtc = DateTimeOffset.UtcNow;
+
         await dbContext.SaveChangesAsync(cancellationToken);
         return result;
     }
@@ -83,10 +171,11 @@ public sealed class AccountService : IAccountService
         var transactionTotals = await dbContext.Transactions
             .AsNoTracking()
             .Where(transaction => !transaction.IsDeleted)
-            .GroupBy(transaction => transaction.AccountId)
+            .GroupBy(transaction => new { transaction.AccountId, transaction.Currency })
             .Select(group => new
             {
-                AccountId = group.Key,
+                group.Key.AccountId,
+                group.Key.Currency,
                 Income = group.Where(transaction => transaction.Type == TransactionType.Income).Sum(transaction => transaction.AmountMinorUnits),
                 Expense = group.Where(transaction => transaction.Type == TransactionType.Expense).Sum(transaction => transaction.AmountMinorUnits)
             })
@@ -94,13 +183,14 @@ public sealed class AccountService : IAccountService
 
         return accounts.Select(account =>
         {
-            var totals = transactionTotals.FirstOrDefault(total => total.AccountId == account.Id);
+            var totals = transactionTotals.FirstOrDefault(total => total.AccountId == account.Id && total.Currency == account.Currency);
             long currentMinorUnits = account.OpeningBalanceMinorUnits + (totals?.Income ?? 0) - (totals?.Expense ?? 0);
             return new AccountBalanceSummary
             {
                 AccountId = account.Id,
                 Name = account.Name,
                 Type = account.Type,
+                Currency = account.Currency,
                 IsArchived = account.IsArchived,
                 CurrentBalance = MoneyMinorUnitConverter.FromMinorUnits(currentMinorUnits)
             };

@@ -33,14 +33,21 @@
         </select>
     </div>
     <div class="col-md-2">
+        <label asp-for="Input.Currency" class="form-label"></label>
+        <select asp-for="Input.Currency" asp-items="Model.CurrencyOptions" class="form-select">
+            <option value="">@SharedLocalizer["請選擇幣別"]</option>
+        </select>
+        <span asp-validation-for="Input.Currency" class="text-danger"></span>
+    </div>
+    <div class="col-md-2">
         <label asp-for="Input.OpeningBalance" class="form-label"></label>
         <input asp-for="Input.OpeningBalance" class="form-control" />
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
         <label asp-for="Input.IconKey" class="form-label"></label>
         <input asp-for="Input.IconKey" class="form-control" />
     </div>
-    <div class="col-md-2">
+    <div class="col-md-1">
         <label asp-for="Input.DisplayOrder" class="form-label"></label>
         <input asp-for="Input.DisplayOrder" class="form-control" />
     </div>
@@ -55,6 +62,7 @@
             <tr>
                 <th scope="col">@SharedLocalizer["名稱"]</th>
                 <th scope="col">@SharedLocalizer["類型"]</th>
+                <th scope="col">@SharedLocalizer["幣別"]</th>
                 <th scope="col" class="text-end">@SharedLocalizer["目前餘額"]</th>
             </tr>
         </thead>
@@ -64,7 +72,8 @@
                 <tr>
                     <td>@account.Name</td>
                     <td>@account.TypeText</td>
-                    <td class="text-end">@account.CurrentBalance.ToString("N0")</td>
+                    <td><span class="badge text-bg-secondary">@account.Currency</span></td>
+                    <td class="text-end"><span class="currency-amount">@account.CurrentBalanceText</span></td>
                 </tr>
             }
         </tbody>

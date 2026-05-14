@@ -221,6 +221,7 @@ public sealed partial class LanguageTogglePageTests
             ["__RequestVerificationToken"] = token,
             ["Input.Name"] = accountName,
             ["Input.Type"] = AccountType.Cash.ToString(),
+            ["Input.Currency"] = "TWD",
             ["Input.OpeningBalance"] = "1000",
             ["Input.IconKey"] = "wallet",
             ["Input.DisplayOrder"] = "1"

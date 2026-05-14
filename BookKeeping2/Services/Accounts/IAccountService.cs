@@ -13,11 +13,41 @@ public interface IAccountService
     /// <param name="name">The account name.</param>
     /// <param name="type">The account type.</param>
     /// <param name="openingBalance">The opening balance.</param>
+    /// <param name="currency">The supported account currency code.</param>
     /// <param name="iconKey">The icon key.</param>
     /// <param name="displayOrder">The display order.</param>
     /// <param name="cancellationToken">A cancellation token.</param>
     /// <returns>The command result.</returns>
-    Task<AccountResult> CreateAsync(string name, AccountType type, decimal openingBalance, string iconKey = "wallet", int displayOrder = 0, CancellationToken cancellationToken = default);
+    Task<AccountResult> CreateAsync(
+        string name,
+        AccountType type,
+        decimal openingBalance,
+        string? currency,
+        string iconKey = "wallet",
+        int displayOrder = 0,
+        CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Updates editable account fields while preserving the fixed account currency.
+    /// </summary>
+    /// <param name="id">The account identifier.</param>
+    /// <param name="name">The account name.</param>
+    /// <param name="type">The account type.</param>
+    /// <param name="openingBalance">The opening balance.</param>
+    /// <param name="currency">The supported account currency code that must match the existing account.</param>
+    /// <param name="iconKey">The icon key.</param>
+    /// <param name="displayOrder">The display order.</param>
+    /// <param name="cancellationToken">A cancellation token.</param>
+    /// <returns>The command result.</returns>
+    Task<AccountResult> UpdateAsync(
+        long id,
+        string name,
+        AccountType type,
+        decimal openingBalance,
+        string? currency,
+        string iconKey = "wallet",
+        int displayOrder = 0,
+        CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Gets account balance summaries.

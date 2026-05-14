@@ -1,5 +1,7 @@
+using BookKeeping2.Models.Common;
 using BookKeeping2.Services.Accounts;
 using BookKeeping2.ViewModels.Accounts;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Localization;
@@ -32,6 +34,11 @@ public sealed class IndexModel : PageModel
     public AccountInputModel Input { get; set; } = new();
 
     /// <summary>
+    /// Gets supported currency options.
+    /// </summary>
+    public IReadOnlyList<SelectListItem> CurrencyOptions { get; private set; } = [];
+
+    /// <summary>
     /// Gets account rows.
     /// </summary>
     public IReadOnlyList<AccountBalanceSummary> Accounts { get; private set; } = [];
@@ -42,6 +49,8 @@ public sealed class IndexModel : PageModel
     /// <returns>A task representing the asynchronous operation.</returns>
     public async Task OnGetAsync()
     {
+        LoadCurrencyOptions();
+        Input.Currency = SupportedCurrency.LegacyDefaultCode;
         Accounts = await accountService.GetBalanceSummariesAsync();
     }
 
@@ -53,11 +62,12 @@ public sealed class IndexModel : PageModel
     {
         if (!ModelState.IsValid)
         {
+            LoadCurrencyOptions();
             Accounts = await accountService.GetBalanceSummariesAsync();
             return Page();
         }
 
-        AccountResult result = await accountService.CreateAsync(Input.Name, Input.Type, Input.OpeningBalance, Input.IconKey, Input.DisplayOrder);
+        AccountResult result = await accountService.CreateAsync(Input.Name, Input.Type, Input.OpeningBalance, Input.Currency, Input.IconKey, Input.DisplayOrder);
         if (!result.Succeeded)
         {
             foreach ((string field, string[] messages) in result.Errors)
@@ -68,11 +78,19 @@ public sealed class IndexModel : PageModel
                 }
             }
 
+            LoadCurrencyOptions();
             Accounts = await accountService.GetBalanceSummariesAsync();
             return Page();
         }
 
         TempData["StatusMessage"] = localizer["帳戶已新增。"].Value;
         return RedirectToPage();
+    }
+
+    private void LoadCurrencyOptions()
+    {
+        CurrencyOptions = SupportedCurrency.Options
+            .Select(option => new SelectListItem($"{option.Code} - {option.DisplayName}", option.Code))
+            .ToList();
     }
 }

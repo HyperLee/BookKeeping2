@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using BookKeeping2.Localization;
 using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.Common;
+using BookKeeping2.Validation;
 
 namespace BookKeeping2.ViewModels.Accounts;
 
@@ -22,6 +24,13 @@ public sealed class AccountInputModel
     /// </summary>
     [Display(Name = "類型")]
     public AccountType Type { get; set; } = AccountType.Cash;
+
+    /// <summary>
+    /// Gets or sets the supported account currency code.
+    /// </summary>
+    [Required(ErrorMessage = FinancialValidationMessages.CurrencyRequired)]
+    [Display(Name = "幣別")]
+    public string? Currency { get; set; }
 
     /// <summary>
     /// Gets or sets the opening balance.
@@ -64,6 +73,11 @@ public sealed class AccountListItemViewModel
     public AccountType Type { get; set; }
 
     /// <summary>
+    /// Gets or sets the account currency code.
+    /// </summary>
+    public string Currency { get; set; } = SupportedCurrency.LegacyDefaultCode;
+
+    /// <summary>
     /// Gets the display-only account type label.
     /// </summary>
     public string TypeText => SystemDisplayLocalizer.GetAccountTypeText(Type);
@@ -72,6 +86,11 @@ public sealed class AccountListItemViewModel
     /// Gets or sets the current balance.
     /// </summary>
     public decimal CurrentBalance { get; set; }
+
+    /// <summary>
+    /// Gets the display-only current balance text with currency.
+    /// </summary>
+    public string CurrentBalanceText => $"{Currency} {CurrentBalance:N2}";
 
     /// <summary>
     /// Gets or sets whether the account is archived.
