@@ -1,6 +1,7 @@
 using System.Net;
 using BookKeeping2.Data;
 using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.AccountTransfers;
 using BookKeeping2.Models.Budgets;
 using BookKeeping2.Models.Categories;
 using BookKeeping2.Models.Common;
@@ -46,6 +47,24 @@ public sealed class HomeBudgetSummaryTests
         Assert.DoesNotContain("1,500", page);
     }
 
+    [Fact]
+    public async Task Home_page_keeps_income_expense_summary_transaction_only_while_balances_include_transfers()
+    {
+        await using BookKeepingWebApplicationFactory factory = new();
+        HttpClient client = factory.CreateClient();
+        await SeedTransferAwareHomeSummaryAsync(factory);
+
+        string page = WebUtility.HtmlDecode(await client.GetStringAsync("/"));
+
+        Assert.Contains("TWD 1,000.00", page);
+        Assert.Contains("TWD 300.00", page);
+        Assert.DoesNotContain("TWD 2,000.00", page);
+        Assert.Contains("銀行", page);
+        Assert.Contains("TWD 3,700.00", page);
+        Assert.Contains("信用卡", page);
+        Assert.Contains("TWD 1,800.00", page);
+    }
+
     private static async Task SeedBudgetAndSpendingAsync(BookKeepingWebApplicationFactory factory)
     {
         using IServiceScope scope = factory.Services.CreateScope();
@@ -82,6 +101,34 @@ public sealed class HomeBudgetSummaryTests
             CreatedAtUtc = DateTimeOffset.UtcNow,
             UpdatedAtUtc = DateTimeOffset.UtcNow,
             LastChangeSummary = "測試"
+        });
+        await context.SaveChangesAsync();
+    }
+
+    private static async Task SeedTransferAwareHomeSummaryAsync(BookKeepingWebApplicationFactory factory)
+    {
+        using IServiceScope scope = factory.Services.CreateScope();
+        AppDbContext context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        Category salary = await context.Categories.FirstAsync(category => category.Type == TransactionType.Income && category.Name == "薪資");
+        Category food = await context.Categories.FirstAsync(category => category.Type == TransactionType.Expense && category.Name == "餐飲");
+        var bank = new Account { Name = "銀行", NormalizedName = "銀行", Type = AccountType.Bank, IconKey = "bank", Currency = TestDataBuilder.TwdCurrency, OpeningBalance = 5_000m, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        var creditCard = new Account { Name = "信用卡", NormalizedName = "信用卡", Type = AccountType.CreditCard, IconKey = "credit-card", Currency = TestDataBuilder.TwdCurrency, OpeningBalance = -200m, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.AddRange(bank, creditCard);
+        await context.SaveChangesAsync();
+        context.Transactions.AddRange(
+            CreateTransaction(bank.Id, salary.Id, TransactionType.Income, 1_000m, TestDataBuilder.TwdCurrency),
+            CreateTransaction(bank.Id, food.Id, TransactionType.Expense, 300m, TestDataBuilder.TwdCurrency));
+        context.AccountTransfers.Add(new AccountTransfer
+        {
+            TransferDate = new DateOnly(2026, 5, 8),
+            Currency = TestDataBuilder.TwdCurrency,
+            Amount = 2_000m,
+            FromAccountId = bank.Id,
+            ToAccountId = creditCard.Id,
+            SubmissionToken = Guid.NewGuid().ToString("N"),
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow,
+            LastChangeSummary = "信用卡繳款"
         });
         await context.SaveChangesAsync();
     }

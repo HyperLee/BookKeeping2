@@ -91,6 +91,28 @@ public static class TestDataBuilder
     }
 
     /// <summary>
+    /// Creates a pair of active accounts suitable for account transfer tests.
+    /// </summary>
+    /// <param name="currency">The currency shared by both accounts.</param>
+    /// <returns>The source and destination accounts.</returns>
+    public static (Account FromAccount, Account ToAccount) CreateTransferAccountPair(string currency = TwdCurrency)
+    {
+        return (
+            CreateAccount("銀行", currency),
+            CreateAccount("現金", currency));
+    }
+
+    /// <summary>
+    /// Creates a stable submission token for account transfer form tests.
+    /// </summary>
+    /// <param name="suffix">The token suffix used to distinguish scenarios.</param>
+    /// <returns>A test submission token.</returns>
+    public static string CreateTransferSubmissionToken(string suffix = "default")
+    {
+        return $"transfer-token-{suffix}";
+    }
+
+    /// <summary>
     /// Creates a test transaction with a specified currency.
     /// </summary>
     /// <param name="category">The transaction category.</param>

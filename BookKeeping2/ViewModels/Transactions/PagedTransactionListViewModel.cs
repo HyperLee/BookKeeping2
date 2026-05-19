@@ -8,7 +8,7 @@ public sealed class PagedTransactionListViewModel
     /// <summary>
     /// Gets or sets the current page items.
     /// </summary>
-    public IReadOnlyList<TransactionListItemViewModel> Items { get; set; } = [];
+    public IReadOnlyList<TransactionTimelineItemViewModel> Items { get; set; } = [];
 
     /// <summary>
     /// Gets or sets the total matching item count.

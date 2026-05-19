@@ -94,6 +94,11 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifie
 
 Browser tests must include mobile/desktop responsive checks and WCAG 2.1 AA accessibility assertions through axe-core or equivalent DOM assertions. If browser tests cannot run because Chrome or Edge is unavailable, report that exact blocker and still run the non-browser subset.
 
+### 驗證紀錄
+
+- 2026-05-19: Browser automation available via local Chromium-compatible executable; `AccountTransferBrowserTests` passed at mobile and desktop widths.
+- 2026-05-19: Full build, full test suite, and coverage collection passed. Cobertura line coverage: 88.14%.
+
 ## 7. Manual Scenario Checklist
 
 - 建立兩個 TWD 帳戶，新增 TWD 1,000 從銀行到現金，確認餘額變化。

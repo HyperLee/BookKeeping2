@@ -10,14 +10,17 @@ namespace BookKeeping2.Pages.Csv;
 public sealed class ImportModel : PageModel
 {
     private readonly ICsvImportService csvImportService;
+    private readonly CsvTransferImportService csvTransferImportService;
 
     /// <summary>
     /// Initializes a CSV import page.
     /// </summary>
     /// <param name="csvImportService">The CSV import service.</param>
-    public ImportModel(ICsvImportService csvImportService)
+    /// <param name="csvTransferImportService">The transfer CSV import service.</param>
+    public ImportModel(ICsvImportService csvImportService, CsvTransferImportService csvTransferImportService)
     {
         this.csvImportService = csvImportService;
+        this.csvTransferImportService = csvTransferImportService;
     }
 
     /// <summary>
@@ -27,9 +30,20 @@ public sealed class ImportModel : PageModel
     public IFormFile? Upload { get; set; }
 
     /// <summary>
+    /// Gets or sets the uploaded transfer CSV file.
+    /// </summary>
+    [BindProperty]
+    public IFormFile? TransferUpload { get; set; }
+
+    /// <summary>
     /// Gets the latest import result.
     /// </summary>
     public CsvImportResult? Result { get; private set; }
+
+    /// <summary>
+    /// Gets the latest transfer import result.
+    /// </summary>
+    public CsvTransferImportResult? TransferResult { get; private set; }
 
     /// <summary>
     /// Gets the current seven-column CSV header contract.
@@ -40,6 +54,11 @@ public sealed class ImportModel : PageModel
     /// Gets the legacy six-column CSV header accepted as TWD.
     /// </summary>
     public string LegacyCsvHeader => CsvImportParser.LegacyHeaderText;
+
+    /// <summary>
+    /// Gets the transfer CSV header contract.
+    /// </summary>
+    public string TransferCsvHeader => CsvTransferImportParser.HeaderText;
 
     /// <summary>
     /// Displays the upload form.
@@ -63,6 +82,24 @@ public sealed class ImportModel : PageModel
         await using var memoryStream = new MemoryStream();
         await Upload.CopyToAsync(memoryStream);
         Result = await csvImportService.ImportAsync(new CsvImportCommand(Upload.FileName, memoryStream.ToArray()));
+        return Page();
+    }
+
+    /// <summary>
+    /// Imports the uploaded transfer CSV file.
+    /// </summary>
+    /// <returns>The post result.</returns>
+    public async Task<IActionResult> OnPostTransferAsync()
+    {
+        if (TransferUpload is null || TransferUpload.Length == 0)
+        {
+            ModelState.AddModelError(nameof(TransferUpload), "請選擇轉帳 CSV 檔案。");
+            return Page();
+        }
+
+        await using var memoryStream = new MemoryStream();
+        await TransferUpload.CopyToAsync(memoryStream);
+        TransferResult = await csvTransferImportService.ImportAsync(new CsvImportCommand(TransferUpload.FileName, memoryStream.ToArray()));
         return Page();
     }
 }

@@ -15,6 +15,13 @@
     </p>
 </section>
 
+<section class="mb-4" aria-labelledby="transfer-csv-export-format-heading">
+    <h2 id="transfer-csv-export-format-heading" class="h5">@SharedLocalizer["轉帳匯出格式"]</h2>
+    <p class="text-muted mb-0">
+        @SharedLocalizer["轉帳下載檔案固定使用："]<code class="csv-contract-code">@Model.TransferCsvHeader</code>
+    </p>
+</section>
+
 <form method="get" asp-page-handler="Download" class="row g-3 align-items-end">
     <div class="col-12 col-md-4">
         <label class="form-label" asp-for="StartDate">@SharedLocalizer["起始日期"]</label>
@@ -28,6 +35,20 @@
     </div>
     <div class="col-12 col-md-4">
         <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["下載 CSV"]</button>
+    </div>
+</form>
+
+<form method="get" asp-page-handler="TransferDownload" class="row g-3 align-items-end mt-2">
+    <div class="col-12 col-md-4">
+        <label class="form-label" asp-for="StartDate">@SharedLocalizer["起始日期"]</label>
+        <input class="form-control" asp-for="StartDate" type="date" />
+    </div>
+    <div class="col-12 col-md-4">
+        <label class="form-label" asp-for="EndDate">@SharedLocalizer["結束日期"]</label>
+        <input class="form-control" asp-for="EndDate" type="date" />
+    </div>
+    <div class="col-12 col-md-4">
+        <button type="submit" class="btn btn-outline-primary w-100">@SharedLocalizer["下載轉帳 CSV"]</button>
     </div>
 </form>
 

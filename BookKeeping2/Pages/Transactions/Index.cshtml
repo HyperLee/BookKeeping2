@@ -6,7 +6,10 @@
 
 <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
     <h1 class="h3 mb-0">@SharedLocalizer["交易明細"]</h1>
-    <a class="btn btn-primary" asp-page="/Transactions/Create">@SharedLocalizer["新增交易"]</a>
+    <div class="d-flex flex-wrap gap-2">
+        <a class="btn btn-primary" asp-page="/Transactions/Create">@SharedLocalizer["新增交易"]</a>
+        <a class="btn btn-outline-primary" asp-page="/Transfers/Create">@SharedLocalizer["新增轉帳"]</a>
+    </div>
 </div>
 
 @if (TempData["StatusMessage"] is string statusMessage)
@@ -97,16 +100,26 @@ else
             <tbody>
                 @foreach (var transaction in Model.Transactions.Items)
                 {
-                    <tr>
+                    bool isTransfer = transaction.RecordKind == "Transfer";
+                    <tr class="@(isTransfer ? "transaction-row-transfer" : null)">
                         <td>@transaction.TransactionDate.ToString("yyyy-MM-dd")</td>
-                        <td>@transaction.TypeText</td>
+                        <td>
+                            @if (isTransfer)
+                            {
+                                <span class="badge text-bg-info">@transaction.TypeText</span>
+                            }
+                            else
+                            {
+                                @transaction.TypeText
+                            }
+                        </td>
                         <td class="text-end"><span class="currency-amount">@transaction.AmountText</span></td>
-                        <td>@transaction.CategoryName</td>
-                        <td>@transaction.AccountName</td>
+                        <td>@(isTransfer ? string.Empty : transaction.CategoryName)</td>
+                        <td class="@(isTransfer ? "transfer-direction" : null)">@(isTransfer ? transaction.TransferDirectionText : transaction.AccountName)</td>
                         <td>@transaction.Note</td>
                         <td class="text-end transaction-actions">
-                            <a class="btn btn-sm btn-outline-secondary" asp-page="/Transactions/Edit" asp-route-id="@transaction.Id">@SharedLocalizer["編輯"]</a>
-                            <a class="btn btn-sm btn-outline-danger" asp-page="/Transactions/Delete" asp-route-id="@transaction.Id">@SharedLocalizer["刪除"]</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-page="@transaction.EditPage" asp-route-id="@transaction.Id">@SharedLocalizer["編輯"]</a>
+                            <a class="btn btn-sm btn-outline-danger" asp-page="@transaction.DeletePage" asp-route-id="@transaction.Id">@SharedLocalizer["刪除"]</a>
                         </td>
                     </tr>
                 }

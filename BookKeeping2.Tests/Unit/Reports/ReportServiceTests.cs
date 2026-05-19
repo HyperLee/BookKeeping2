@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BookKeeping2.Data;
 using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.AccountTransfers;
 using BookKeeping2.Models.Categories;
 using BookKeeping2.Models.Common;
 using BookKeeping2.Models.Transactions;
@@ -71,6 +72,45 @@ public sealed class ReportServiceTests
         Assert.All(usd.CategoryShares, share => Assert.Equal(TestDataBuilder.UsdCurrency, share.Currency));
         Assert.All(twd.TrendPoints, point => Assert.Equal(TestDataBuilder.TwdCurrency, point.Currency));
         Assert.All(usd.TrendPoints, point => Assert.Equal(TestDataBuilder.UsdCurrency, point.Currency));
+    }
+
+    [Fact]
+    public async Task GetMonthlyReportAsync_excludes_transfers_from_expense_category_trend_and_chart_totals()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        (Account bank, Category food, _, Category salary) = await SeedAsync(context);
+        Account creditCard = new() { Name = "信用卡", NormalizedName = "信用卡", Type = AccountType.CreditCard, IconKey = "credit-card", Currency = TestDataBuilder.TwdCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.Add(creditCard);
+        await context.SaveChangesAsync();
+        context.Transactions.AddRange(
+            Create(bank.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, 3), 300m),
+            Create(bank.Id, salary.Id, TransactionType.Income, new DateOnly(2026, 5, 4), 1_000m));
+        context.AccountTransfers.Add(new AccountTransfer
+        {
+            TransferDate = new DateOnly(2026, 5, 5),
+            Currency = TestDataBuilder.TwdCurrency,
+            Amount = 2_000m,
+            FromAccountId = bank.Id,
+            ToAccountId = creditCard.Id,
+            SubmissionToken = Guid.NewGuid().ToString("N"),
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow,
+            LastChangeSummary = "信用卡繳款"
+        });
+        await context.SaveChangesAsync();
+        var service = new ReportService(context);
+
+        MonthlyReportViewModel report = await service.GetMonthlyReportAsync(2026, 5);
+
+        MonthlyCurrencyReportViewModel bucket = Assert.Single(report.CurrencyBuckets);
+        Assert.Equal(1_000m, bucket.TotalIncome);
+        Assert.Equal(300m, bucket.TotalExpense);
+        Assert.Equal(300m, Assert.Single(bucket.CategoryShares).Amount);
+        Assert.DoesNotContain(bucket.CategoryShares, share => share.Amount == 2_000m);
+        Assert.DoesNotContain(bucket.TrendPoints, point => point.Expense == 2_000m);
+        Assert.Equal(300m, bucket.TrendPoints.Sum(point => point.Expense));
     }
 
     [Fact]

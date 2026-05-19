@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using BookKeeping2.Data;
 using BookKeeping2.Models.Accounts;
+using BookKeeping2.Models.AccountTransfers;
 using BookKeeping2.Models.Audit;
 using BookKeeping2.Models.Budgets;
 using BookKeeping2.Models.Categories;
@@ -126,6 +127,40 @@ public sealed class BudgetServiceTests
         Assert.Equal(4_000m, twd.RemainingAmount);
         Assert.Equal(100m, usd.SpentAmount);
         Assert.Equal(200m, usd.RemainingAmount);
+    }
+
+    [Fact]
+    public async Task ListMonthlyAsync_excludes_transfer_payments_from_budget_usage_and_alert_state()
+    {
+        await using SqliteTestDatabase database = new();
+        await using var context = new AppDbContext(database.CreateOptions<AppDbContext>());
+        await context.Database.EnsureCreatedAsync();
+        (Account bank, Category food, _, _) = await SeedAsync(context);
+        Account creditCard = new() { Name = "信用卡", NormalizedName = "信用卡", Type = AccountType.CreditCard, IconKey = "credit-card", Currency = TestDataBuilder.TwdCurrency, CreatedAtUtc = DateTimeOffset.UtcNow, UpdatedAtUtc = DateTimeOffset.UtcNow };
+        context.Accounts.Add(creditCard);
+        await context.SaveChangesAsync();
+        context.Budgets.Add(CreateBudget(food.Id, new DateOnly(2026, 5, 1), 1_000m, TestDataBuilder.TwdCurrency));
+        context.Transactions.Add(CreateTransaction(bank.Id, food.Id, TransactionType.Expense, new DateOnly(2026, 5, 5), 100m, TestDataBuilder.TwdCurrency));
+        context.AccountTransfers.Add(new AccountTransfer
+        {
+            TransferDate = new DateOnly(2026, 5, 6),
+            Currency = TestDataBuilder.TwdCurrency,
+            Amount = 2_000m,
+            FromAccountId = bank.Id,
+            ToAccountId = creditCard.Id,
+            SubmissionToken = Guid.NewGuid().ToString("N"),
+            CreatedAtUtc = DateTimeOffset.UtcNow,
+            UpdatedAtUtc = DateTimeOffset.UtcNow,
+            LastChangeSummary = "信用卡繳款"
+        });
+        await context.SaveChangesAsync();
+        var service = new BudgetService(context, TestDataBuilder.CreateDateService(), new NullAuditService(), new AuditLogMaskingPolicy());
+
+        BudgetStatusViewModel budget = Assert.Single(await service.ListMonthlyAsync(new DateOnly(2026, 5, 1)));
+
+        Assert.Equal(100m, budget.SpentAmount);
+        Assert.Equal(900m, budget.RemainingAmount);
+        Assert.Equal(BudgetAlertState.Normal, budget.AlertState);
     }
 
     private static Budget CreateBudget(long categoryId, DateOnly month, decimal amount, string currency)

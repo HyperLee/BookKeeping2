@@ -151,6 +151,25 @@ main {
   white-space: nowrap;
 }
 
+.transfer-form .text-danger,
+.transfer-delete-summary dd {
+  overflow-wrap: anywhere;
+}
+
+.transfer-direction {
+  font-weight: 600;
+}
+
+.transaction-row-transfer .badge {
+  min-width: 3rem;
+}
+
+.transaction-row-transfer .transfer-direction {
+  max-width: 18rem;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
 .progress {
   min-width: 8rem;
 }

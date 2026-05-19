@@ -1,3 +1,4 @@
+using BookKeeping2.Models.AccountTransfers;
 using BookKeeping2.Models.Accounts;
 using BookKeeping2.Models.Audit;
 using BookKeeping2.Models.Budgets;
@@ -27,6 +28,11 @@ public sealed class AppDbContext : DbContext
     /// Gets the transactions table.
     /// </summary>
     public DbSet<Transaction> Transactions => Set<Transaction>();
+
+    /// <summary>
+    /// Gets the account transfers table.
+    /// </summary>
+    public DbSet<AccountTransfer> AccountTransfers => Set<AccountTransfer>();
 
     /// <summary>
     /// Gets the categories table.

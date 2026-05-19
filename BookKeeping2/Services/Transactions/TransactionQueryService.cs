@@ -30,45 +30,53 @@ public sealed class TransactionQueryService : ITransactionQueryService
         int pageSize = Math.Clamp(query.PageSize, 1, 200);
         IQueryable<Transaction> transactions = dbContext.Transactions
             .AsNoTracking()
-            .Include(transaction => transaction.Category)
-            .Include(transaction => transaction.Account)
             .Where(transaction => !transaction.IsDeleted);
+        var transfers = dbContext.AccountTransfers
+            .AsNoTracking()
+            .Where(transfer => !transfer.IsDeleted);
 
         if (query.StartDate.HasValue)
         {
             transactions = transactions.Where(transaction => transaction.TransactionDate >= query.StartDate.Value);
+            transfers = transfers.Where(transfer => transfer.TransferDate >= query.StartDate.Value);
         }
 
         if (query.EndDate.HasValue)
         {
             transactions = transactions.Where(transaction => transaction.TransactionDate <= query.EndDate.Value);
+            transfers = transfers.Where(transfer => transfer.TransferDate <= query.EndDate.Value);
         }
 
         if (query.CategoryId.HasValue)
         {
             transactions = transactions.Where(transaction => transaction.CategoryId == query.CategoryId.Value);
+            transfers = transfers.Where(_ => false);
         }
 
         if (query.AccountId.HasValue)
         {
             transactions = transactions.Where(transaction => transaction.AccountId == query.AccountId.Value);
+            transfers = transfers.Where(transfer => transfer.FromAccountId == query.AccountId.Value || transfer.ToAccountId == query.AccountId.Value);
         }
 
         if (SupportedCurrency.TryNormalize(query.Currency, out string? currency))
         {
             transactions = transactions.Where(transaction => transaction.Currency == currency);
+            transfers = transfers.Where(transfer => transfer.Currency == currency);
         }
 
         if (query.MinAmount.HasValue)
         {
             long minMinorUnits = MoneyMinorUnitConverter.ToMinorUnits(query.MinAmount.Value, requirePositive: false);
             transactions = transactions.Where(transaction => transaction.AmountMinorUnits >= minMinorUnits);
+            transfers = transfers.Where(transfer => transfer.AmountMinorUnits >= minMinorUnits);
         }
 
         if (query.MaxAmount.HasValue)
         {
             long maxMinorUnits = MoneyMinorUnitConverter.ToMinorUnits(query.MaxAmount.Value, requirePositive: false);
             transactions = transactions.Where(transaction => transaction.AmountMinorUnits <= maxMinorUnits);
+            transfers = transfers.Where(transfer => transfer.AmountMinorUnits <= maxMinorUnits);
         }
 
         if (!string.IsNullOrWhiteSpace(query.Keyword))
@@ -78,37 +86,83 @@ public sealed class TransactionQueryService : ITransactionQueryService
                 (transaction.Note != null && transaction.Note.Contains(keyword))
                 || transaction.Category.Name.Contains(keyword)
                 || transaction.Account.Name.Contains(keyword));
+            transfers = transfers.Where(transfer =>
+                (transfer.Note != null && transfer.Note.Contains(keyword))
+                || transfer.FromAccount.Name.Contains(keyword)
+                || transfer.ToAccount.Name.Contains(keyword));
         }
 
-        int totalCount = await transactions.CountAsync(cancellationToken);
-        List<Transaction> pageItems = await transactions
-            .OrderByDescending(transaction => transaction.TransactionDate)
-            .ThenByDescending(transaction => transaction.Id)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
+        var transactionItems = await transactions
+            .Select(transaction => new
+            {
+                transaction.Id,
+                transaction.TransactionDate,
+                transaction.Type,
+                transaction.AmountMinorUnits,
+                transaction.Currency,
+                CategoryName = transaction.Category.Name,
+                AccountName = transaction.Account.Name,
+                transaction.Note
+            })
             .ToListAsync(cancellationToken);
 
+        var transferItems = await transfers
+            .Select(transfer => new
+            {
+                transfer.Id,
+                transfer.TransferDate,
+                transfer.AmountMinorUnits,
+                transfer.Currency,
+                FromAccountName = transfer.FromAccount.Name,
+                ToAccountName = transfer.ToAccount.Name,
+                transfer.Note
+            })
+            .ToListAsync(cancellationToken);
+
+        List<TransactionTimelineItemViewModel> timelineItems = transactionItems
+            .Select(transaction => new TransactionTimelineItemViewModel
+            {
+                Id = transaction.Id,
+                RecordKind = transaction.Type.ToString(),
+                TransactionDate = transaction.TransactionDate,
+                Type = transaction.Type,
+                Amount = MoneyMinorUnitConverter.FromMinorUnits(transaction.AmountMinorUnits),
+                Currency = transaction.Currency,
+                CategoryName = transaction.CategoryName,
+                AccountName = transaction.AccountName,
+                Note = transaction.Note,
+                EditPage = "/Transactions/Edit",
+                DeletePage = "/Transactions/Delete"
+            })
+            .Concat(transferItems.Select(transfer => new TransactionTimelineItemViewModel
+            {
+                Id = transfer.Id,
+                RecordKind = "Transfer",
+                TransactionDate = transfer.TransferDate,
+                Amount = MoneyMinorUnitConverter.FromMinorUnits(transfer.AmountMinorUnits),
+                Currency = transfer.Currency,
+                CategoryName = string.Empty,
+                AccountName = $"{transfer.FromAccountName} -> {transfer.ToAccountName}",
+                FromAccountName = transfer.FromAccountName,
+                ToAccountName = transfer.ToAccountName,
+                Note = transfer.Note,
+                EditPage = "/Transfers/Edit",
+                DeletePage = "/Transfers/Delete"
+            }))
+            .OrderByDescending(item => item.TransactionDate)
+            .ThenByDescending(item => item.Id)
+            .ToList();
+
+        int totalCount = timelineItems.Count;
         return new PagedTransactionListViewModel
         {
-            Items = pageItems.Select(ToListItem).ToList(),
+            Items = timelineItems
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList(),
             TotalCount = totalCount,
             Page = page,
             PageSize = pageSize
-        };
-    }
-
-    private static TransactionListItemViewModel ToListItem(Transaction transaction)
-    {
-        return new TransactionListItemViewModel
-        {
-            Id = transaction.Id,
-            TransactionDate = transaction.TransactionDate,
-            Type = transaction.Type,
-            Amount = transaction.Amount,
-            Currency = transaction.Currency,
-            CategoryName = transaction.Category.Name,
-            AccountName = transaction.Account.Name,
-            Note = transaction.Note
         };
     }
 }

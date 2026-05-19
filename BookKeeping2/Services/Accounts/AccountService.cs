@@ -181,10 +181,44 @@ public sealed class AccountService : IAccountService
             })
             .ToListAsync(cancellationToken);
 
+        var outgoingTransferTotals = await dbContext.AccountTransfers
+            .AsNoTracking()
+            .Where(transfer => !transfer.IsDeleted)
+            .GroupBy(transfer => new { AccountId = transfer.FromAccountId, transfer.Currency })
+            .Select(group => new
+            {
+                group.Key.AccountId,
+                group.Key.Currency,
+                Amount = group.Sum(transfer => transfer.AmountMinorUnits)
+            })
+            .ToListAsync(cancellationToken);
+
+        var incomingTransferTotals = await dbContext.AccountTransfers
+            .AsNoTracking()
+            .Where(transfer => !transfer.IsDeleted)
+            .GroupBy(transfer => new { AccountId = transfer.ToAccountId, transfer.Currency })
+            .Select(group => new
+            {
+                group.Key.AccountId,
+                group.Key.Currency,
+                Amount = group.Sum(transfer => transfer.AmountMinorUnits)
+            })
+            .ToListAsync(cancellationToken);
+
         return accounts.Select(account =>
         {
             var totals = transactionTotals.FirstOrDefault(total => total.AccountId == account.Id && total.Currency == account.Currency);
-            long currentMinorUnits = account.OpeningBalanceMinorUnits + (totals?.Income ?? 0) - (totals?.Expense ?? 0);
+            long outgoingTransfers = outgoingTransferTotals
+                .FirstOrDefault(total => total.AccountId == account.Id && total.Currency == account.Currency)
+                ?.Amount ?? 0;
+            long incomingTransfers = incomingTransferTotals
+                .FirstOrDefault(total => total.AccountId == account.Id && total.Currency == account.Currency)
+                ?.Amount ?? 0;
+            long currentMinorUnits = account.OpeningBalanceMinorUnits
+                + (totals?.Income ?? 0)
+                - (totals?.Expense ?? 0)
+                - outgoingTransfers
+                + incomingTransfers;
             return new AccountBalanceSummary
             {
                 AccountId = account.Id,

@@ -35,6 +35,33 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
             b.ToTable("Accounts");
         });
 
+        modelBuilder.Entity("BookKeeping2.Models.AccountTransfers.AccountTransfer", b =>
+        {
+            b.Property<long>("Id").ValueGeneratedOnAdd().HasColumnType("INTEGER");
+            b.Property<long>("AmountMinorUnits").HasColumnType("INTEGER");
+            b.Property<DateTimeOffset>("CreatedAtUtc").HasColumnType("TEXT");
+            b.Property<string>("Currency").IsRequired().HasMaxLength(3).HasColumnType("TEXT").HasDefaultValue("TWD");
+            b.Property<DateTimeOffset?>("DeletedAtUtc").HasColumnType("TEXT");
+            b.Property<string>("DeletionSummary").HasMaxLength(500).HasColumnType("TEXT");
+            b.Property<long>("FromAccountId").HasColumnType("INTEGER");
+            b.Property<bool>("IsDeleted").HasColumnType("INTEGER");
+            b.Property<string>("LastChangeSummary").IsRequired().HasMaxLength(500).HasColumnType("TEXT");
+            b.Property<string>("Note").HasMaxLength(500).HasColumnType("TEXT");
+            b.Property<string>("SubmissionToken").IsRequired().HasMaxLength(64).HasColumnType("TEXT");
+            b.Property<long>("ToAccountId").HasColumnType("INTEGER");
+            b.Property<DateOnly>("TransferDate").HasColumnType("TEXT");
+            b.Property<DateTimeOffset>("UpdatedAtUtc").HasColumnType("TEXT");
+            b.HasKey("Id");
+            b.HasIndex("FromAccountId");
+            b.HasIndex("IsDeleted", "Currency", "TransferDate");
+            b.HasIndex("IsDeleted", "FromAccountId", "TransferDate");
+            b.HasIndex("IsDeleted", "ToAccountId", "TransferDate");
+            b.HasIndex("IsDeleted", "TransferDate");
+            b.HasIndex("SubmissionToken").IsUnique();
+            b.HasIndex("ToAccountId");
+            b.ToTable("AccountTransfers");
+        });
+
         modelBuilder.Entity("BookKeeping2.Models.Settings.AppSetting", b =>
         {
             b.Property<string>("Key").HasMaxLength(100).HasColumnType("TEXT");
@@ -146,6 +173,22 @@ public partial class AppDbContextModelSnapshot : ModelSnapshot
             b.HasIndex("IsDeleted", "Currency", "TransactionDate");
             b.HasIndex("IsDeleted", "TransactionDate");
             b.ToTable("Transactions");
+        });
+
+        modelBuilder.Entity("BookKeeping2.Models.AccountTransfers.AccountTransfer", b =>
+        {
+            b.HasOne("BookKeeping2.Models.Accounts.Account", "FromAccount")
+                .WithMany()
+                .HasForeignKey("FromAccountId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            b.HasOne("BookKeeping2.Models.Accounts.Account", "ToAccount")
+                .WithMany()
+                .HasForeignKey("ToAccountId")
+                .OnDelete(DeleteBehavior.Restrict)
+                .IsRequired();
+            b.Navigation("FromAccount");
+            b.Navigation("ToAccount");
         });
 
         modelBuilder.Entity("BookKeeping2.Models.Budgets.Budget", b =>

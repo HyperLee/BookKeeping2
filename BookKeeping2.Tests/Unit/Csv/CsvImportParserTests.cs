@@ -46,4 +46,17 @@ public sealed class CsvImportParserTests
         Assert.False(row.IsLegacyFormat);
         Assert.Contains(result.Errors, error => error.RowNumber == 3 && error.FieldName == "幣別" && error.Reason.Contains("幣別不可空白", StringComparison.Ordinal));
     }
+
+    [Fact]
+    public void Parse_rejects_transfer_csv_header_on_transaction_import_path()
+    {
+        var parser = new CsvImportParser();
+
+        CsvImportResult result = parser.Parse(new CsvImportCommand(
+            "transfers.csv",
+            Encoding.UTF8.GetBytes("日期,幣別,金額,轉出帳戶,轉入帳戶,備註\r\n2026-05-01,TWD,1000,銀行,現金,提款")));
+
+        Assert.Empty(result.Rows);
+        Assert.Contains(result.Errors, error => error.RowNumber == 1 && error.FieldName == "標題列");
+    }
 }

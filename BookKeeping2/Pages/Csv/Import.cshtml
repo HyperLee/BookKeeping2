@@ -19,6 +19,13 @@
     </p>
 </section>
 
+<section class="mb-4" aria-labelledby="transfer-csv-import-format-heading">
+    <h2 id="transfer-csv-import-format-heading" class="h5">@SharedLocalizer["轉帳匯入格式"]</h2>
+    <p class="mb-0">
+        @SharedLocalizer["轉帳 CSV 格式："]<code class="csv-contract-code">@Model.TransferCsvHeader</code>
+    </p>
+</section>
+
 <form method="post" enctype="multipart/form-data" class="row g-3 align-items-end mb-4">
     <div class="col-12 col-md-8">
         <label class="form-label" asp-for="Upload">@SharedLocalizer["CSV 檔案"]</label>
@@ -27,6 +34,17 @@
     </div>
     <div class="col-12 col-md-4">
         <button type="submit" class="btn btn-primary w-100">@SharedLocalizer["匯入 CSV"]</button>
+    </div>
+</form>
+
+<form method="post" asp-page-handler="Transfer" enctype="multipart/form-data" class="row g-3 align-items-end mb-4">
+    <div class="col-12 col-md-8">
+        <label class="form-label" asp-for="TransferUpload">@SharedLocalizer["轉帳 CSV 檔案"]</label>
+        <input class="form-control" asp-for="TransferUpload" type="file" accept=".csv,text/csv" />
+        <span class="text-danger small" asp-validation-for="TransferUpload"></span>
+    </div>
+    <div class="col-12 col-md-4">
+        <button type="submit" class="btn btn-outline-primary w-100">@SharedLocalizer["匯入轉帳 CSV"]</button>
     </div>
 </form>
 
@@ -49,6 +67,26 @@
         {
             <ul class="list-group">
                 @foreach (var error in Model.Result.Errors)
+                {
+                    <li class="list-group-item">@CsvImportResultFormatter.FormatError(error)</li>
+                }
+            </ul>
+        }
+    </section>
+}
+
+@if (Model.TransferResult is not null)
+{
+    <section aria-labelledby="transfer-csv-import-result-heading">
+        <h2 id="transfer-csv-import-result-heading" class="h5">@SharedLocalizer["轉帳匯入結果"]</h2>
+        <div class="alert @(Model.TransferResult.FailedRows > 0 ? "alert-warning" : "alert-success")" role="status">
+            @Model.TransferResult.Summary
+        </div>
+
+        @if (Model.TransferResult.Errors.Count > 0)
+        {
+            <ul class="list-group">
+                @foreach (var error in Model.TransferResult.Errors)
                 {
                     <li class="list-group-item">@CsvImportResultFormatter.FormatError(error)</li>
                 }

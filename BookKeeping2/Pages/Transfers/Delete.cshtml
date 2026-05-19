@@ -1,0 +1,29 @@
+@page "{id:long}"
+@model BookKeeping2.Pages.Transfers.DeleteModel
+@{
+    ViewData["Title"] = SharedLocalizer["刪除轉帳"].Value;
+}
+
+<h1 class="h3 mb-3">@SharedLocalizer["刪除轉帳"]</h1>
+
+<div class="alert alert-warning" role="alert">
+    @SharedLocalizer["確定要刪除此轉帳嗎？刪除後將不會出現在一般明細、帳戶餘額與轉帳匯出中。"]
+</div>
+
+<dl class="row transfer-delete-summary">
+    <dt class="col-sm-3">@SharedLocalizer["日期"]</dt>
+    <dd class="col-sm-9">@Model.Transfer.TransferDate.ToString("yyyy-MM-dd")</dd>
+    <dt class="col-sm-3">@SharedLocalizer["金額"]</dt>
+    <dd class="col-sm-9"><span class="currency-amount">@Model.Transfer.AmountText</span></dd>
+    <dt class="col-sm-3">@SharedLocalizer["方向"]</dt>
+    <dd class="col-sm-9 transfer-direction">@Model.Transfer.DirectionText</dd>
+    <dt class="col-sm-3">@SharedLocalizer["備註"]</dt>
+    <dd class="col-sm-9">@Model.Transfer.Note</dd>
+</dl>
+
+<form method="post">
+    <div class="d-flex gap-2 flex-wrap">
+        <button type="submit" class="btn btn-danger">@SharedLocalizer["確認刪除"]</button>
+        <a class="btn btn-outline-secondary" asp-page="/Transactions/Index">@SharedLocalizer["取消"]</a>
+    </div>
+</form>
