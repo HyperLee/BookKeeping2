@@ -16,8 +16,7 @@ bulk deletion, stop and ask the user to perform that cleanup manually.
 
 <!-- SPECKIT START -->
 For additional context about technologies to be used, project structure,
-shell commands, and other important information, read
-`specs/004-multi-currency-bookkeeping/plan.md`.
+shell commands, and other important information, read the current plan
 <!-- SPECKIT END -->
 
 ## Project Snapshot
