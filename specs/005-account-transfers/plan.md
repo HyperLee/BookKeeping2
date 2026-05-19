@@ -14,9 +14,9 @@
 
 **Primary Dependencies**: Razor Pages、Bootstrap 5.3、jQuery 3.x、jQuery Validation、Chart.js 4.x、Entity Framework Core 10.0 SQLite provider、Serilog.AspNetCore、HtmlSanitizer、CsvHelper。現有技術棧足以支援本功能；不新增生產相依套件。
 
-**Storage**: SQLite + EF Core `AppDbContext`、entity configuration、migration、唯一索引、外鍵與交易控制。新增 `AccountTransfers` table，金額繼續以 `long` minor units 儲存，domain/view model 對外使用 `decimal`。幣別沿用現有 `SupportedCurrency` 與帳戶 `Currency` 欄位，不新增 `Currencies` table，不回填交易資料；既有收入/支出 CSV 契約保持不變，轉帳使用獨立 CSV 格式。
+**Storage**: SQLite + EF Core `AppDbContext`、entity configuration、migration、唯一索引、外鍵與交易控制。新增 `AccountTransfers` table，金額繼續以 `long` minor units 儲存，domain/view model 對外使用 `decimal`；每筆 create 使用不可猜測的一次性 `SubmissionToken`，成功建立後保存並以唯一索引防止同一表單重送建立第二筆。幣別沿用現有 `SupportedCurrency` 與帳戶 `Currency` 欄位，不新增 `Currencies` table，不回填交易資料；既有收入/支出 CSV 契約保持不變，轉帳使用獨立 CSV 格式。
 
-**Testing**: xUnit + Moq 單元測試、`WebApplicationFactory` 整合測試、EF Core SQLite persistence tests、coverlet coverage。新增轉帳服務、帳戶餘額、混合明細查詢、CSV 匯入匯出、migration、Razor Pages、稽核、報表/預算排除與效能測試。Playwright 用於轉帳表單、明細時間線、CSV 操作在桌面與行動寬度下的 UI 驗證；axe-core 或等效 DOM/accessibility assertions 可作為可及性補強，但不是必需生產相依。
+**Testing**: xUnit + Moq 單元測試、`WebApplicationFactory` 整合測試、EF Core SQLite persistence tests、coverlet coverage。新增轉帳服務、帳戶餘額、混合明細查詢、CSV 匯入匯出、migration、Razor Pages、稽核、報表/預算排除與效能測試；關鍵轉帳金額、餘額、CSV 與查詢邏輯 coverage 必須達 80% 以上。Playwright 用於轉帳表單、明細時間線、CSV 操作在桌面與行動寬度下的 UI 驗證；轉帳 UI 必須以 axe-core 或等效 DOM/accessibility assertions 驗證 WCAG 2.1 AA 核心要求，相關工具僅作為測試相依。
 
 **Target Platform**: 桌面瀏覽器 Chrome、Edge、Firefox、Safari 與行動裝置瀏覽器。
 
@@ -78,8 +78,7 @@ BookKeeping2/
 ├── ViewModels/
 │   ├── AccountTransfers/
 │   │   ├── AccountTransferInputModel.cs
-│   │   ├── AccountTransferFormOptionsViewModel.cs
-│   │   └── AccountTransferListItemViewModel.cs
+│   │   └── AccountTransferFormOptionsViewModel.cs
 │   └── Transactions/
 │       ├── TransactionFilterInputModel.cs
 │       └── TransactionTimelineItemViewModel.cs
@@ -150,7 +149,7 @@ Phase 1 design artifacts:
 ### Post-Design Constitution Check
 
 - **I. 程式碼品質至上**: PASS。data model 與 contract 使用既有分層，未新增不必要套件或 repository abstraction。
-- **II. 測試優先開發**: PASS。quickstart 明確要求先寫失敗測試，且測試矩陣涵蓋 P1/P2 user stories、migration、CSV、稽核、帳戶餘額、報表/預算排除、UI 與效能。
+- **II. 測試優先開發**: PASS。quickstart 明確要求先取得測試意圖確認，再寫失敗測試；測試矩陣涵蓋 P1/P2 user stories、migration、CSV、稽核、帳戶餘額、報表/預算排除、UI、可及性、coverage 與效能。
 - **III. 使用者體驗一致性**: PASS。UI contract 指定繁體中文欄位、轉帳方向、錯誤訊息、手機/桌面不重疊與鍵盤可操作。
 - **IV. 效能與延展性**: PASS。contract 與 data model 指定轉帳索引、混合時間線篩選順序與 bounded projection，保留 10,000+ 筆效能目標。
 - **V. 可觀察性與監控**: PASS。稽核摘要包含必要轉帳方向與幣別，但仍遮罩金額與備註。

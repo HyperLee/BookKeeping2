@@ -36,13 +36,15 @@ Fields:
 | `轉出帳戶` | `FromAccountId` |
 | `轉入帳戶` | `ToAccountId` |
 | `備註` | `Note` |
+| hidden | `SubmissionToken` |
 
 Rules:
 
 - POST must require anti-forgery token.
 - Successful create redirects to transaction timeline or transfer details/edit target consistent with existing transaction pages.
 - Validation errors re-render the form with selected values preserved.
-- If same content is submitted repeatedly within the configured short window, the service returns success without creating a duplicate transfer.
+- GET generates an opaque one-time `SubmissionToken`; if the same token is submitted again after a successful create, the service returns duplicate-resubmit success without creating a second transfer.
+- Same date, amount, from account, to account and note submitted with a different `SubmissionToken` remains a valid independent transfer.
 
 ### 編輯轉帳
 
@@ -86,7 +88,7 @@ Result semantics:
 
 - `Succeeded == true` means the requested action is complete.
 - Validation errors are keyed to input property names when possible.
-- Duplicate rapid resubmit returns success without inserting a second transfer.
+- Duplicate rapid resubmit is detected by `SubmissionToken` reuse and returns success without inserting a second transfer.
 - Service never performs currency conversion.
 - Service never updates reports, budgets or categories.
 
@@ -142,7 +144,7 @@ Rules:
 - Amount uses invariant decimal text and existing money limits.
 - From account and to account must resolve by normalized account name.
 - Both accounts must be active, different and same currency as the row.
-- Valid rows create transfers.
+- Valid rows create transfers with a server-generated internal `SubmissionToken`; the token is not part of the CSV format.
 - Invalid rows do not create transfers and must be reported with row number, field and reason.
 - Mixed valid/invalid files commit valid transfers and persist row-level error summary.
 - Transaction CSV headers must not be accepted by transfer import.
@@ -155,6 +157,7 @@ Rules:
 - Header order must match the transfer header exactly.
 - Rows are ordered by transfer date ascending, then id ascending.
 - Account names and notes must be protected against spreadsheet formula injection.
+- `SubmissionToken` is never exported.
 - Export file name should clearly identify transfers, for example `transfers-yyyyMMdd-HHmmss.csv`.
 - Export audit summary records row count and filter range, not raw note content.
 
@@ -163,9 +166,10 @@ Rules:
 `AccountTransfers` table:
 
 - `Id` primary key.
-- `TransferDate`, `Currency`, `AmountMinorUnits`, `FromAccountId`, `ToAccountId`, `CreatedAtUtc`, `UpdatedAtUtc`, `IsDeleted`, `LastChangeSummary` are required.
+- `TransferDate`, `Currency`, `AmountMinorUnits`, `FromAccountId`, `ToAccountId`, `SubmissionToken`, `CreatedAtUtc`, `UpdatedAtUtc`, `IsDeleted`, `LastChangeSummary` are required.
 - `Note`, `DeletedAtUtc`, `DeletionSummary` are optional.
 - `Currency` max length 3 and required.
+- `SubmissionToken` max length 64 and has a unique index.
 - `Note`, `DeletionSummary`, `LastChangeSummary` max length 500.
 - `FromAccountId` and `ToAccountId` foreign keys reference `Accounts.Id` with restrict delete behavior.
 - No unique index on transfer content, because same-content independent transfers are allowed.

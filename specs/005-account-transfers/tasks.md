@@ -4,7 +4,7 @@
 
 **Prerequisites**: `plan.md`, `spec.md`, `research.md`, `data-model.md`, `contracts/account-transfer-contract.md`, `quickstart.md`
 
-**Tests**: 本功能規格與 quickstart 明確要求測試優先開發；每個使用者故事的測試任務必須先撰寫並確認失敗，再進入實作任務。
+**Tests**: 本功能規格與 quickstart 明確要求測試優先開發；每個測試任務必須先列出測試意圖並取得使用者或維護者確認，再撰寫並確認失敗，之後才能進入對應實作任務。
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing. User-facing UI text and validation messages must use Traditional Chinese (`zh-TW`).
 
@@ -33,12 +33,12 @@
 
 ### Tests for Foundational Persistence
 
-- [ ] T005 [P] Add failing persistence tests for AccountTransfers schema, restrict foreign keys, soft-delete columns, and indexes in BookKeeping2.Tests/Integration/Persistence/AccountTransferPersistenceTests.cs
+- [ ] T005 [P] Confirm persistence test intent, then add failing persistence tests for AccountTransfers schema, restrict foreign keys, soft-delete columns, submission-token unique index, and query indexes in BookKeeping2.Tests/Integration/Persistence/AccountTransferPersistenceTests.cs
 
 ### Implementation for Foundational Persistence
 
-- [ ] T006 Add AccountTransfer entity with XML documentation, money minor-unit conversion, timestamps, soft-delete metadata, and masked summary fields in BookKeeping2/Models/AccountTransfers/AccountTransfer.cs
-- [ ] T007 [P] Add AccountTransfer EF Core configuration for required fields, max lengths, restrict foreign keys, and query indexes in BookKeeping2/Data/EntityConfigurations/AccountTransferConfiguration.cs
+- [ ] T006 Add AccountTransfer entity with XML documentation, money minor-unit conversion, one-time submission token, timestamps, soft-delete metadata, and masked summary fields in BookKeeping2/Models/AccountTransfers/AccountTransfer.cs
+- [ ] T007 [P] Add AccountTransfer EF Core configuration for required fields, max lengths, restrict foreign keys, submission-token unique index, and query indexes in BookKeeping2/Data/EntityConfigurations/AccountTransferConfiguration.cs
 - [ ] T008 Register DbSet<AccountTransfer> and using statements in BookKeeping2/Data/AppDbContext.cs
 - [ ] T009 Add transfer audit event types for create, update, delete, transfer CSV import, and transfer CSV export in BookKeeping2/Models/Audit/AuditEventType.cs
 - [ ] T010 Create EF Core migration and model snapshot updates for AccountTransfers in BookKeeping2/Data/Migrations/
@@ -56,17 +56,17 @@
 
 ### Tests for User Story 1
 
-- [ ] T012 [P] [US1] Add failing service tests for create validation, same-account rejection, currency mismatch rejection, future-date rejection, note sanitization, duplicate rapid resubmit, update, and soft delete in BookKeeping2.Tests/Unit/AccountTransfers/AccountTransferServiceTests.cs
-- [ ] T013 [P] [US1] Add failing balance tests for outgoing transfer, incoming transfer, negative balance allowance, edit recalculation, and soft-delete exclusion in BookKeeping2.Tests/Unit/Accounts/AccountTransferBalanceTests.cs
-- [ ] T014 [P] [US1] Add failing Razor Pages tests for Transfers Create/Edit/Delete GET and POST, anti-forgery, validation preservation, success redirects, and deleted transfer NotFound handling in BookKeeping2.Tests/Integration/Pages/AccountTransferPagesTests.cs
+- [ ] T012 [P] [US1] Confirm service test intent, then add failing service tests for create validation, same-account rejection, currency mismatch rejection, future-date rejection, note sanitization, submission-token duplicate rapid resubmit, same-content different-token allowance, update, and soft delete in BookKeeping2.Tests/Unit/AccountTransfers/AccountTransferServiceTests.cs
+- [ ] T013 [P] [US1] Confirm balance test intent, then add failing balance tests for outgoing transfer, incoming transfer, negative balance allowance, edit recalculation, soft-delete exclusion, and 1-second balance reflection after create/edit/delete in BookKeeping2.Tests/Unit/Accounts/AccountTransferBalanceTests.cs
+- [ ] T014 [P] [US1] Confirm Razor Pages test intent, then add failing Razor Pages tests for Transfers Create/Edit/Delete GET and POST, anti-forgery, SubmissionToken rendering and reuse behavior, validation preservation, success redirects, and deleted transfer NotFound handling in BookKeeping2.Tests/Integration/Pages/AccountTransferPagesTests.cs
 
 ### Implementation for User Story 1
 
-- [ ] T015 [P] [US1] Create AccountTransferInputModel with Traditional Chinese validation messages in BookKeeping2/ViewModels/AccountTransfers/AccountTransferInputModel.cs
+- [ ] T015 [P] [US1] Create AccountTransferInputModel with hidden SubmissionToken and Traditional Chinese validation messages in BookKeeping2/ViewModels/AccountTransfers/AccountTransferInputModel.cs
 - [ ] T016 [P] [US1] Create AccountTransferFormOptionsViewModel for active same-currency account selections in BookKeeping2/ViewModels/AccountTransfers/AccountTransferFormOptionsViewModel.cs
 - [ ] T017 [P] [US1] Create AccountTransferResult for success, not-found, duplicate-resubmit, and field-level validation errors in BookKeeping2/Services/AccountTransfers/AccountTransferResult.cs
 - [ ] T018 [US1] Define IAccountTransferService contract from specs/005-account-transfers/contracts/account-transfer-contract.md in BookKeeping2/Services/AccountTransfers/IAccountTransferService.cs
-- [ ] T019 [US1] Implement AccountTransferService validation, sanitization, same-currency rules, duplicate rapid resubmit detection, create, update, soft delete, and masked audit events in BookKeeping2/Services/AccountTransfers/AccountTransferService.cs
+- [ ] T019 [US1] Implement AccountTransferService validation, sanitization, same-currency rules, submission-token duplicate rapid resubmit detection, same-content different-token allowance, create, update, soft delete, and masked audit events in BookKeeping2/Services/AccountTransfers/AccountTransferService.cs
 - [ ] T020 [US1] Update AccountService balance aggregation to include non-deleted outgoing and incoming transfer totals without N+1 queries in BookKeeping2/Services/Accounts/AccountService.cs
 - [ ] T021 [US1] Register IAccountTransferService in dependency injection and add the AccountTransfers namespace in BookKeeping2/Program.cs
 - [ ] T022 [P] [US1] Create shared transfer form partial with date, currency, amount, from account, to account, note, validation summary, and anti-forgery-compatible fields in BookKeeping2/Pages/Transfers/_TransferForm.cshtml
@@ -88,9 +88,9 @@
 
 ### Tests for User Story 2
 
-- [ ] T028 [P] [US2] Add failing report tests proving transfer payments are excluded from monthly expense totals, category totals, trend data, and chart totals in BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs
-- [ ] T029 [P] [US2] Add failing budget tests proving transfer payments do not increase any category budget usage or alert state in BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs
-- [ ] T030 [P] [US2] Add failing homepage summary tests proving transfer payments do not alter income/expense cards while account balances reflect transfers in BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs
+- [ ] T028 [P] [US2] Confirm report test intent, then add failing report tests proving transfer payments are excluded from monthly expense totals, category totals, trend data, and chart totals in BookKeeping2.Tests/Unit/Reports/ReportServiceTests.cs
+- [ ] T029 [P] [US2] Confirm budget test intent, then add failing budget tests proving transfer payments do not increase any category budget usage or alert state in BookKeeping2.Tests/Unit/Budgets/BudgetServiceTests.cs
+- [ ] T030 [P] [US2] Confirm homepage summary test intent, then add failing homepage summary tests proving transfer payments do not alter income/expense cards while account balances reflect transfers in BookKeeping2.Tests/Integration/Pages/HomeBudgetSummaryTests.cs
 
 ### Implementation for User Story 2
 
@@ -111,9 +111,9 @@
 
 ### Tests for User Story 3
 
-- [ ] T035 [P] [US3] Add failing timeline query tests for mixed income/expense/transfer sorting, account filter matching either side, currency/date/keyword/amount filters, category filter excluding transfers, and no deleted transfers in BookKeeping2.Tests/Unit/Transactions/TransactionTimelineQueryTests.cs
-- [ ] T036 [P] [US3] Add failing transaction timeline page tests for visible `新增轉帳` entry, transfer label `轉帳`, direction text, edit/delete links, and filter form behavior in BookKeeping2.Tests/Integration/Pages/TransactionTimelineTransferTests.cs
-- [ ] T037 [P] [US3] Add failing performance test for 10,000 mixed transaction and transfer rows with one filter under 2 seconds and no N+1 query pattern in BookKeeping2.Tests/Integration/Performance/TransactionTimelinePerformanceTests.cs
+- [ ] T035 [P] [US3] Confirm timeline query test intent, then add failing timeline query tests for mixed income/expense/transfer sorting, account filter matching either side, currency/date/keyword/amount filters, category filter excluding transfers, and no deleted transfers in BookKeeping2.Tests/Unit/Transactions/TransactionTimelineQueryTests.cs
+- [ ] T036 [P] [US3] Confirm transaction timeline page test intent, then add failing transaction timeline page tests for visible `新增轉帳` entry, transfer label `轉帳`, direction text, edit/delete links, and filter form behavior in BookKeeping2.Tests/Integration/Pages/TransactionTimelineTransferTests.cs
+- [ ] T037 [P] [US3] Confirm performance test intent, then add failing performance tests for 10,000 mixed transaction and transfer rows with one filter under 2 seconds, transfer-aware account balance aggregation after create/edit/delete under 1 second, and no N+1 query pattern in BookKeeping2.Tests/Integration/Performance/TransactionTimelinePerformanceTests.cs and BookKeeping2.Tests/Integration/Performance/AccountTransferPerformanceTests.cs
 
 ### Implementation for User Story 3
 
@@ -138,16 +138,16 @@
 
 ### Tests for User Story 4
 
-- [ ] T046 [P] [US4] Add failing transfer CSV parser tests for exact header, transaction-header rejection, empty file, wrong order, field-count errors, row limit, date, currency, amount, account names, and row-level errors in BookKeeping2.Tests/Unit/Csv/CsvTransferImportParserTests.cs
-- [ ] T047 [P] [US4] Add failing transfer CSV import service tests for valid row creation, invalid row skipping, mixed commit behavior, same-currency validation, active account validation, audit batch summaries, and safe raw value previews in BookKeeping2.Tests/Unit/Csv/CsvTransferImportServiceTests.cs
-- [ ] T048 [P] [US4] Add failing transfer CSV export service tests for header order, non-deleted transfer filtering, date/id ordering, formula injection protection, file name, and export audit-safe row count in BookKeeping2.Tests/Unit/Csv/CsvTransferExportServiceTests.cs
-- [ ] T049 [P] [US4] Add failing CSV page tests for separate transfer import/export handlers, preserved transaction CSV contract, validation errors, and download headers in BookKeeping2.Tests/Integration/Pages/CsvTransferPageTests.cs
+- [ ] T046 [P] [US4] Confirm transfer CSV parser test intent, then add failing transfer CSV parser tests for exact header, transaction-header rejection, empty file, wrong order, field-count errors, row limit, date, currency, amount, account names, and row-level errors in BookKeeping2.Tests/Unit/Csv/CsvTransferImportParserTests.cs
+- [ ] T047 [P] [US4] Confirm transfer CSV import service test intent, then add failing transfer CSV import service tests for valid row creation, invalid row skipping, mixed commit behavior, same-currency validation, active account validation, 100-row import under 10 seconds, audit batch summaries, and safe raw value previews in BookKeeping2.Tests/Unit/Csv/CsvTransferImportServiceTests.cs
+- [ ] T048 [P] [US4] Confirm transfer CSV export service test intent, then add failing transfer CSV export service tests for header order, non-deleted transfer filtering, date/id ordering, formula injection protection, file name, 1,000-row export under 5 seconds, and export audit-safe row count in BookKeeping2.Tests/Unit/Csv/CsvTransferExportServiceTests.cs
+- [ ] T049 [P] [US4] Confirm CSV page test intent, then add failing CSV page tests for separate transfer import/export handlers, preserved transaction CSV contract, validation errors, and download headers in BookKeeping2.Tests/Integration/Pages/CsvTransferPageTests.cs
 
 ### Implementation for User Story 4
 
 - [ ] T050 [P] [US4] Create CsvTransferRow with exact transfer CSV field mapping in BookKeeping2/Services/Csv/CsvTransferRow.cs
 - [ ] T051 [US4] Create CsvTransferImportParser with exact header matching, structural validation, existing upload limits, row limit, and transaction-header rejection in BookKeeping2/Services/Csv/CsvTransferImportParser.cs
-- [ ] T052 [US4] Create CsvTransferImportService that resolves active accounts, validates transfer rules through AccountTransferService, commits valid rows with import batch/errors, and records audit summaries in BookKeeping2/Services/Csv/CsvTransferImportService.cs
+- [ ] T052 [US4] Create CsvTransferImportService that resolves active accounts, generates internal SubmissionToken values, validates transfer rules through AccountTransferService, commits valid rows with import batch/errors, and records audit summaries in BookKeeping2/Services/Csv/CsvTransferImportService.cs
 - [ ] T053 [US4] Create CsvTransferExportService that exports only non-deleted transfers with formula protection, date/id ordering, transfer file names, and audit-safe result metadata in BookKeeping2/Services/Csv/CsvTransferExportService.cs
 - [ ] T054 [US4] Update transaction CsvImportParser tests and behavior so transfer CSV headers are rejected by the transaction import path in BookKeeping2/Services/Csv/CsvImportParser.cs and BookKeeping2.Tests/Unit/Csv/CsvImportParserTests.cs
 - [ ] T055 [US4] Register CsvTransferImportService and CsvTransferExportService in dependency injection in BookKeeping2/Program.cs
@@ -163,11 +163,11 @@
 
 **Purpose**: Verify accessibility, responsive behavior, performance, audit safety, and whole-repo quality after selected user stories are complete.
 
-- [ ] T059 [P] Add Playwright browser coverage for transfer create/edit/delete, timeline transfer rows, and transfer CSV UI at mobile and desktop widths in BookKeeping2.Tests/Integration/Browser/AccountTransferBrowserTests.cs
+- [ ] T059 [P] Add Playwright browser coverage and WCAG 2.1 AA accessibility assertions for transfer create/edit/delete, timeline transfer rows, and transfer CSV UI at mobile and desktop widths in BookKeeping2.Tests/Integration/Browser/AccountTransferBrowserTests.cs
 - [ ] T060 [P] Review audit masking and logging so transfer amount, note, import, and export summaries do not expose raw sensitive financial data in BookKeeping2/Services/Audit/AuditLogMaskingPolicy.cs
 - [ ] T061 [P] Review Traditional Chinese UI text, validation messages, button labels, and CSV summaries for transfer surfaces in BookKeeping2/Pages/Transfers/, BookKeeping2/Pages/Transactions/Index.cshtml, and BookKeeping2/Pages/Csv/
 - [ ] T062 Run targeted verification commands from specs/005-account-transfers/quickstart.md for AccountTransfer, TransactionTimeline, CsvTransfer, ReportService, BudgetService, persistence, and performance tests
-- [ ] T063 Run full build and test verification for BookKeeping2.slnx and BookKeeping2.Tests/BookKeeping2.Tests.csproj
+- [ ] T063 Run full build, test, and coverage verification for BookKeeping2.slnx and BookKeeping2.Tests/BookKeeping2.Tests.csproj, confirming critical transfer amount, balance, CSV, and query logic coverage is at least 80%
 - [ ] T064 Update manual verification notes or unresolved blockers in specs/005-account-transfers/quickstart.md if browser automation or environment constraints prevent full validation
 
 ---
@@ -193,7 +193,8 @@
 
 ### Within Each User Story
 
-- Write the listed tests first and confirm they fail.
+- For each listed test task, document the intended assertions and obtain user or maintainer confirmation before writing the test.
+- Write the confirmed tests and observe them fail before implementation.
 - Implement view models and service contracts before services and pages.
 - Implement services before Razor Page handlers that call them.
 - Complete each story checkpoint before starting lower-priority stories unless parallel staffing is available.

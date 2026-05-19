@@ -12,7 +12,7 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifie
 
 ## 2. 先寫失敗測試
 
-依使用者故事順序建立測試，先確認測試會失敗再實作。
+依使用者故事順序建立測試。每個測試任務先列出測試意圖並取得使用者或維護者確認，再撰寫測試、確認測試會失敗，最後才實作。
 
 建議測試檔：
 
@@ -34,6 +34,7 @@ Minimum P1 failing tests:
 - 轉出與轉入帳戶相同時拒絕。
 - 轉出與轉入帳戶幣別不同時拒絕。
 - 轉出後負餘額允許。
+- 同一 `SubmissionToken` 快速重送不建立第二筆；相同內容但不同 `SubmissionToken` 可建立獨立轉帳。
 - 信用卡繳款轉帳不增加月支出與預算使用率。
 - 編輯轉帳後以更新後內容重新計算相關帳戶餘額。
 - 軟刪除轉帳後一般查詢、餘額與 CSV 匯出排除。
@@ -42,7 +43,7 @@ Minimum P1 failing tests:
 
 1. 新增 `AccountTransfer` model、entity configuration、`DbSet` 與 migration。
 2. 新增 `AccountTransferInputModel`、form options、result type 與 service interface。
-3. 實作 `AccountTransferService` validation、duplicate rapid resubmit、create/update/soft delete、audit transaction boundary。
+3. 實作 `AccountTransferService` validation、SubmissionToken duplicate rapid resubmit、same-content different-token allowance、create/update/soft delete、audit transaction boundary。
 4. 調整 `AccountService.GetBalanceSummariesAsync`，加入 outgoing/incoming transfer totals。
 5. 調整或擴充交易明細 query，回傳收入、支出與轉帳混合時間線。
 6. 確認 `ReportService`、`BudgetService` 與首頁月收入支出摘要仍只使用 income/expense transactions。
@@ -72,6 +73,7 @@ dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifie
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~TransactionTimeline|FullyQualifiedName~CsvTransfer"
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~ReportServiceTests|FullyQualifiedName~BudgetServiceTests"
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~AccountTransferPersistenceTests|FullyQualifiedName~TransactionTimelinePerformanceTests"
+dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~AccountTransferPerformanceTests|FullyQualifiedName~CsvTransferImportServiceTests|FullyQualifiedName~CsvTransferExportServiceTests"
 ```
 
 Full verification before completion:
@@ -79,7 +81,10 @@ Full verification before completion:
 ```powershell
 dotnet build BookKeeping2.slnx
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj
+dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --collect:"XPlat Code Coverage"
 ```
+
+Coverage output must show at least 80% coverage for critical transfer amount, balance, CSV, and query logic before completion.
 
 If browser automation is available:
 
@@ -87,17 +92,18 @@ If browser automation is available:
 dotnet test BookKeeping2.Tests/BookKeeping2.Tests.csproj --filter "FullyQualifiedName~AccountTransferBrowserTests"
 ```
 
-If browser tests cannot run because Chrome or Edge is unavailable, report that exact blocker and still run the non-browser subset.
+Browser tests must include mobile/desktop responsive checks and WCAG 2.1 AA accessibility assertions through axe-core or equivalent DOM assertions. If browser tests cannot run because Chrome or Edge is unavailable, report that exact blocker and still run the non-browser subset.
 
 ## 7. Manual Scenario Checklist
 
 - 建立兩個 TWD 帳戶，新增 TWD 1,000 從銀行到現金，確認餘額變化。
 - 建立銀行到信用卡帳戶的繳款轉帳，確認月報與預算不增加支出。
 - 嘗試同帳戶轉帳，確認錯誤訊息為繁體中文且指出不可相同。
+- 快速重送同一新增表單，確認同一 `SubmissionToken` 不建立第二筆；重新開啟表單後相同內容可建立獨立轉帳。
 - 嘗試 TWD 帳戶轉 USD 帳戶，確認錯誤訊息指出幣別必須一致。
 - 用低餘額帳戶轉出較大金額，確認可建立且餘額可為負。
 - 編輯轉帳金額與帳戶，確認舊帳戶與新帳戶餘額都正確。
 - 軟刪除轉帳，確認時間線、餘額與轉帳 CSV 匯出都排除該筆。
 - 匯入包含有效列與無效列的轉帳 CSV，確認有效列建立、無效列列出行號與原因。
 - 匯出轉帳 CSV，確認 header、排序、內容與公式保護。
-- 在手機寬度與桌面寬度檢查轉帳表單與時間線列不重疊，鍵盤可操作。
+- 在手機寬度與桌面寬度檢查轉帳表單與時間線列不重疊、鍵盤可操作，且通過 WCAG 2.1 AA 核心可及性檢查。

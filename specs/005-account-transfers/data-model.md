@@ -18,6 +18,7 @@
 | `ToAccountId` | long | Required；轉入帳戶必須存在且未封存 |
 | `ToAccount` | Account | Required navigation |
 | `Note` | string? | Sanitized plain text，max 500 |
+| `SubmissionToken` | string | Required opaque one-time create token，max 64；same token may not create more than one transfer |
 | `CreatedAtUtc` | DateTimeOffset | UTC timestamp |
 | `UpdatedAtUtc` | DateTimeOffset | UTC timestamp |
 | `IsDeleted` | bool | Soft delete marker |
@@ -47,11 +48,12 @@
 - `{ IsDeleted, Currency, TransferDate }` for currency/date filtering.
 - `{ IsDeleted, FromAccountId, TransferDate }` for outgoing account filter and balance totals.
 - `{ IsDeleted, ToAccountId, TransferDate }` for incoming account filter and balance totals.
+- Unique `{ SubmissionToken }` for create idempotency; no unique index on transfer content because same-content independent transfers are allowed.
 - Optional `{ IsDeleted, Currency, FromAccountId, ToAccountId, TransferDate }` if performance tests show compound account/currency filtering needs it.
 
 **State transitions**:
 
-- Create: validates all rules, checks short-window duplicate form resubmit, saves transfer and audit event atomically.
+- Create: validates all rules, uses the one-time `SubmissionToken` to reject duplicate form resubmit, saves transfer and audit event atomically.
 - Edit: may change date, currency, amount, from account, to account and note; validates all rules against updated values and saves audit event atomically.
 - Soft delete: sets `IsDeleted`, `DeletedAtUtc`, `DeletionSummary`, saves warning audit event atomically, and excludes the transfer from normal list, account balances and export.
 
@@ -127,6 +129,7 @@ Razor Page input model for create/edit transfer forms.
 | `FromAccountId` | long | Required；active account |
 | `ToAccountId` | long | Required；active account；must differ from from account |
 | `Note` | string? | Optional；max 500 after sanitization |
+| `SubmissionToken` | string | Required for create as a hidden field generated per form render；ignored on edit；successful reuse returns duplicate-resubmit success without inserting another transfer |
 
 **Validation messages**:
 
@@ -157,6 +160,7 @@ Razor Page input model for create/edit transfer forms.
 - Transfer CSV headers must not be parsed as transaction CSV.
 - Empty files, wrong header order, wrong field count, files larger than the existing upload limit and rows beyond the existing row limit produce actionable errors.
 - Valid rows create transfers; invalid rows do not create transfers and are included in row-level error summaries.
+- CSV import does not read or write `SubmissionToken`; the import service generates a unique internal token per valid row before creating `AccountTransfer`.
 
 ## Entity: CsvImportBatch / CsvImportError
 
@@ -166,7 +170,7 @@ Razor Page input model for create/edit transfer forms.
 
 - Batch summary must identify transfer CSV import separately from transaction CSV import.
 - Row errors must include row number, field name, reason and safe raw value preview.
-- Valid transfer rows and import batch/errors are committed atomically.
+- Valid transfer rows, generated submission tokens and import batch/errors are committed atomically.
 - Raw sensitive note text must not be written to audit summaries.
 
 ## Entity: AuditEvent
@@ -189,7 +193,7 @@ Razor Page input model for create/edit transfer forms.
 
 ## Migration Notes
 
-- Add `AccountTransfers` table with required fields, two account foreign keys and soft-delete metadata.
+- Add `AccountTransfers` table with required fields, one-time submission token, two account foreign keys and soft-delete metadata.
 - Add indexes listed under `AccountTransfer`.
 - Add `DbSet<AccountTransfer>` to `AppDbContext`.
 - Update model snapshot.
