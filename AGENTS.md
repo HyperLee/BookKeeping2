@@ -15,8 +15,8 @@ Delete only explicit single-path files when deletion is required. If a task trul
 bulk deletion, stop and ask the user to perform that cleanup manually.
 
 <!-- SPECKIT START -->
-For additional context about technologies to be used, project structure,
-shell commands, and other important information, read the current plan
+For current feature implementation context, read
+`specs/006-recurring-bookkeeping/plan.md`.
 <!-- SPECKIT END -->
 
 ## Project Snapshot
