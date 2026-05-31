@@ -5,6 +5,6 @@
   "context_file": "AGENTS.md",
   "here": true,
   "integration": "codex",
-  "script": "ps",
-  "speckit_version": "0.8.11"
+  "script": "sh",
+  "speckit_version": "0.8.18"
 }

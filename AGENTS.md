@@ -15,9 +15,8 @@ Delete only explicit single-path files when deletion is required. If a task trul
 bulk deletion, stop and ask the user to perform that cleanup manually.
 
 <!-- SPECKIT START -->
-For current feature planning context, read `specs/005-account-transfers/plan.md`
-for technologies, project structure, shell commands, constraints, and generated
-design artifacts.
+For additional context about technologies to be used, project structure,
+shell commands, and other important information, read the current plan
 <!-- SPECKIT END -->
 
 ## Project Snapshot
